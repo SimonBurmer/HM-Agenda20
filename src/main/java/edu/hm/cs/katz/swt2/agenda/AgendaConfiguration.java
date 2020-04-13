@@ -6,23 +6,33 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
- * Spring Boot Configuration. 
+ * Konfigurationsklasse, vor allem für Spring Security. In Konfigurationsklassen können bestimmte
+ * Aspekte der Anwendung konfiguriert werden, im konkreten Fall nur die Sicherheitseinstellungen.
+ * Zum Beispiel aktivieren wir hier die Nutzung von Java-Annotationen zur Autorisierungsprüfung und
+ * konfigurieren, welche URLs ohne Autorisierung aufgerufen werden können, damit zum Beispiel jeder
+ * die Hauptseite sehen kann.
  * 
- * @author katz.bastian
+ * @author Bastian Katz (mailto: bastian.katz@hm.edu)
  */
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled=true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AgendaConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-        .antMatchers("/assets/**", "/", "/login**", "/logout**", "/h2-console/**").permitAll()
-		.anyRequest().fullyAuthenticated()
-		.and().formLogin().and()
-        .logout().logoutSuccessUrl("/").permitAll();
-		http.csrf().disable();
-		http.headers().frameOptions().disable();
-	}
-	
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.authorizeRequests()
+        // unbeschränkter Zugriff auf Ressourcen und Login/Logout
+        .antMatchers("/assets/**", "/", "/login**", "/logout**").permitAll()
+        // Administratorzugriff auf Datenbank
+        .antMatchers("/h2-console/**").hasRole("ADMIN")
+        // Authentifizierung Voraussetzung für alles andere
+        .anyRequest().fullyAuthenticated()
+        // Login-Handling
+        .and().formLogin().and().logout().logoutSuccessUrl("/").permitAll();
+
+    // Deaktivierung von Sicherheitsmerkmalen nur im Praktikum sinnvoll!
+    http.csrf().disable();
+    http.headers().frameOptions().disable();
+  }
+
 }
