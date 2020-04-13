@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head" />
+<body>
+	<nav th:replace="fragments :: navigation"></nav>
+
+	<h2>Abonnenten-Ansicht für Task <i th:text="${task.title}"></i></h2>
+
+	<th:block th:replace="fragments :: scripts">
+</body>
+</html>

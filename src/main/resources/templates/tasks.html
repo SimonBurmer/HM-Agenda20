@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head" />
+<body>
+	<nav th:replace="fragments :: navigation"></nav>
+
+	<h2>Tasks abonnierter Topics</h2>
+	<table>
+		<thead>
+			<tr>
+				<th scope="col">Task</th>
+				<th scope="col">Topic</th>
+			</tr>
+		</thead>
+		<tr th:each="t : ${tasks}">
+			<td ><a th:text="${t.title}" th:href="'/tasks/'+${t.id}"></a></td>
+			<td ><a th:text="${t.topic.uuid}" th:href="'/topics/'+${t.topic.uuid}"></a></td>
+		</tr>
+	</table>
+	<th:block th:replace="fragments :: scripts">
+</body>
+</html>

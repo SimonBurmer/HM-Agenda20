@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head" />
+<body>
+	<nav th:replace="fragments :: navigation"></nav>
+
+	<div class="container-fluid">
+		<div class="row justify-content-center bg-light">
+			<div class="col-12">
+				<h4 class="display-4">Neues Topic erstellen</h4>
+
+				<form id="formName" th:action="@{/topics}" th:object="${newTopic}"
+					method="post">
+
+					<div class="form-group">
+						<input th:field="*{title}" class="form-control"
+							placeholder="Titel" /> <small class="form-text text-muted">
+							Verwenden Sie einen aussagekräftigen Titel! </small>
+					</div>
+
+					<button type="submit" class="btn btn-primary">Erstellen!</button>
+					<a href="/topics" class="btn btn-danger">Abbrechen</a>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<th:block th:replace="fragments :: scripts">
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head" />
+<body>
+	<nav th:replace="fragments :: navigation"></nav>
+
+	<div class="container-fluid">
+		<div class="row justify-content-center bg-light">
+			<div class="col-12">
+				<h4 class="display-4">Task erstellen für <i th:text="${topic.title}">Titel</i></h4>
+
+				<form id="formName" th:action="@{/topics/{uuid}/createTask(uuid=${topic.uuid})}" th:object="${newTask}"
+					method="post">
+
+					<div class="form-group">
+						<input th:field="*{titel}" class="form-control"
+							placeholder="Titel" /> <small class="form-text text-muted">
+							Verwenden Sie einen aussagekräftigen Titel! </small>
+					</div>
+
+					<button type="submit" class="btn btn-primary">Erstellen!</button>
+					<a th:href="'/topics/'+${topic.uuid}+'/manage'" class="btn btn-danger">Abbrechen</a>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+
+	<th:block th:replace="fragments :: scripts">
+</body>
+</html>

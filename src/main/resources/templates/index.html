@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head" />
+<body>
+	<nav th:replace="fragments :: navigation"></nav>
+
+	<div class="jumbotron">
+		<h1 class="display-4">Deine Agenda</h1>
+		<p class="lead">Keine Deadline mehr verpassen!</p>
+		<hr class="my-4">
+		<p>
+			Agenda ist eine einfache Verwaltung für Aufgaben in Kursen.
+			Kursleiter*innen oder Teilnehmer*innen legen einmalig ein <i>Topic</i>
+			für einen Kurs an und tragen zu erledigende Aufgaben (<i>Tasks</i>)
+			ein. Teilnehmer*innen abonnieren das Topic und haben so ständig eine 
+			Übersicht über alle noch offenen Aufgaben.
+		</p>
+	</div>
+
+	<th:block th:replace="fragments :: scripts">
+</body>
+</html>
