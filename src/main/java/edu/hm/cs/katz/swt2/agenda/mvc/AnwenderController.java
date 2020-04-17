@@ -10,6 +10,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import edu.hm.cs.katz.swt2.agenda.service.AnwenderService;
 
+/**
+ * @author katz
+ *
+ */
 @Controller
 public class AnwenderController extends AbstractController {
 
