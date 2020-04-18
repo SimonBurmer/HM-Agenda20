@@ -119,9 +119,7 @@ public class TaskServiceImpl implements TaskService {
     Task task = taskRepository.getOne(taskId);
     Status status = statusRepository.findByAnwenderAndTask(anwender, task);
     if (status == null) {
-      status = new Status();
-      status.setAnwender(anwender);
-      status.setTask(task);
+      status = new Status(task, anwender);
       statusRepository.save(status);
     }
     return status;
