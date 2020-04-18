@@ -19,7 +19,7 @@ public class TopicController extends AbstractController {
 
   @Autowired
   TopicService topicService;
-  
+
   @Autowired
   TaskService taskService;
 
@@ -42,43 +42,46 @@ public class TopicController extends AbstractController {
   @PostMapping("/topics")
   public String topicCreations(Model model, Authentication auth,
       @ModelAttribute("newTopic") EditableTopic topic) {
-    topicService.createTopic(topic.getTitle(), auth.getName());    
+    topicService.createTopic(topic.getTitle(), auth.getName());
     return "redirect:/topics";
   }
- 
+
   // Seite nur für Management!
   @GetMapping("/topics/{uuid}/manage")
-  public String topicManagement(Model model, Authentication auth, @PathVariable("uuid") String uuid) {
-    model.addAttribute("administration", SecurityHelper.isAdmin(auth));
+  public String topicManagement(Model model, Authentication auth,
+      @PathVariable("uuid") String uuid) {
     ManagedTopicDto topic = topicService.getManagedTopic(uuid);
     model.addAttribute("topic", topic);
     model.addAttribute("tasks", topicService.getManagedTasks(uuid));
-    return "topic-management";   
+    return "topic-management";
   }
 
   @GetMapping("/topics/{uuid}/register")
-  public String getTaskRegistrationView(Model model, Authentication auth, @PathVariable("uuid") String uuid) {
+  public String getTaskRegistrationView(Model model, Authentication auth,
+      @PathVariable("uuid") String uuid) {
     model.addAttribute("administration", SecurityHelper.isAdmin(auth));
     TopicDto topic = topicService.getTopic(uuid);
     model.addAttribute("topic", topic);
     return "topic-registration";
-  }  
-  
+  }
+
   @PostMapping("/topics/{uuid}/register")
-  public String handleTaskRegistration(Model model, Authentication auth, @PathVariable("uuid") String uuid) {
+  public String handleTaskRegistration(Model model, Authentication auth,
+      @PathVariable("uuid") String uuid) {
     model.addAttribute("administration", SecurityHelper.isAdmin(auth));
     topicService.register(uuid, auth.getName());
-    return "redirect:/topics/"+uuid;
-  }  
+    return "redirect:/topics/" + uuid;
+  }
 
   @GetMapping("/topics/{uuid}")
   // TODO: Sinnvoll nur für registrierte Anwender
-  public String createTopicView(Model model, Authentication auth, @PathVariable("uuid") String uuid) {
+  public String createTopicView(Model model, Authentication auth,
+      @PathVariable("uuid") String uuid) {
     model.addAttribute("administration", SecurityHelper.isAdmin(auth));
     TopicDto topic = topicService.getTopic(uuid);
     model.addAttribute("topic", topic);
     model.addAttribute("tasks", topicService.getTasks(uuid));
     return "topic";
   }
-  
+
 }

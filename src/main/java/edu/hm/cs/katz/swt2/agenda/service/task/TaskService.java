@@ -10,6 +10,8 @@ public interface TaskService {
 
   ManagedTaskDto getManagedTask(Long id, String name);
 
-  List<TaskDto> getSubscribedTasks(String name);
+  List<ReadTaskDto> getSubscribedTasks(String name);
+
+  void checkTask(Long id, String name);
   
 }

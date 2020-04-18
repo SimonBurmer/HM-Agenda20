@@ -5,19 +5,41 @@
 <body>
 	<nav th:replace="fragments :: navigation"></nav>
 
-	<h2>Tasks abonnierter Topics</h2>
-	<table>
-		<thead>
-			<tr>
-				<th scope="col">Task</th>
-				<th scope="col">Topic</th>
-			</tr>
-		</thead>
-		<tr th:each="t : ${tasks}">
-			<td ><a th:text="${t.title}" th:href="'/tasks/'+${t.id}"></a></td>
-			<td ><a th:text="${t.topic.uuid}" th:href="'/topics/'+${t.topic.uuid}"></a></td>
-		</tr>
-	</table>
+	<div class="container-fluid">
+		<div class="row justify-content-center bg-light">
+			<div class="col-12">
+				<h4 class="display-4">Eigene Aufgaben</h4>
+				<span th:if="${#lists.size(tasks)==0}">Sie haben keine
+					Aufgaben!</span>
+			</div>
+		</div>
+		<div class="row row-cols-md-12 bg-light">
+			<div class="card col-md-12" th:each="t : ${tasks}" th:classappend="${t.status.status.toString()=='FERTIG'} ? text-secondary : text-primary">
+				<div class="row align-items-center">
+					<div class="col-md-8">
+						<div class="card-body"
+							>
+							<h5 class="card-title" th:text="${t.title}">Card title</h5>
+							<h6 class="card-subtitle mb-2 text-muted"
+								th:text="'In '+${t.topic.title}">Card subtitle</h6>
+
+							<p class="card-text">Keine Beschreibung</p>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<form th:unless="${t.status.status.toString()=='FERTIG'}"
+							id="formName" th:action="@{/tasks/{id}/check(id=${t.id})}"
+							th:object="${t}" method="post">
+
+							<button type="submit" class="btn btn-success">Done!</button>
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<th:block th:replace="fragments :: scripts">
 </body>
 </html>

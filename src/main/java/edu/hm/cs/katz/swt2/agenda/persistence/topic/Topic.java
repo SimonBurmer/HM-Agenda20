@@ -30,16 +30,16 @@ public class Topic {
   @ManyToOne
   private Anwender createdBy;
 
-  @OneToMany(mappedBy="topic")
+  @OneToMany(mappedBy = "topic")
   private Collection<Task> tasks = new ArrayList<Task>();
 
   @ManyToMany
   private Collection<Anwender> subscriber = new ArrayList<Anwender>();
-  
+
   public Topic() {
-    
+
   }
-  
+
   public Topic(String uuid, String title, Anwender createdBy) {
     this.uuid = uuid;
     this.title = title;
@@ -72,7 +72,7 @@ public class Topic {
   }
 
   public Collection<Task> getTasks() {
-    return Collections.unmodifiableCollection(tasks) ;
+    return Collections.unmodifiableCollection(tasks);
   }
 
   @SuppressWarnings("unused")

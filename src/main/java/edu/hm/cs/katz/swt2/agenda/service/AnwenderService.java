@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import edu.hm.cs.katz.swt2.agenda.mvc.AnwenderDto;
+import edu.hm.cs.katz.swt2.agenda.mvc.anwender.AnwenderDisplayDto;
 import edu.hm.cs.katz.swt2.agenda.persistence.anwender.Anwender;
 import edu.hm.cs.katz.swt2.agenda.persistence.anwender.AnwenderRepository;
 
@@ -55,9 +55,10 @@ public class AnwenderService implements UserDetailsService {
   }
 
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-  public AnwenderDto getAnwenderInfo(String login) {
+  public AnwenderDisplayDto getAnwenderInfo(String login) {
     Anwender anwender = anwenderRepository.getOne(login);
-    return new AnwenderDto(anwender.getLogin());
+    String login3 = anwender.getLogin();
+    return new AnwenderDisplayDto(login3);
   }
 
   @PreAuthorize("hasRole('ROLE_ADMIN')")

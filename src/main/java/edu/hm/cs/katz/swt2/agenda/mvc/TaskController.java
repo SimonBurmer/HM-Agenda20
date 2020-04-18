@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import edu.hm.cs.katz.swt2.agenda.SecurityHelper;
 import edu.hm.cs.katz.swt2.agenda.service.task.ManagedTaskDto;
+import edu.hm.cs.katz.swt2.agenda.service.task.ReadTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.task.TaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.task.TaskService;
 import edu.hm.cs.katz.swt2.agenda.service.topic.ManagedTopicDto;
@@ -39,7 +40,6 @@ public class TaskController extends AbstractController {
   @PostMapping("/topics/{uuid}/createTask")
   public String handleTaskCreation(Model model, Authentication auth,
       @PathVariable("uuid") String uuid, @ModelAttribute("newTask") TaskCreation newTask) {
-    model.addAttribute("administration", SecurityHelper.isAdmin(auth));
     taskService.createTask(uuid, newTask.getTitel());
     return "redirect:/topics/" + uuid + "/manage";
   }
@@ -47,7 +47,6 @@ public class TaskController extends AbstractController {
   @GetMapping("tasks/{id}")
   public String getSubscriberTaskView(Model model, Authentication auth,
       @PathVariable("id") Long id) {
-    model.addAttribute("administration", SecurityHelper.isAdmin(auth));
     TaskDto task = taskService.getTask(id, auth.getName());
     model.addAttribute("task", task);
     return "task";
@@ -56,16 +55,21 @@ public class TaskController extends AbstractController {
   @GetMapping("tasks/{id}/manage")
   public String getManagerTaskView(Model model, Authentication auth,
       @PathVariable("id") Long id) {
-    model.addAttribute("administration", SecurityHelper.isAdmin(auth));
     ManagedTaskDto task = taskService.getManagedTask(id, auth.getName());
     model.addAttribute("task", task);
     return "task-management";
   }
 
+  @PostMapping("tasks/{id}/check")
+  public String checkTask(Model model, Authentication auth,
+      @PathVariable("id") Long id) {
+    taskService.checkTask(id, auth.getName());
+    return "redirect:/tasks";
+  }
+
   @GetMapping("tasks")
   public String getSubscriberTaskListView(Model model, Authentication auth) {
-    model.addAttribute("administration", SecurityHelper.isAdmin(auth));
-    List<TaskDto> tasks = taskService.getSubscribedTasks(auth.getName());
+    List<ReadTaskDto> tasks = taskService.getSubscribedTasks(auth.getName());
     model.addAttribute("tasks", tasks);
     return "tasks";
   }

@@ -1,6 +1,7 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
 import edu.hm.cs.katz.swt2.agenda.SecurityHelper;
+import edu.hm.cs.katz.swt2.agenda.mvc.anwender.AnwenderDisplayDto;
 import edu.hm.cs.katz.swt2.agenda.service.AnwenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 public abstract class AbstractController {
 
   @Autowired
-  AnwenderService anwenderService;
+  private AnwenderService anwenderService;
 
   @ModelAttribute("administration")
   public boolean isAdministrator(Authentication auth) {
@@ -24,9 +25,10 @@ public abstract class AbstractController {
   }
 
   @ModelAttribute("user")
-  private AnwenderDto anwender(Authentication auth) {
+  private AnwenderDisplayDto anwender(Authentication auth) {
     if (auth != null) {
-      return anwenderService.getAnwenderInfo(auth.getName());
+      AnwenderDisplayDto anwenderInfo = anwenderService.getAnwenderInfo(auth.getName());
+      return anwenderInfo;
     }
     return null;
   }
