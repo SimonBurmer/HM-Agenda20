@@ -19,7 +19,7 @@ import edu.hm.cs.katz.swt2.agenda.service.task.ManagedTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.task.TaskDto;
 
 @Component
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 //TODO: Exceptions?
 public class TopicServiceImpl implements TopicService {
 

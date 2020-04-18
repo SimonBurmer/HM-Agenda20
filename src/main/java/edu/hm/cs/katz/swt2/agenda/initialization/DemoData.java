@@ -1,9 +1,9 @@
 package edu.hm.cs.katz.swt2.agenda.initialization;
 
 import edu.hm.cs.katz.swt2.agenda.SecurityHelper;
-import edu.hm.cs.katz.swt2.agenda.service.AnwenderService;
 import edu.hm.cs.katz.swt2.agenda.service.task.TaskService;
 import edu.hm.cs.katz.swt2.agenda.service.topic.TopicService;
+import edu.hm.cs.katz.swt2.agenda.service.user.UserService;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public class DemoData {
   private static final Logger LOG = LoggerFactory.getLogger(DemoData.class);
 
   @Autowired
-  AnwenderService anwenderService;
+  UserService anwenderService;
 
   @Autowired
   TopicService topicService;

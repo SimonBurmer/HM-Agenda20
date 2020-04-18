@@ -1,5 +1,7 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
+import edu.hm.cs.katz.swt2.agenda.mvc.anwender.AnwenderManagementDto;
+import edu.hm.cs.katz.swt2.agenda.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -7,11 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import edu.hm.cs.katz.swt2.agenda.mvc.anwender.AnwenderManagementDto;
-import edu.hm.cs.katz.swt2.agenda.service.AnwenderService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- * Controller-Klasse für die
+ * Controller-Klasse für alle Interaktionen, die das Verwalten der Anwender betrifft. Controller
+ * reagieren auf Aufrufe von URLs. Sie benennen ein View-Template (Thymeleaf-Vorlage) und stellen
+ * Daten zusammen, die darin dargestellt werden.
  * 
  * @author Bastian Katz (mailto: bastian.katz@hm.edu)
  */
@@ -19,7 +22,7 @@ import edu.hm.cs.katz.swt2.agenda.service.AnwenderService;
 public class AnwenderController extends AbstractController {
 
   @Autowired
-  private AnwenderService anwenderService;
+  private UserService anwenderService;
 
   @GetMapping("/anwender")
   public String getAnwenderListView(Model model, Authentication auth) {
@@ -28,15 +31,23 @@ public class AnwenderController extends AbstractController {
   }
 
   @GetMapping("/anwender/create")
-  public String getAnwenderCreationView(Model model, Authentication auth) {
+  public String getAnwenderCreationView(Model model) {
     model.addAttribute("newAnwender", new AnwenderManagementDto());
     return "anwender-creation";
   }
 
   @PostMapping("anwender")
-  public String createAnwender(Model model, Authentication auth,
-      @ModelAttribute("newAnwender") AnwenderManagementDto anwender) {
-    anwenderService.legeAn(anwender.getLogin(), anwender.getPassword(), false);
+  public String createAnwender(Model model,
+      @ModelAttribute("newAnwender") AnwenderManagementDto anwender,
+      RedirectAttributes redirectAttributes) {
+    try {
+      anwenderService.legeAn(anwender.getLogin(), anwender.getPassword(), false);
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("error", e.getMessage());
+      return "redirect:/anwender/create";
+    }
+    redirectAttributes.addFlashAttribute("success",
+        "Anwender " + anwender.getLogin() + " erstellt.");
     return "redirect:/anwender";
   }
 }

@@ -1,15 +1,5 @@
 package edu.hm.cs.katz.swt2.agenda.service.task;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import edu.hm.cs.katz.swt2.agenda.StatusEnum;
 import edu.hm.cs.katz.swt2.agenda.persistence.anwender.Anwender;
 import edu.hm.cs.katz.swt2.agenda.persistence.anwender.AnwenderRepository;
@@ -20,9 +10,19 @@ import edu.hm.cs.katz.swt2.agenda.persistence.task.TaskRepository;
 import edu.hm.cs.katz.swt2.agenda.persistence.topic.Topic;
 import edu.hm.cs.katz.swt2.agenda.persistence.topic.TopicRepository;
 import edu.hm.cs.katz.swt2.agenda.service.topic.TopicDto;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class TaskServiceImpl implements TaskService {
 
   private static final Logger LOG = LoggerFactory.getLogger(TaskServiceImpl.class);

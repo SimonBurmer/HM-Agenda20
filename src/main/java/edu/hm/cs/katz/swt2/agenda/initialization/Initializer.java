@@ -1,5 +1,8 @@
 package edu.hm.cs.katz.swt2.agenda.initialization;
 
+import edu.hm.cs.katz.swt2.agenda.SecurityHelper;
+import edu.hm.cs.katz.swt2.agenda.mvc.anwender.AnwenderDisplayDto;
+import edu.hm.cs.katz.swt2.agenda.service.user.UserService;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -7,9 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import edu.hm.cs.katz.swt2.agenda.SecurityHelper;
-import edu.hm.cs.katz.swt2.agenda.persistence.anwender.Anwender;
-import edu.hm.cs.katz.swt2.agenda.service.AnwenderService;
 
 @Component
 public class Initializer {
@@ -17,7 +17,7 @@ public class Initializer {
   private static final Logger LOG = LoggerFactory.getLogger(Initializer.class);
   
   @Autowired
-  AnwenderService anwenderService;
+  UserService anwenderService;
   
   @Value("${agenda.admin.login}")
   String adminLogin;
@@ -32,7 +32,7 @@ public class Initializer {
   @PostConstruct
   public void checkAdminAccount() {
     SecurityHelper.escalate();
-    List<Anwender> adminAccounts = anwenderService.findeAdmins();
+    List<AnwenderDisplayDto> adminAccounts = anwenderService.findeAdmins();
     if (adminAccounts.isEmpty()) {
       LOG.debug("No admins found. Creating configured admin account.");
 
