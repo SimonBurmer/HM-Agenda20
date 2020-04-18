@@ -93,7 +93,10 @@ public class Anwender {
     return status;
   }
 
-  /* Generated methods */
+  /*
+   * Generierte Methoden. Es ist sinnvoll, hier auf die Auswertung der Assoziationen zu verzichten,
+   * da sonst unnötige Datenbankzugriffe erzeugt werden.
+   */
 
   @Override
   public int hashCode() {
