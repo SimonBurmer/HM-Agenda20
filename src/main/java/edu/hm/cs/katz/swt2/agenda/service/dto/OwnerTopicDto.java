@@ -6,13 +6,13 @@ package edu.hm.cs.katz.swt2.agenda.service.dto;
  * nicht Teil des Modells, so dass Änderungen an den Transferobjekten die Überprüfungen der
  * Geschäftslogik nicht umgehen können.
  * 
- * @see TopicDto
+ * @see SubscriberTopicDto
  * 
  * @author Bastian Katz (mailto: bastian.katz@hm.edu)
  */
-public class ManagedTopicDto extends TopicDto {
+public class OwnerTopicDto extends SubscriberTopicDto {
 
-  public ManagedTopicDto(String uuid, UserDisplayDto user, String title) {
+  public OwnerTopicDto(String uuid, UserDisplayDto user, String title) {
     super(uuid, user, title);
   }
 }

@@ -52,8 +52,8 @@ public class DemoData {
     anwenderService.legeAn(LOGIN_BERT, "b", false);
 
     String htmlKursUuid = topicService.createTopic("HTML für Anfänger", LOGIN_FINE);
-    topicService.register(htmlKursUuid, LOGIN_ERNIE);
-    topicService.register(htmlKursUuid, LOGIN_BERT);
+    topicService.subscribe(htmlKursUuid, LOGIN_ERNIE);
+    topicService.subscribe(htmlKursUuid, LOGIN_BERT);
     Long linkErstellenTask = taskService.createTask(htmlKursUuid, "Link erstellen", LOGIN_FINE);
     taskService.checkTask(linkErstellenTask, LOGIN_ERNIE);
     taskService.createTask(htmlKursUuid, "Leeres HTML-Template erstellen", LOGIN_FINE);
@@ -63,7 +63,7 @@ public class DemoData {
     taskService.createTask(erniesKursUuid, "Googlehupf backen", LOGIN_ERNIE);
     Long affenMuffinTask =
         taskService.createTask(erniesKursUuid, "Affenmuffins backen", LOGIN_ERNIE);
-    topicService.register(erniesKursUuid, LOGIN_BERT);
+    topicService.subscribe(erniesKursUuid, LOGIN_BERT);
     taskService.checkTask(affenMuffinTask, LOGIN_BERT);
   }
 

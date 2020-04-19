@@ -2,9 +2,9 @@ package edu.hm.cs.katz.swt2.agenda.mvc;
 
 import edu.hm.cs.katz.swt2.agenda.service.TaskService;
 import edu.hm.cs.katz.swt2.agenda.service.TopicService;
-import edu.hm.cs.katz.swt2.agenda.service.dto.ManagedTaskDto;
-import edu.hm.cs.katz.swt2.agenda.service.dto.ManagedTopicDto;
-import edu.hm.cs.katz.swt2.agenda.service.dto.ReadTaskDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.TaskDto;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +30,9 @@ public class TaskController extends AbstractController {
    * Ertellt das Formular zur Erfassung eines neuen Tasks.
    */
   @GetMapping("/topics/{uuid}/createTask")
-  public String getTaskCreationView(Model model, @PathVariable("uuid") String uuid) {
-    ManagedTopicDto topic = topicService.getManagedTopic(uuid);
+  public String getTaskCreationView(Model model, Authentication auth,
+      @PathVariable("uuid") String uuid) {
+    OwnerTopicDto topic = topicService.getManagedTopic(uuid, auth.getName());
     model.addAttribute("topic", topic);
     model.addAttribute("newTask", new TaskDto(null, "", topic));
     return "task-creation";
@@ -71,7 +72,7 @@ public class TaskController extends AbstractController {
    */
   @GetMapping("tasks/{id}/manage")
   public String getManagerTaskView(Model model, Authentication auth, @PathVariable("id") Long id) {
-    ManagedTaskDto task = taskService.getManagedTask(id, auth.getName());
+    OwnerTaskDto task = taskService.getManagedTask(id, auth.getName());
     model.addAttribute("task", task);
     return "task-management";
   }
@@ -90,7 +91,7 @@ public class TaskController extends AbstractController {
    */
   @GetMapping("tasks")
   public String getSubscriberTaskListView(Model model, Authentication auth) {
-    List<ReadTaskDto> tasks = taskService.getSubscribedTasks(auth.getName());
+    List<SubscriberTaskDto> tasks = taskService.getSubscribedTasks(auth.getName());
     model.addAttribute("tasks", tasks);
     return "task-listview";
   }

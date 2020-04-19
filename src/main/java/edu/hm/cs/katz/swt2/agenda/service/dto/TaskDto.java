@@ -5,20 +5,20 @@ package edu.hm.cs.katz.swt2.agenda.service.dto;
  * Schnittstellenobjekte der Geschäftslogik; Sie sind nicht Teil des Modells, so dass Änderungen an
  * den Transferobjekten die Überprüfungen der Geschäftslogik nicht umgehen können.
  * 
- * @see ManagedTaskDto
- * @see ReadTaskDto
+ * @see OwnerTaskDto
+ * @see SubscriberTaskDto
  * 
  * @author Bastian Katz (mailto: bastian.katz@hm.edu)
  */
 public class TaskDto {
   Long id;
   String title;
-  TopicDto topic;
+  SubscriberTopicDto topic;
 
   /**
    * Konstruktor.
    */
-  public TaskDto(Long id, String title, TopicDto topicDto) {
+  public TaskDto(Long id, String title, SubscriberTopicDto topicDto) {
     this.id = id;
     this.title = title;
     this.topic = topicDto;
@@ -36,11 +36,11 @@ public class TaskDto {
     this.title = title;
   }
 
-  public TopicDto getTopic() {
+  public SubscriberTopicDto getTopic() {
     return topic;
   }
 
-  public void setTopic(TopicDto topic) {
+  public void setTopic(SubscriberTopicDto topic) {
     this.topic = topic;
   }
 

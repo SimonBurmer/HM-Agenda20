@@ -10,9 +10,9 @@ package edu.hm.cs.katz.swt2.agenda.service.dto;
  * 
  * @author Bastian Katz (mailto: bastian.katz@hm.edu)
  */
-public class ManagedTaskDto extends TaskDto {
+public class OwnerTaskDto extends TaskDto {
 
-  public ManagedTaskDto(Long id, String title, TopicDto topicDto) {
+  public OwnerTaskDto(Long id, String title, SubscriberTopicDto topicDto) {
     super(id, title, topicDto);
   }
 }

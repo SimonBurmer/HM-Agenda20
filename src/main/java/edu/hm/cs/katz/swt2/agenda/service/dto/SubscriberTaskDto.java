@@ -10,11 +10,12 @@ package edu.hm.cs.katz.swt2.agenda.service.dto;
  * 
  * @author Bastian Katz (mailto: bastian.katz@hm.edu)
  */
-public class ReadTaskDto extends TaskDto {
+public class SubscriberTaskDto extends TaskDto {
 
   private StatusDto status;
 
-  public ReadTaskDto(Long taskId, String title, TopicDto topicDto, StatusDto status) {
+  public SubscriberTaskDto(Long taskId, String title, SubscriberTopicDto topicDto,
+      StatusDto status) {
     super(taskId, title, topicDto);
     this.status = status;
   }
@@ -26,5 +27,4 @@ public class ReadTaskDto extends TaskDto {
   public void setStatus(StatusDto status) {
     this.status = status;
   }
-
 }

@@ -9,20 +9,19 @@ import edu.hm.cs.katz.swt2.agenda.persistence.Topic;
 import edu.hm.cs.katz.swt2.agenda.persistence.TopicRepository;
 import edu.hm.cs.katz.swt2.agenda.persistence.User;
 import edu.hm.cs.katz.swt2.agenda.persistence.UserRepository;
-import edu.hm.cs.katz.swt2.agenda.service.dto.ManagedTaskDto;
-import edu.hm.cs.katz.swt2.agenda.service.dto.ReadTaskDto;
-import edu.hm.cs.katz.swt2.agenda.service.dto.StatusDto;
-import edu.hm.cs.katz.swt2.agenda.service.dto.TaskDto;
-import edu.hm.cs.katz.swt2.agenda.service.dto.TopicDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.collections4.SetUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +47,7 @@ public class TaskServiceImpl implements TaskService {
   private DtoMapper mapper;
 
   @Override
+  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public Long createTask(String uuid, String titel, String login) {
     Topic t = topicRepository.findById(uuid).get();
     Task task = new Task(t, titel);
@@ -55,62 +55,72 @@ public class TaskServiceImpl implements TaskService {
     return task.getId();
   }
 
-
   @Override
-  public TaskDto getTask(Long id, String name) {
-    Task task = taskRepository.getOne(id);
+  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+  public SubscriberTaskDto getTask(Long taskId, String login) {
+    Task task = taskRepository.getOne(taskId);
     Topic topic = task.getTopic();
-    TopicDto topicDto = mapper.createDto(topic);
-    User anwender = anwenderRepository.getOne(name);
-    if (!(topic.getCreator().equals(anwender) || topic.getSubscriber().contains(anwender))) {
-      throw new RuntimeException("Access!");
-    }
-    return new TaskDto(task.getId(), task.getTitle(), topicDto);
-  }
-
-  @Override
-  public ManagedTaskDto getManagedTask(Long id, String name) {
-    Task task = taskRepository.getOne(id);
-    Topic topic = task.getTopic();
-    User anwender = anwenderRepository.getOne(name);
-    User createdBy = topic.getCreator();
-    if (!anwender.equals(createdBy)) {
+    User user = anwenderRepository.getOne(login);
+    if (!(topic.getCreator().equals(user) || topic.getSubscriber().contains(user))) {
       throw new AccessDeniedException("Zugriff verweigert.");
     }
-    return new ManagedTaskDto(task.getId(), task.getTitle(), mapper.createDto(topic));
+    Status status = getOrCreateStatus(taskId, login);
+    return mapper.createReadDto(task, status);
   }
 
+  @Override
+  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+  public OwnerTaskDto getManagedTask(Long taskId, String login) {
+    Task task = taskRepository.getOne(taskId);
+    Topic topic = task.getTopic();
+    User createdBy = topic.getCreator();
+    if (!login.equals(createdBy.getLogin())) {
+      throw new AccessDeniedException("Zugriff verweigert.");
+    }
+    return mapper.createManagedDto(task);
+  }
 
   @Override
-  public List<ReadTaskDto> getSubscribedTasks(String login) {
-    User anwender = anwenderRepository.getOne(login);
-    Collection<Topic> topics = anwender.getSubscriptions();
-    Collection<Status> status = anwender.getStatus();
+  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+  public List<SubscriberTaskDto> getSubscribedTasks(String login) {
+    User user = anwenderRepository.getOne(login);
+    Collection<Topic> topics = user.getSubscriptions();
+    return extracted(user, topics);
+  }
+
+  private List<SubscriberTaskDto> extracted(User user, Collection<Topic> topics) {
+    Collection<Status> status = user.getStatus();
     Map<Task, Status> statusForTask = new HashMap<>();
     for (Status currentStatus : status) {
       statusForTask.put(currentStatus.getTask(), currentStatus);
     }
 
-    List<ReadTaskDto> result = new ArrayList<>();
+    List<SubscriberTaskDto> result = new ArrayList<>();
 
     for (Topic t : topics) {
-      TopicDto topicDto = mapper.createDto(t);
-
       for (Task task : t.getTasks()) {
         if (statusForTask.get(task) == null) {
-          Status createdStatus = getOrCreateStatus(task.getId(), login);
+          Status createdStatus = getOrCreateStatus(task.getId(), user.getLogin());
           statusForTask.put(task, createdStatus);
         }
-        StatusDto statusDto = new StatusDto(statusForTask.get(task).getStatus());
-        result.add(new ReadTaskDto(task.getId(), task.getTitle(), topicDto, statusDto));
+        result.add(mapper.createReadDto(task, statusForTask.get(task)));
       }
     }
     return result;
   }
 
+  @Override
+  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+  public List<SubscriberTaskDto> getTasksForTopic(String uuid, String login) {
+    User user = anwenderRepository.getOne(login);
+    Topic topic = topicRepository.getOne(uuid);
+
+    return extracted(user, SetUtils.hashSet(topic));
+  }
+
 
   @Override
-  // TODO: Auth
+  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public void checkTask(Long taskId, String login) {
     Status status = getOrCreateStatus(taskId, login);
     status.setStatus(StatusEnum.FERTIG);
@@ -118,6 +128,16 @@ public class TaskServiceImpl implements TaskService {
         status.getUser(), status.getStatus());
   }
 
+  @Override
+  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+  public List<OwnerTaskDto> getManagedTasks(String uuid, String login) {
+    List<OwnerTaskDto> result = new ArrayList<>();
+    Topic topic = topicRepository.getOne(uuid);
+    for (Task task : topic.getTasks()) {
+      result.add(mapper.createManagedDto(task));
+    }
+    return result;
+  }
 
   private Status getOrCreateStatus(Long taskId, String login) {
     User user = anwenderRepository.getOne(login);
@@ -129,6 +149,4 @@ public class TaskServiceImpl implements TaskService {
     }
     return status;
   }
-
-
 }

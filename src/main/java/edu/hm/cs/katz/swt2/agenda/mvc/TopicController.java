@@ -1,8 +1,9 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
+import edu.hm.cs.katz.swt2.agenda.service.TaskService;
 import edu.hm.cs.katz.swt2.agenda.service.TopicService;
-import edu.hm.cs.katz.swt2.agenda.service.dto.ManagedTopicDto;
-import edu.hm.cs.katz.swt2.agenda.service.dto.TopicDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,9 @@ public class TopicController extends AbstractController {
   @Autowired
   private TopicService topicService;
 
+  @Autowired
+  private TaskService taskService;
+
   /**
    * Erstellt die Übersicht über alle Topics des Anwenders, d.h. selbst erzeugte und abonnierte.
    */
@@ -43,7 +47,7 @@ public class TopicController extends AbstractController {
    */
   @GetMapping("/topics/create")
   public String getTopicCreationView(Model model, Authentication auth) {
-    model.addAttribute("newTopic", new TopicDto(null, null, ""));
+    model.addAttribute("newTopic", new SubscriberTopicDto(null, null, ""));
     return "topic-creation";
   }
 
@@ -55,7 +59,7 @@ public class TopicController extends AbstractController {
    */
   @PostMapping("/topics")
   public String handleTopicCreation(Model model, Authentication auth,
-      @ModelAttribute("newTopic") TopicDto topic, RedirectAttributes redirectAttributes) {
+      @ModelAttribute("newTopic") SubscriberTopicDto topic, RedirectAttributes redirectAttributes) {
     try {
       topicService.createTopic(topic.getTitle(), auth.getName());
     } catch (Exception e) {
@@ -70,10 +74,11 @@ public class TopicController extends AbstractController {
    * Erzeugt Anzeige eines Topics mit Informationen für den Ersteller.
    */
   @GetMapping("/topics/{uuid}/manage")
-  public String createTopicManagementView(Model model, @PathVariable("uuid") String uuid) {
-    ManagedTopicDto topic = topicService.getManagedTopic(uuid);
+  public String createTopicManagementView(Model model, Authentication auth,
+      @PathVariable("uuid") String uuid) {
+    OwnerTopicDto topic = topicService.getManagedTopic(uuid, auth.getName());
     model.addAttribute("topic", topic);
-    model.addAttribute("tasks", topicService.getManagedTasks(uuid));
+    model.addAttribute("tasks", taskService.getManagedTasks(uuid, auth.getName()));
     return "topic-management";
   }
 
@@ -83,7 +88,7 @@ public class TopicController extends AbstractController {
   @GetMapping("/topics/{uuid}/register")
   public String getTaskRegistrationView(Model model, Authentication auth,
       @PathVariable("uuid") String uuid) {
-    TopicDto topic = topicService.getTopic(uuid, auth.getName());
+    SubscriberTopicDto topic = topicService.getTopic(uuid, auth.getName());
     model.addAttribute("topic", topic);
     return "topic-registration";
   }
@@ -95,7 +100,7 @@ public class TopicController extends AbstractController {
   @PostMapping("/topics/{uuid}/register")
   public String handleTaskRegistration(Model model, Authentication auth,
       @PathVariable("uuid") String uuid) {
-    topicService.register(uuid, auth.getName());
+    topicService.subscribe(uuid, auth.getName());
     return "redirect:/topics/" + uuid;
   }
 
@@ -105,9 +110,9 @@ public class TopicController extends AbstractController {
   @GetMapping("/topics/{uuid}")
   public String createTopicView(Model model, Authentication auth,
       @PathVariable("uuid") String uuid) {
-    TopicDto topic = topicService.getTopic(uuid, auth.getName());
+    SubscriberTopicDto topic = topicService.getTopic(uuid, auth.getName());
     model.addAttribute("topic", topic);
-    model.addAttribute("tasks", topicService.getTasks(uuid, auth.getName()));
+    model.addAttribute("tasks", taskService.getTasksForTopic(uuid, auth.getName()));
     return "topic";
   }
 }
