@@ -43,7 +43,7 @@ public class TopicController extends AbstractController {
    */
   @GetMapping("/topics/create")
   public String getTopicCreationView(Model model, Authentication auth) {
-    model.addAttribute("newTopic", new TopicDto(null, "", ""));
+    model.addAttribute("newTopic", new TopicDto(null, null, ""));
     return "topic-creation";
   }
 

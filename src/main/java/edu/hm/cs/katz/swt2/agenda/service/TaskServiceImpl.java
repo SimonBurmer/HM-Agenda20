@@ -44,6 +44,9 @@ public class TaskServiceImpl implements TaskService {
   @Autowired
   private StatusRepository statusRepository;
 
+  @Autowired
+  private DtoMapper mapper;
+
   @Override
   public Long createTask(String uuid, String titel, String login) {
     Topic t = topicRepository.findById(uuid).get();
@@ -57,8 +60,7 @@ public class TaskServiceImpl implements TaskService {
   public TaskDto getTask(Long id, String name) {
     Task task = taskRepository.getOne(id);
     Topic topic = task.getTopic();
-    TopicDto topicDto =
-        new TopicDto(topic.getUuid(), topic.getCreator().getLogin(), topic.getTitle());
+    TopicDto topicDto = mapper.createDto(topic);
     User anwender = anwenderRepository.getOne(name);
     if (!(topic.getCreator().equals(anwender) || topic.getSubscriber().contains(anwender))) {
       throw new RuntimeException("Access!");
@@ -75,10 +77,7 @@ public class TaskServiceImpl implements TaskService {
     if (!anwender.equals(createdBy)) {
       throw new AccessDeniedException("Zugriff verweigert.");
     }
-
-    TopicDto topicDto =
-        new TopicDto(topic.getUuid(), topic.getCreator().getLogin(), topic.getTitle());
-    return new ManagedTaskDto(task.getId(), task.getTitle(), topicDto);
+    return new ManagedTaskDto(task.getId(), task.getTitle(), mapper.createDto(topic));
   }
 
 
@@ -95,7 +94,7 @@ public class TaskServiceImpl implements TaskService {
     List<ReadTaskDto> result = new ArrayList<>();
 
     for (Topic t : topics) {
-      TopicDto topicDto = new TopicDto(t.getUuid(), t.getCreator().getLogin(), t.getTitle());
+      TopicDto topicDto = mapper.createDto(t);
 
       for (Task task : t.getTasks()) {
         if (statusForTask.get(task) == null) {

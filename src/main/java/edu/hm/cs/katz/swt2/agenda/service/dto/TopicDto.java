@@ -1,12 +1,24 @@
 package edu.hm.cs.katz.swt2.agenda.service.dto;
 
+/**
+ * Transferobjekt für einfache Anzeigeinformationen von Topics. Transferobjekte sind
+ * Schnittstellenobjekte der Geschäftslogik; Sie sind nicht Teil des Modells, so dass Änderungen an
+ * den Transferobjekten die Überprüfungen der Geschäftslogik nicht umgehen können.
+ * 
+ * @see ManagedTopicDto
+ * 
+ * @author Bastian Katz (mailto: bastian.katz@hm.edu)
+ */
+
 public class TopicDto {
   private String uuid;
-  private String creator;
+  private UserDisplayDto creator;
   private String title;
 
-  // TODO: DTO types überprüfen
-  public TopicDto(String uuid, String creator, String title) {
+  /**
+   * Konstruktor.
+   */
+  public TopicDto(String uuid, UserDisplayDto creator, String title) {
     this.uuid = uuid;
     this.creator = creator;
     this.title = title;
@@ -16,16 +28,8 @@ public class TopicDto {
     return uuid;
   }
 
-  public void setUuid(String uuid) {
-    this.uuid = uuid;
-  }
-
-  public String getCreator() {
+  public UserDisplayDto getCreator() {
     return creator;
-  }
-
-  public void setCreator(String creator) {
-    this.creator = creator;
   }
 
   public String getTitle() {

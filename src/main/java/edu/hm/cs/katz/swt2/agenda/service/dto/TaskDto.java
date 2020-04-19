@@ -1,11 +1,12 @@
 package edu.hm.cs.katz.swt2.agenda.service.dto;
 
 /**
- * Transferobjekt für einfache Anzeigeinformationen von Tasks . Transferobjekte sind Schnittstellenobjekte der Geschäftslogik; Sie sind nicht Teil des
- * Modells, so dass Änderungen an den Transferobjekten die Überprüfungen der Geschäftslogik nicht
- * umgehen können.
+ * Transferobjekt für einfache Anzeigeinformationen von Tasks. Transferobjekte sind
+ * Schnittstellenobjekte der Geschäftslogik; Sie sind nicht Teil des Modells, so dass Änderungen an
+ * den Transferobjekten die Überprüfungen der Geschäftslogik nicht umgehen können.
  * 
- * @see ManagedTaskDto, {@link ReadTaskDto}
+ * @see ManagedTaskDto
+ * @see ReadTaskDto
  * 
  * @author Bastian Katz (mailto: bastian.katz@hm.edu)
  */
@@ -13,7 +14,10 @@ public class TaskDto {
   Long id;
   String title;
   TopicDto topic;
-  
+
+  /**
+   * Konstruktor.
+   */
   public TaskDto(Long id, String title, TopicDto topicDto) {
     this.id = id;
     this.title = title;
@@ -22,10 +26,6 @@ public class TaskDto {
 
   public Long getId() {
     return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public String getTitle() {
@@ -43,6 +43,6 @@ public class TaskDto {
   public void setTopic(TopicDto topic) {
     this.topic = topic;
   }
-  
-  
+
+
 }
