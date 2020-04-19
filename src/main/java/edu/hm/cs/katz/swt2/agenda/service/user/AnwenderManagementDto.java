@@ -1,4 +1,4 @@
-package edu.hm.cs.katz.swt2.agenda.mvc.anwender;
+package edu.hm.cs.katz.swt2.agenda.service.user;
 
 public class AnwenderManagementDto extends AnwenderDisplayDto {
 

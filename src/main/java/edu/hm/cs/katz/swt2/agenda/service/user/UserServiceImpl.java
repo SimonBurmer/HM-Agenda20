@@ -2,8 +2,6 @@ package edu.hm.cs.katz.swt2.agenda.service.user;
 
 import static edu.hm.cs.katz.swt2.agenda.SecurityHelper.ADMIN_ROLES;
 import static edu.hm.cs.katz.swt2.agenda.SecurityHelper.STANDARD_ROLES;
-
-import edu.hm.cs.katz.swt2.agenda.mvc.anwender.AnwenderDisplayDto;
 import edu.hm.cs.katz.swt2.agenda.persistence.anwender.Anwender;
 import edu.hm.cs.katz.swt2.agenda.persistence.anwender.AnwenderRepository;
 import java.util.ArrayList;

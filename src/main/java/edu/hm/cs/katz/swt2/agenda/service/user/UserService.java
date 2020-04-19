@@ -1,6 +1,5 @@
 package edu.hm.cs.katz.swt2.agenda.service.user;
 
-import edu.hm.cs.katz.swt2.agenda.mvc.anwender.AnwenderDisplayDto;
 import java.util.List;
 
 

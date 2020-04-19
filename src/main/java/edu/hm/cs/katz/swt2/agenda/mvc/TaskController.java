@@ -33,7 +33,6 @@ public class TaskController extends AbstractController {
     ManagedTopicDto topic = topicService.getManagedTopic(uuid);
     model.addAttribute("topic", topic);
     model.addAttribute("newTask", new TaskCreation());
-
     return "task-creation";
   }
 

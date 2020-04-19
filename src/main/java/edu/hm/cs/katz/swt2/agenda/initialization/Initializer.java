@@ -1,7 +1,7 @@
 package edu.hm.cs.katz.swt2.agenda.initialization;
 
 import edu.hm.cs.katz.swt2.agenda.SecurityHelper;
-import edu.hm.cs.katz.swt2.agenda.mvc.anwender.AnwenderDisplayDto;
+import edu.hm.cs.katz.swt2.agenda.service.user.AnwenderDisplayDto;
 import edu.hm.cs.katz.swt2.agenda.service.user.UserService;
 import java.util.List;
 import javax.annotation.PostConstruct;
