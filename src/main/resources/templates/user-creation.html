@@ -8,24 +8,28 @@
 	<div class="container-fluid">
 		<div class="row justify-content-center bg-light">
 			<div class="col-12">
-				<h4 class="display-4">Task erstellen für <i th:text="${topic.title}">Titel</i></h4>
+				<h4 class="display-4">Neuen Anwender erstellen</h4>
 
-				<form id="formName" th:action="@{/topics/{uuid}/createTask(uuid=${topic.uuid})}" th:object="${newTask}"
+				<form id="formName" th:action="@{/users}" th:object="${newUser}"
 					method="post">
 
 					<div class="form-group">
-						<input th:field="*{title}" class="form-control"
-							placeholder="Titel" /> <small class="form-text text-muted">
-							Verwenden Sie einen aussagekräftigen Titel! </small>
+						<input th:field="*{login}" class="form-control"
+							placeholder="Login" /> 
+					</div>
+
+					<div class="form-group">
+						<input th:field="*{password}" class="form-control"
+							placeholder="Password" type="password" /> 
 					</div>
 
 					<button type="submit" class="btn btn-primary">Erstellen!</button>
-					<a th:href="'/topics/'+${topic.uuid}+'/manage'" class="btn btn-danger">Abbrechen</a>
+					<a href="/user" class="btn btn-danger">Abbrechen</a>
 				</form>
 			</div>
 		</div>
 	</div>
-
+	
 	<th:block th:replace="fragments :: scripts">
 </body>
 </html>

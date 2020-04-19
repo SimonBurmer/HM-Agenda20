@@ -1,5 +1,11 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
+import edu.hm.cs.katz.swt2.agenda.service.TaskService;
+import edu.hm.cs.katz.swt2.agenda.service.TopicService;
+import edu.hm.cs.katz.swt2.agenda.service.dto.ManagedTaskDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.ManagedTopicDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.ReadTaskDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.TaskDto;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -9,40 +15,49 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import edu.hm.cs.katz.swt2.agenda.SecurityHelper;
-import edu.hm.cs.katz.swt2.agenda.service.task.ManagedTaskDto;
-import edu.hm.cs.katz.swt2.agenda.service.task.ReadTaskDto;
-import edu.hm.cs.katz.swt2.agenda.service.task.TaskDto;
-import edu.hm.cs.katz.swt2.agenda.service.task.TaskService;
-import edu.hm.cs.katz.swt2.agenda.service.topic.ManagedTopicDto;
-import edu.hm.cs.katz.swt2.agenda.service.topic.TopicService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class TaskController extends AbstractController {
 
   @Autowired
-  TopicService topicService;
+  private TopicService topicService;
 
   @Autowired
-  TaskService taskService;
+  private TaskService taskService;
 
+  /**
+   * Ertellt das Formular zur Erfassung eines neuen Tasks.
+   */
   @GetMapping("/topics/{uuid}/createTask")
-  public String getTaskCreationView(Model model, Authentication auth,
-      @PathVariable("uuid") String uuid) {
-    model.addAttribute("administration", SecurityHelper.isAdmin(auth));
+  public String getTaskCreationView(Model model, @PathVariable("uuid") String uuid) {
     ManagedTopicDto topic = topicService.getManagedTopic(uuid);
     model.addAttribute("topic", topic);
-    model.addAttribute("newTask", new TaskCreation());
+    model.addAttribute("newTask", new TaskDto(null, "", topic));
     return "task-creation";
   }
 
+  /**
+   * Verarbeitet die Erstellung eines Tasks.
+   */
   @PostMapping("/topics/{uuid}/createTask")
   public String handleTaskCreation(Model model, Authentication auth,
-      @PathVariable("uuid") String uuid, @ModelAttribute("newTask") TaskCreation newTask) {
-    taskService.createTask(uuid, newTask.getTitel());
+      @PathVariable("uuid") String uuid, @ModelAttribute("newTask") TaskDto newTask,
+      RedirectAttributes redirectAttributes) {
+    try {
+      taskService.createTask(uuid, newTask.getTitle(), auth.getName());
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("error", e.getMessage());
+      return "redirect:/topics/" + uuid + "/createTask";
+    }
+    redirectAttributes.addFlashAttribute("success",
+        "Task \"" + newTask.getTitle() + "\" erstellt.");
     return "redirect:/topics/" + uuid + "/manage";
   }
 
+  /**
+   * Erstellt die Taskansicht für Abonnenten.
+   */
   @GetMapping("tasks/{id}")
   public String getSubscriberTaskView(Model model, Authentication auth,
       @PathVariable("id") Long id) {
@@ -50,26 +65,33 @@ public class TaskController extends AbstractController {
     model.addAttribute("task", task);
     return "task";
   }
-  
+
+  /**
+   * Erstellt die Taskansicht für den Verwalter/Ersteller eines Topics.
+   */
   @GetMapping("tasks/{id}/manage")
-  public String getManagerTaskView(Model model, Authentication auth,
-      @PathVariable("id") Long id) {
+  public String getManagerTaskView(Model model, Authentication auth, @PathVariable("id") Long id) {
     ManagedTaskDto task = taskService.getManagedTask(id, auth.getName());
     model.addAttribute("task", task);
     return "task-management";
   }
 
+  /**
+   * Verarbeitet die Markierung eines Tasks als "Done".
+   */
   @PostMapping("tasks/{id}/check")
-  public String checkTask(Model model, Authentication auth,
-      @PathVariable("id") Long id) {
+  public String handleTaskChecking(Model model, Authentication auth, @PathVariable("id") Long id) {
     taskService.checkTask(id, auth.getName());
     return "redirect:/tasks";
   }
 
+  /**
+   * Erstellt die Übersicht aller Tasks abonnierter Topics für einen Anwender.
+   */
   @GetMapping("tasks")
   public String getSubscriberTaskListView(Model model, Authentication auth) {
     List<ReadTaskDto> tasks = taskService.getSubscribedTasks(auth.getName());
     model.addAttribute("tasks", tasks);
-    return "tasks";
+    return "task-listview";
   }
 }

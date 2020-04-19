@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head" />
+<body>
+	<nav th:replace="fragments :: navigation"></nav>
+
+	<h2>Anwender</h2>
+	<a href="/users/create" class="btn btn-primary">Anwender anlegen</a>
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Login</th>
+			</tr>
+		</thead>
+		<tr th:each="user : ${users}">
+			<td th:text="${user.login} " />
+		</tr>
+	</table>
+
+	<th:block th:replace="fragments :: scripts">
+</body>
+</html>

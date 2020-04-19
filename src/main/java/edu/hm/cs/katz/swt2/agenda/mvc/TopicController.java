@@ -1,5 +1,8 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
+import edu.hm.cs.katz.swt2.agenda.service.TopicService;
+import edu.hm.cs.katz.swt2.agenda.service.dto.ManagedTopicDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.TopicDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -8,80 +11,103 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import edu.hm.cs.katz.swt2.agenda.SecurityHelper;
-import edu.hm.cs.katz.swt2.agenda.service.task.TaskService;
-import edu.hm.cs.katz.swt2.agenda.service.topic.ManagedTopicDto;
-import edu.hm.cs.katz.swt2.agenda.service.topic.TopicDto;
-import edu.hm.cs.katz.swt2.agenda.service.topic.TopicService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
+/**
+ * Controller-Klasse für alle Interaktionen, die die Anzeige und Verwaltung von Topics betrifft.
+ * Controller reagieren auf Aufrufe von URLs. Sie benennen ein View-Template (Thymeleaf-Vorlage) und
+ * stellen Daten zusammen, die darin dargestellt werden. Dafür verwenden Sie Methoden der
+ * Service-Schicht.
+ * 
+ * @author Bastian Katz (mailto: bastian.katz@hm.edu)
+ */
 @Controller
 public class TopicController extends AbstractController {
 
   @Autowired
-  TopicService topicService;
+  private TopicService topicService;
 
-  @Autowired
-  TaskService taskService;
-
+  /**
+   * Erstellt die Übersicht über alle Topics des Anwenders, d.h. selbst erzeugte und abonnierte.
+   */
   @GetMapping("/topics")
-  public String topicList(Model model, Authentication auth) {
-    model.addAttribute("administration", SecurityHelper.isAdmin(auth));
+  public String getTopicListView(Model model, Authentication auth) {
     model.addAttribute("managedTopics", topicService.getManagedTopics(auth.getName()));
     model.addAttribute("topics", topicService.getSubscriptions(auth.getName()));
-    // Vorlage bzw. View
     return "topic-listview";
   }
 
-  @GetMapping("/createTopic")
-  public String topicCreation(Model model, Authentication auth) {
-    model.addAttribute("administration", SecurityHelper.isAdmin(auth));
-    model.addAttribute("newTopic", new EditableTopic());
+  /**
+   * Erstellt das Formular zum Erstellen eines Topics.
+   */
+  @GetMapping("/topics/create")
+  public String getTopicCreationView(Model model, Authentication auth) {
+    model.addAttribute("newTopic", new TopicDto(null, "", ""));
     return "topic-creation";
   }
 
+  /**
+   * Nimmt den Formularinhalt vom Formular zum Erstellen eines Topics entgegen und legt einen
+   * entsprechendes Topic an. Kommt es dabei zu einer Exception, wird das Erzeugungsformular wieder
+   * angezeigt und eine Fehlermeldung eingeblendet. Andernfalls wird auf die Übersicht der Topics
+   * weitergeleitet und das Anlegen in einer Einblendung bestätigt.
+   */
   @PostMapping("/topics")
-  public String topicCreations(Model model, Authentication auth,
-      @ModelAttribute("newTopic") EditableTopic topic) {
-    topicService.createTopic(topic.getTitle(), auth.getName());
+  public String handleTopicCreation(Model model, Authentication auth,
+      @ModelAttribute("newTopic") TopicDto topic, RedirectAttributes redirectAttributes) {
+    try {
+      topicService.createTopic(topic.getTitle(), auth.getName());
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("error", e.getMessage());
+      return "redirect:/topics/create";
+    }
+    redirectAttributes.addFlashAttribute("success", "Topic " + topic.getTitle() + " angelegt.");
     return "redirect:/topics";
   }
 
-  // Seite nur für Management!
+  /**
+   * Erzeugt Anzeige eines Topics mit Informationen für den Ersteller.
+   */
   @GetMapping("/topics/{uuid}/manage")
-  public String topicManagement(Model model, Authentication auth,
-      @PathVariable("uuid") String uuid) {
+  public String createTopicManagementView(Model model, @PathVariable("uuid") String uuid) {
     ManagedTopicDto topic = topicService.getManagedTopic(uuid);
     model.addAttribute("topic", topic);
     model.addAttribute("tasks", topicService.getManagedTasks(uuid));
     return "topic-management";
   }
 
+  /**
+   * Erzeugt Anzeige für die Nachfrage beim Abonnieren eines Topics.
+   */
   @GetMapping("/topics/{uuid}/register")
   public String getTaskRegistrationView(Model model, Authentication auth,
       @PathVariable("uuid") String uuid) {
-    model.addAttribute("administration", SecurityHelper.isAdmin(auth));
-    TopicDto topic = topicService.getTopic(uuid);
+    TopicDto topic = topicService.getTopic(uuid, auth.getName());
     model.addAttribute("topic", topic);
     return "topic-registration";
   }
 
+  /**
+   * Nimmt das Abonnement (d.h. die Bestätigung auf die Nachfrage) entgegen und erstellt ein
+   * Abonnement.
+   */
   @PostMapping("/topics/{uuid}/register")
   public String handleTaskRegistration(Model model, Authentication auth,
       @PathVariable("uuid") String uuid) {
-    model.addAttribute("administration", SecurityHelper.isAdmin(auth));
     topicService.register(uuid, auth.getName());
     return "redirect:/topics/" + uuid;
   }
 
+  /**
+   * Erstellt Übersicht eines Topics für einen Abonennten.
+   */
   @GetMapping("/topics/{uuid}")
-  // TODO: Sinnvoll nur für registrierte Anwender
   public String createTopicView(Model model, Authentication auth,
       @PathVariable("uuid") String uuid) {
-    model.addAttribute("administration", SecurityHelper.isAdmin(auth));
-    TopicDto topic = topicService.getTopic(uuid);
+    TopicDto topic = topicService.getTopic(uuid, auth.getName());
     model.addAttribute("topic", topic);
-    model.addAttribute("tasks", topicService.getTasks(uuid));
+    model.addAttribute("tasks", topicService.getTasks(uuid, auth.getName()));
     return "topic";
   }
-
 }

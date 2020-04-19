@@ -1,9 +1,9 @@
 package edu.hm.cs.katz.swt2.agenda.initialization;
 
-import edu.hm.cs.katz.swt2.agenda.SecurityHelper;
-import edu.hm.cs.katz.swt2.agenda.service.task.TaskService;
-import edu.hm.cs.katz.swt2.agenda.service.topic.TopicService;
-import edu.hm.cs.katz.swt2.agenda.service.user.UserService;
+import edu.hm.cs.katz.swt2.agenda.common.SecurityHelper;
+import edu.hm.cs.katz.swt2.agenda.service.TaskService;
+import edu.hm.cs.katz.swt2.agenda.service.TopicService;
+import edu.hm.cs.katz.swt2.agenda.service.UserService;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,24 +42,29 @@ public class DemoData {
    * Erstellt die Demo-Daten.
    */
   @PostConstruct
+  @SuppressWarnings("unused")
   public void addData() {
-    SecurityHelper.escalate();
+    SecurityHelper.escalate(); // admin rights
     LOG.debug("Erzeuge Demo-Daten.");
+
+    anwenderService.legeAn(LOGIN_FINE, "t", false);
     anwenderService.legeAn(LOGIN_ERNIE, "t", false);
     anwenderService.legeAn(LOGIN_BERT, "t", false);
-    anwenderService.legeAn(LOGIN_FINE, "t", false);
-    String erniesKursUuid = topicService.createTopic("Ernies Backkurs", LOGIN_ERNIE);
-    taskService.createTask(erniesKursUuid, "Googlehupf backen");
-    taskService.createTask(erniesKursUuid, "Affenmuffins backen");
-    topicService.register(erniesKursUuid, LOGIN_BERT);
-    topicService.register(erniesKursUuid, LOGIN_BERT);
-    String finesKursUuid = topicService.createTopic("HTML für Anfänger", LOGIN_FINE);
-    taskService.createTask(finesKursUuid, "Leeres HTML-Template erstellen");
-    taskService.createTask(finesKursUuid, "Link erstellen");
-    topicService.register(finesKursUuid, LOGIN_BERT);
-    topicService.register(finesKursUuid, LOGIN_ERNIE);
-    topicService.createTopic("CSS für Fortgeschrittene", LOGIN_FINE);
 
+    String htmlKursUuid = topicService.createTopic("HTML für Anfänger", LOGIN_FINE);
+    topicService.register(htmlKursUuid, LOGIN_ERNIE);
+    topicService.register(htmlKursUuid, LOGIN_BERT);
+    Long linkErstellenTask = taskService.createTask(htmlKursUuid, "Link erstellen", LOGIN_FINE);
+    taskService.checkTask(linkErstellenTask, LOGIN_ERNIE);
+    taskService.createTask(htmlKursUuid, "Leeres HTML-Template erstellen", LOGIN_FINE);
+       
+    String cssKursUuid = topicService.createTopic("CSS für Fortgeschrittene", LOGIN_FINE);
+    String erniesKursUuid = topicService.createTopic("Ernies Backkurs", LOGIN_ERNIE);
+    taskService.createTask(erniesKursUuid, "Googlehupf backen", LOGIN_ERNIE);
+    Long affenMuffinTask =
+        taskService.createTask(erniesKursUuid, "Affenmuffins backen", LOGIN_ERNIE);
+    topicService.register(erniesKursUuid, LOGIN_BERT);
+    taskService.checkTask(affenMuffinTask, LOGIN_BERT);
   }
 
 }

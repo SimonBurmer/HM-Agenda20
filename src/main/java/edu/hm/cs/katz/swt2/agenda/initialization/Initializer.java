@@ -1,8 +1,8 @@
 package edu.hm.cs.katz.swt2.agenda.initialization;
 
-import edu.hm.cs.katz.swt2.agenda.SecurityHelper;
-import edu.hm.cs.katz.swt2.agenda.service.user.AnwenderDisplayDto;
-import edu.hm.cs.katz.swt2.agenda.service.user.UserService;
+import edu.hm.cs.katz.swt2.agenda.common.SecurityHelper;
+import edu.hm.cs.katz.swt2.agenda.service.UserService;
+import edu.hm.cs.katz.swt2.agenda.service.dto.UserDisplayDto;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public class Initializer {
   @PostConstruct
   public void checkAdminAccount() {
     SecurityHelper.escalate();
-    List<AnwenderDisplayDto> adminAccounts = anwenderService.findeAdmins();
+    List<UserDisplayDto> adminAccounts = anwenderService.findeAdmins();
     if (adminAccounts.isEmpty()) {
       LOG.debug("No admins found. Creating configured admin account.");
 
