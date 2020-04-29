@@ -1,0 +1,81 @@
+@startuml
+
+title Klassendiagramm der Transferobjekte
+
+class OwnerTaskDto {
+  +OwnerTaskDto(id : Long, title : String, topicDto : SubscriberTopicDto)
+}
+
+class OwnerTopicDto {
+  +OwnerTopicDto(uuid : String, user : UserDisplayDto, title : String)
+}
+
+class StatusDto {
+  -status : StatusEnumw
+  +StatusDto(status : StatusEnum)
+  +getStatus() : StatusEnum
+  +setStatus(status : StatusEnum)
+}
+
+class SubscriberTaskDto {
+  -status : StatusDTO
+  +SubscriberTaskDto(taskId : Long, title : String, topicDto : SubscriberTopicDto, status : StatusDto)
+  +getStatus() : StatusDto
+  +setStatus(status: StatusDto)
+}
+
+class SubscriberTopicDto {
+  -uuid : String
+  -creator : UserDisplayDto
+  -title : String
+  +SubscriberTopicDto(uuid : String, creator : UserDisplayDto, title : String)
+  +getUuid() : String
+  +getCreator() : UserDisplayDto
+  +getTitle() : String
+  +setTitle(title : String)
+}
+
+class TaskDto {
+  ~id : Long
+  ~title : String
+  ~topic : SubscriberTopicDto
+  +TaskDto(id : Long, title : String, topicDto : SubscriberTopicDto)
+  +getId() : Long
+  +getTitle() : String
+  +setTitle(title : String)
+  +getTopic() : SubscriberTopicDto
+  +setTopic(topic : SubscriberTopicDto)
+}
+
+class UserDisplayDto {
+  -login : String
+  +UserDisplayDto(login : String)
+  +UserDisplayDto()
+  +getDisplayName() : String
+  +getLogin() : String
+  +setLogin(login : String)
+}
+
+class UserManagementDto {
+  'ATTRIBUTES
+  -password : String
+  'CONSTRUCTORS
+  +UserManagementDto(login : String, password :String)
+  +UserManagementDto()
+  'METHODS
+  +getPassword() : String
+  +setPassword(password : String)
+}
+
+'Generalizations
+TaskDto <|-- OwnerTaskDto
+TaskDto <|-- SubscriberTaskDto
+SubscriberTopicDto <|-- OwnerTopicDto
+UserDisplayDto <|-- UserManagementDto
+
+' Associations (commented out in class attributes)
+SubscriberTaskDto - StatusDto : -status >
+SubscriberTopicDto - UserDisplayDto : -creator >
+TaskDto - SubscriberTopicDto : -topic >
+
+@enduml
