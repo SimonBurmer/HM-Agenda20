@@ -44,11 +44,9 @@
 					als <strong th:text=${user.displayName}></strong>
 				</span>
 				<form th:if="${user}" th:action="@{/logout}" method="post">
-					<input type="submit" value="Abmelden" />
+					<button class="btn btn-secondary" type="submit">Abmelden</button>
 				</form>
-				<form th:unless="${user}" th:action="@{/login}" method="get">
-					<input type="submit" value="Anmelden" />
-				</form>
+				<a class="btn btn-secondary" th:unless="${user}" href="/login">Anmelden</a>
 			</div>
 		</nav>
 		<div th:if="${success!=null}"
