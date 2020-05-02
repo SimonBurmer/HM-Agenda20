@@ -1,32 +1,95 @@
 @startuml
-object "<u>fine:User</u>" as fine
-object "<u>ernie:User</u>" as ernie
-object "<u>bert:User</u>" as bert
-object "<u>admin:User</u>" as admin
+object "<u>Fine:User</u>" as fine
+fine : String login = fine
+fine : String password = f
+fine : boolean admini = false
+fine : Collection<Topic> subscriptions =
+fine : Collection<Status> status =
 
-object "<u>HTML für Anfänger:Kurs</u>" as HTML
-object "<u>Link erstellenr:Task</u>" as HTMLTs1 
-object "<u>Leeres HTML-Template erstellen:Task</u>" as HTMLTs2
+object "<u>Bert:User</u>" as bert
+bert : String login = bert
+bert : String password = b
+bert : boolean admini = false
+bert : Collection<Topic> subscriptions = HTML
+bert : Collection<Status> status =
+
+object "<u>Ernie:User</u>" as ernie
+ernie : String login = ernie
+ernie : String password = e
+ernie : boolean admini = false
+ernie : Collection<Topic> subscriptions = HTML, Back
+ernie : Collection<Status> status =
+
+object "<u>Admin:User</u>" as admin
+admin : String login = admin
+admin : String password = pwd
+admin : boolean admini = true
+admin : Collection<Topic> subscriptions =
+admin : Collection<Status> status =
 
 
-object "<u>CSS für Fortgeschrittene:Kurs</u>" as CSS
+
+object "<u>HTML:Topic</u>" as HTML
+HTML : String uuid = 
+HTML : String title = HTML für Anfänger
+HTML : User createdBy = fine 
+HTML : Collection<Task> tasks = HTMLTs1,HTMLTs2
+HTML : Collection<User> subscriber = ernie
+
+object "<u>HTMLTs1 :Task</u>" as HTMLTs1 
+HTMLTs1 : Long id =
+HTMLTs1 : Topic topic =  HTML
+HTMLTs1 : String title = Link erstellen
+
+object "<u>HTMLTs2:Task</u>" as HTMLTs2
+HTMLTs2 : Long id =
+HTMLTs2 : Topic topic =  HTML
+HTMLTs2 : String title = Leeres HTML-Template erstellen
 
 
-object "<u>Ernies Backkurs:Kurs</u>" as Back
-object "<u>Googlehupf backen:Task</u>" as BackTs1
-object "<u>Affenmuffins backen:Task</u>" as BackTs2
+
+object "<u>CSS:Topic</u>" as CSS
+CSS : String uuid = 
+CSS : String title = CSS für Fortgeschrittene
+CSS : User createdBy = fine 
+CSS : Collection<Task> tasks = 
+CSS : Collection<User> subscriber = 
+
+
+
+
+object "<u>Back:Topic</u>" as Back
+Back : String uuid = 
+Back : String title = Ernies Backkurs
+Back : User createdBy = ernie
+Back : Collection<Task> tasks = BackTs1, BackTs2
+Back : Collection<User> subscriber = Bert
+
+object "<u>BackTs1:Task</u>" as BackTs1
+BackTs1 : Long id =
+BackTs1 : Topic topic =  Back
+BackTs1 : String title = Googlehupf backen
+
+object "<u>BackTs2:Task</u>" as BackTs2
+BackTs2 : Long id =
+BackTs2 : Topic topic =  Back
+BackTs2 : String title = Affenmuffins backen
+
+
 
 
 fine .. HTML : gehört
 ernie .. HTML : folgt
 bert .. HTML : folgt
-HTML .. HTMLTs1: Aufagbe1
-HTML .. HTMLTs2: Aufagbe2
+HTML .. HTMLTs1: Aufageb1
+HTML .. HTMLTs2: Aufageb2
 
 
 fine .. CSS : gehört
 
+
 ernie .. Back: gehört
+bert .. Back : folgt
 Back .. BackTs1: Aufgabe1
 Back .. BackTs2: Aufgabe2
 @enduml
