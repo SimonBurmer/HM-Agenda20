@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="274px" preserveAspectRatio="none" style="width:854px;height:274px;" version="1.1" viewBox="0 0 854 274" width="854px" zoomAndPan="magnify"><defs><filter height="300%" id="fi55x86z3vcsv" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><rect fill="#FEFECE" filter="url(#fi55x86z3vcsv)" height="33.9688" style="stroke: #A80036; stroke-width: 1.5;" width="68" x="123" y="8"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="54" x="130" y="21.1387">fine:User</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="124" x2="190" y1="25.9688" y2="25.9688"/><rect fill="#FEFECE" filter="url(#fi55x86z3vcsv)" height="33.9688" style="stroke: #A80036; stroke-width: 1.5;" width="77" x="401.5" y="8"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="63" x="408.5" y="21.1387">ernie:User</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="402.5" x2="477.5" y1="25.9688" y2="25.9688"/><rect fill="#FEFECE" filter="url(#fi55x86z3vcsv)" height="33.9688" style="stroke: #A80036; stroke-width: 1.5;" width="72" x="279" y="8"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="58" x="286" y="21.1387">bert:User</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="280" x2="350" y1="25.9688" y2="25.9688"/><rect fill="#FEFECE" filter="url(#fi55x86z3vcsv)" height="33.9688" style="stroke: #A80036; stroke-width: 1.5;" width="83" x="513.5" y="8"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="69" x="520.5" y="21.1387">admin:User</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="514.5" x2="595.5" y1="25.9688" y2="25.9688"/><rect fill="#FEFECE" filter="url(#fi55x86z3vcsv)" height="33.9688" style="stroke: #A80036; stroke-width: 1.5;" width="155" x="237.5" y="119"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="141" x="244.5" y="132.1387">HTML für Anfänger:Kurs</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="238.5" x2="391.5" y1="136.9688" y2="136.9688"/><rect fill="#FEFECE" filter="url(#fi55x86z3vcsv)" height="33.9688" style="stroke: #A80036; stroke-width: 1.5;" width="132" x="25" y="230"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="118" x="32" y="243.1387">Link erstellenr:Task</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="26" x2="156" y1="247.9688" y2="247.9688"/><rect fill="#FEFECE" filter="url(#fi55x86z3vcsv)" height="33.9688" style="stroke: #A80036; stroke-width: 1.5;" width="245" x="192.5" y="230"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="231" x="199.5" y="243.1387">Leeres HTML-Template erstellen:Task</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="193.5" x2="436.5" y1="247.9688" y2="247.9688"/><rect fill="#FEFECE" filter="url(#fi55x86z3vcsv)" height="33.9688" style="stroke: #A80036; stroke-width: 1.5;" width="196" x="6" y="119"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="182" x="13" y="132.1387">CSS für Fortgeschrittene:Kurs</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="201" y1="136.9688" y2="136.9688"/><rect fill="#FEFECE" filter="url(#fi55x86z3vcsv)" height="33.9688" style="stroke: #A80036; stroke-width: 1.5;" width="141" x="485.5" y="119"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="492.5" y="132.1387">Ernies Backkurs:Kurs</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="486.5" x2="625.5" y1="136.9688" y2="136.9688"/><rect fill="#FEFECE" filter="url(#fi55x86z3vcsv)" height="33.9688" style="stroke: #A80036; stroke-width: 1.5;" width="166" x="473" y="230"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="152" x="480" y="243.1387">Googlehupf backen:Task</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="474" x2="638" y1="247.9688" y2="247.9688"/><rect fill="#FEFECE" filter="url(#fi55x86z3vcsv)" height="33.9688" style="stroke: #A80036; stroke-width: 1.5;" width="169" x="674.5" y="230"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="155" x="681.5" y="243.1387">Affenmuffins backen:Task</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="675.5" x2="842.5" y1="247.9688" y2="247.9688"/><!--MD5=[5a021f4518fb2cc1874ce7df6548eae9]
+link fine to HTML--><path d="M180.313,42.083 C210.186,62.692 261.672,98.211 291.591,118.851 " fill="none" id="fine-HTML" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="43" x="247" y="85.0669">gehört</text><!--MD5=[3f3c905ae33425a503ee926ee0e92472]
+link ernie to HTML--><path d="M421.556,42.083 C397.923,62.692 357.19,98.211 333.52,118.851 " fill="none" id="ernie-HTML" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="386" y="85.0669">folgt</text><!--MD5=[d802e7e7900fce6d58d8aff14e00b019]
+link bert to HTML--><path d="M315,42.083 C315,62.692 315,98.211 315,118.851 " fill="none" id="bert-HTML" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="316" y="85.0669">folgt</text><!--MD5=[23831f9958b5844e377ecf43556a4d46]
+link HTML to HTMLTs1--><path d="M281.948,153.083 C239.597,173.6916 166.604,209.2107 124.188,229.8507 " fill="none" id="HTML-HTMLTs1" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="62" x="218" y="196.0669">Aufagbe1</text><!--MD5=[e65ba095a24a2a4d3233c374193407d2]
+link HTML to HTMLTs2--><path d="M315,153.083 C315,173.6916 315,209.2107 315,229.8507 " fill="none" id="HTML-HTMLTs2" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="62" x="316" y="196.0669">Aufagbe2</text><!--MD5=[b793b8085d4662bc5233928c998c7abb]
+link fine to CSS--><path d="M147.889,42.015 C143.005,50.783 136.984,61.891 132,72 C124.273,87.674 116.252,105.961 110.786,118.782 " fill="none" id="fine-CSS" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="43" x="133" y="85.0669">gehört</text><!--MD5=[49c10242f917be4a6c05c1d5850b3c1d]
+link ernie to Back--><path d="M457.116,42.083 C479.048,62.692 516.848,98.211 538.814,118.851 " fill="none" id="ernie-Back" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="43" x="506" y="85.0669">gehört</text><!--MD5=[275669d8ed4d3ae148e1a08d2fae15d9]
+link Back to BackTs1--><path d="M556,153.083 C556,173.6916 556,209.2107 556,229.8507 " fill="none" id="Back-BackTs1" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="62" x="557" y="196.0669">Aufgabe1</text><!--MD5=[65bdd6bc663d1317b832c3f906debfe0]
+link Back to BackTs2--><path d="M585.953,153.083 C624.334,173.6916 690.484,209.2107 728.924,229.8507 " fill="none" id="Back-BackTs2" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="62" x="670" y="196.0669">Aufgabe2</text><!--MD5=[9279e10fe93d80e0044d2ed5a17c1bb8]
+@startuml
+object "<u>fine:User</u>" as fine
+object "<u>ernie:User</u>" as ernie
+object "<u>bert:User</u>" as bert
+object "<u>admin:User</u>" as admin
+
+object "<u>HTML für Anfänger:Kurs</u>" as HTML
+object "<u>Link erstellenr:Task</u>" as HTMLTs1 
+object "<u>Leeres HTML-Template erstellen:Task</u>" as HTMLTs2
+
+
+object "<u>CSS für Fortgeschrittene:Kurs</u>" as CSS
+
+
+object "<u>Ernies Backkurs:Kurs</u>" as Back
+object "<u>Googlehupf backen:Task</u>" as BackTs1
+object "<u>Affenmuffins backen:Task</u>" as BackTs2
+
+
+fine .. HTML : gehört
+ernie .. HTML : folgt
+bert .. HTML : folgt
+HTML .. HTMLTs1: Aufagbe1
+HTML .. HTMLTs2: Aufagbe2
+
+
+fine .. CSS : gehört
+
+ernie .. Back: gehört
+Back .. BackTs1: Aufgabe1
+Back .. BackTs2: Aufgabe2
+@enduml
+
+PlantUML version 1.2020.09beta14(Unknown compile time)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 14.0.1+7
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

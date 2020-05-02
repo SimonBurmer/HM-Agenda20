@@ -1,0 +1,32 @@
+@startuml
+object "<u>fine:User</u>" as fine
+object "<u>ernie:User</u>" as ernie
+object "<u>bert:User</u>" as bert
+object "<u>admin:User</u>" as admin
+
+object "<u>HTML für Anfänger:Kurs</u>" as HTML
+object "<u>Link erstellenr:Task</u>" as HTMLTs1 
+object "<u>Leeres HTML-Template erstellen:Task</u>" as HTMLTs2
+
+
+object "<u>CSS für Fortgeschrittene:Kurs</u>" as CSS
+
+
+object "<u>Ernies Backkurs:Kurs</u>" as Back
+object "<u>Googlehupf backen:Task</u>" as BackTs1
+object "<u>Affenmuffins backen:Task</u>" as BackTs2
+
+
+fine .. HTML : gehört
+ernie .. HTML : folgt
+bert .. HTML : folgt
+HTML .. HTMLTs1: Aufagbe1
+HTML .. HTMLTs2: Aufagbe2
+
+
+fine .. CSS : gehört
+
+ernie .. Back: gehört
+Back .. BackTs1: Aufgabe1
+Back .. BackTs2: Aufgabe2
+@enduml
