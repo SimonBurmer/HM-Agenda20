@@ -2,28 +2,28 @@
 object "<u>Fine:User</u>" as fine
 fine : String login = fine
 fine : String password = f
-fine : boolean admini = false
+fine : boolean admin = false
 fine : Collection<Topic> subscriptions =
 fine : Collection<Status> status =
 
 object "<u>Bert:User</u>" as bert
 bert : String login = bert
 bert : String password = b
-bert : boolean admini = false
+bert : boolean admin = false
 bert : Collection<Topic> subscriptions = HTML
 bert : Collection<Status> status =
 
 object "<u>Ernie:User</u>" as ernie
 ernie : String login = ernie
 ernie : String password = e
-ernie : boolean admini = false
+ernie : boolean admin = false
 ernie : Collection<Topic> subscriptions = HTML, Back
 ernie : Collection<Status> status =
 
 object "<u>Admin:User</u>" as admin
 admin : String login = admin
 admin : String password = pwd
-admin : boolean admini = true
+admin : boolean admin = true
 admin : Collection<Topic> subscriptions =
 admin : Collection<Status> status =
 
@@ -81,8 +81,8 @@ BackTs2 : String title = Affenmuffins backen
 fine .. HTML : gehört
 ernie .. HTML : folgt
 bert .. HTML : folgt
-HTML .. HTMLTs1: Aufageb1
-HTML .. HTMLTs2: Aufageb2
+HTML .. HTMLTs1: Aufgabe
+HTML .. HTMLTs2: Aufgabe
 
 
 fine .. CSS : gehört
@@ -90,6 +90,6 @@ fine .. CSS : gehört
 
 ernie .. Back: gehört
 bert .. Back : folgt
-Back .. BackTs1: Aufgabe1
-Back .. BackTs2: Aufgabe2
+Back .. BackTs1: Aufgabe
+Back .. BackTs2: Aufgabe
 @enduml
