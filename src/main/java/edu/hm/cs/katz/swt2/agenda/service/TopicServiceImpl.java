@@ -9,7 +9,9 @@ import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import javax.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +40,17 @@ public class TopicServiceImpl implements TopicService {
   @Override
   @PreAuthorize("#login==authentication.name OR hasRole('ROLE_ADMIN')")
   public String createTopic(String title, String login) {
+
     LOG.info("Erstelle ein Topic.");
     LOG.debug("Erstelle Topic \"{}\".", title);
-    // TODO: Validation
+
+    if(title.length() < 10){
+      throw new ValidationException("Titel müssen mindestens 10 Zeichen lang sein!");
+    }
+    if(title.length() > 60){
+      throw new ValidationException("Maximal Länge von 30 Zeichen überschritten!");
+    }
+
     String uuid = uuidProvider.getRandomUuid();
     User creator = anwenderRepository.findById(login).get();
     Topic topic = new Topic(uuid, title, creator);
@@ -54,7 +64,7 @@ public class TopicServiceImpl implements TopicService {
     LOG.info("Fordere Liste aller verwalteten Topics eines Anwenders an.");
     LOG.debug("Fordere Liste aller verwalteten Topics für Anwender \"{}\" an.", login);
     User creator = anwenderRepository.findById(login).get();
-    List<Topic> managedTopics = topicRepository.findByCreator(creator);
+    List<Topic> managedTopics = topicRepository.findByCreatorOrderByTitleAsc(creator);
     List<OwnerTopicDto> result = new ArrayList<>();
     for (Topic topic : managedTopics) {
       result.add(mapper.createManagedDto(topic));
@@ -97,8 +107,13 @@ public class TopicServiceImpl implements TopicService {
     LOG.debug("Fordere Liste aller abonnierten Topics für Anwender \"{}\" an.", login);
     User creator = anwenderRepository.findById(login).get();
     Collection<Topic> subscriptions = creator.getSubscriptions();
+
+    TopicComparator tpComp = new TopicComparator();
+    List<Topic> subscriptionsList = new ArrayList<Topic>(subscriptions);
+    Collections.sort(subscriptionsList, tpComp);
+    
     List<SubscriberTopicDto> result = new ArrayList<>();
-    for (Topic topic : subscriptions) {
+    for (Topic topic : subscriptionsList) {
       result.add(mapper.createDto(topic));
     }
     return result;

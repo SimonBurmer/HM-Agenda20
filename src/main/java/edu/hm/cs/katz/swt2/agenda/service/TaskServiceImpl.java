@@ -17,6 +17,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.validation.ValidationException;
 import org.apache.commons.collections4.SetUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,8 +51,17 @@ public class TaskServiceImpl implements TaskService {
   @Override
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public Long createTask(String uuid, String titel, String login) {
+
     LOG.info("Erstelle einen Task.");
     LOG.debug("Erstelle Task \"{}\" mit UUID \"{}\" für Anwender \"{}\".", titel, uuid, login);
+
+    if(titel.length() < 8){
+      throw new ValidationException("Titel müssen mindestens 8 Zeichen lang sein!");
+    }
+    if(titel.length() > 32){
+      throw new ValidationException("Maximal Länge von 32 Zeichen überschritten!");
+    }
+
     Topic t = topicRepository.findById(uuid).get();
     Task task = new Task(t, titel);
     taskRepository.save(task);

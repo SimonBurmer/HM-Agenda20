@@ -22,4 +22,13 @@ public interface TopicRepository extends JpaRepository<Topic, String> {
    */
   List<Topic> findByCreator(User creator);
 
+
+  /**
+   * Findet alle Topics zu einem gegebenen Anwender und ordnet diese nach ihrem Titel
+   * 
+   * @param creator
+   * @return
+   */
+  List<Topic> findByCreatorOrderByTitleAsc(User creator);
+
 }
