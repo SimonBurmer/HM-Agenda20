@@ -13,6 +13,7 @@ import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -116,6 +117,24 @@ public class TaskServiceImpl implements TaskService {
         result.add(mapper.createReadDto(task, statusForTask.get(task)));
       }
     }
+
+    // Sortiere das Ergebnis erst nach Titel
+    result.sort(new Comparator<SubscriberTaskDto>() {
+      @Override
+      public int compare(SubscriberTaskDto o1, SubscriberTaskDto o2) {
+        // Vergleichskriterium ist der Titel
+        return o1.getTitle().compareTo(o2.getTitle());
+      }
+    });
+    // und dann nach Status (benötigt stabilen Sortieralgorithmus)
+    result.sort(new Comparator<SubscriberTaskDto>() {
+      @Override
+      public int compare(SubscriberTaskDto o1, SubscriberTaskDto o2) {
+        // Vergleichskriterium ist der StatusEnum nach Definitionsreihenfolge
+        return o1.getStatus().getStatus().compareTo(o2.getStatus().getStatus());
+      }
+    });
+
     return result;
   }
 
@@ -153,6 +172,16 @@ public class TaskServiceImpl implements TaskService {
     for (Task task : topic.getTasks()) {
       result.add(mapper.createManagedDto(task));
     }
+
+    // Sortiere das Ergebnis nach Titel
+    result.sort(new Comparator<OwnerTaskDto>() {
+      @Override
+      public int compare(OwnerTaskDto o1, OwnerTaskDto o2) {
+        // Vergleichskriterium ist der Titel
+        return o1.getTitle().compareTo(o2.getTitle());
+      }
+    });
+
     return result;
   }
 
