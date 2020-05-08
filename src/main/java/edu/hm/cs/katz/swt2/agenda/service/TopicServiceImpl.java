@@ -10,6 +10,9 @@ import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.validation.ValidationException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +42,12 @@ public class TopicServiceImpl implements TopicService {
   @PreAuthorize("#login==authentication.name OR hasRole('ROLE_ADMIN')")
   public String createTopic(String title, String login) {
     LOG.debug("Erstelle Topic {}.", title);
-    // TODO: Validation
+    if(title.length() < 10){
+      throw new ValidationException("Titel müssen mindestens 10 Zeichen lang sein!");
+    }
+    if(title.length() > 60){
+      throw new ValidationException("Maximal Länge von 30 Zeichen überschritten!");
+    }
     String uuid = uuidProvider.getRandomUuid();
     User creator = anwenderRepository.findById(login).get();
     Topic topic = new Topic(uuid, title, creator);
