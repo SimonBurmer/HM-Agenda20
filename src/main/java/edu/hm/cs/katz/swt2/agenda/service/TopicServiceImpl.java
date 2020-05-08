@@ -9,6 +9,7 @@ import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.validation.ValidationException;
@@ -59,7 +60,7 @@ public class TopicServiceImpl implements TopicService {
   @PreAuthorize("#login==authentication.name")
   public List<OwnerTopicDto> getManagedTopics(String login) {
     User creator = anwenderRepository.findById(login).get();
-    List<Topic> managedTopics = topicRepository.findByCreator(creator);
+    List<Topic> managedTopics = topicRepository.findByCreatorOrderByTitleAsc(creator);
     List<OwnerTopicDto> result = new ArrayList<>();
     for (Topic topic : managedTopics) {
       result.add(mapper.createManagedDto(topic));
@@ -94,8 +95,13 @@ public class TopicServiceImpl implements TopicService {
   public List<SubscriberTopicDto> getSubscriptions(String login) {
     User creator = anwenderRepository.findById(login).get();
     Collection<Topic> subscriptions = creator.getSubscriptions();
+
+    TopicComparator tpComp = new TopicComparator();
+    List<Topic> subscriptionsList = new ArrayList<Topic>(subscriptions);
+    Collections.sort(subscriptionsList, tpComp);
+    
     List<SubscriberTopicDto> result = new ArrayList<>();
-    for (Topic topic : subscriptions) {
+    for (Topic topic : subscriptionsList) {
       result.add(mapper.createDto(topic));
     }
     return result;
