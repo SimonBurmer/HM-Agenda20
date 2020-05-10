@@ -21,5 +21,8 @@ public interface UserRepository extends JpaRepository<User, String> {
    * @return
    */
   List<User> findByAdministrator(boolean isAdministrator);
+  
+  
+  List<User> findAllByOrderByLoginAsc();
 
 }

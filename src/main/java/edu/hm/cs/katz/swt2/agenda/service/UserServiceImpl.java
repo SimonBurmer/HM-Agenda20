@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
   public List<UserDisplayDto> getAllUsers() {
     LOG.info("Erstelle eine Liste aller Anwender.");
     List<UserDisplayDto> result = new ArrayList<>();
-    for (User anwender : anwenderRepository.findAll()) {
+    for (User anwender : anwenderRepository.findAllByOrderByLoginAsc()) {
       result.add(mapper.map(anwender, UserDisplayDto.class));
     }
     return result;
