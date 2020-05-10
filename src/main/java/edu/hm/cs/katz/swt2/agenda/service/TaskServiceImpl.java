@@ -52,14 +52,18 @@ public class TaskServiceImpl implements TaskService {
   @Override
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public Long createTask(String uuid, String titel, String login) {
-
     if(titel.length() < 8){
       throw new ValidationException("Titel müssen mindestens 8 Zeichen lang sein!");
     }
     if(titel.length() > 32){
       throw new ValidationException("Maximal Länge von 32 Zeichen überschritten!");
     }
+    User user = anwenderRepository.getOne(login);
     Topic t = topicRepository.findById(uuid).get();
+    if (!user.equals(t.getCreator())){
+      LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login, t.getTitle());
+      throw new AccessDeniedException("Kein Zugriff auf das Topic!");
+    }
     Task task = new Task(t, titel);
     taskRepository.save(task);
     return task.getId();
