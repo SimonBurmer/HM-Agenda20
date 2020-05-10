@@ -114,17 +114,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
               + "Bitte passen Sie Ihre Eingabe an!");
     }
 
-    if (login.length() < 4 && login.length() > 20) {
+    if (login.length() < 4 || login.length() > 20) {
       throw new ValidationException(
           "Der Name muss zwischen 4 und 20 Zeichen lang sein. Bitte passen Sie Ihre Eingabe an!");
     }
 
-    if (password.length() < 8 && password.length() > 20) {
-      throw new ValidationException("Das Passwort muss zwischen 8 und 20 Zeichen lang sein. "
-          + "Bitte passen Sie Ihre Eingabe an!");
-    }
-
-    if (password.length() < 8 && password.length() > 20) {
+    if (password.length() < 8 || password.length() > 20) {
       throw new ValidationException("Das Passwort muss zwischen 8 und 20 Zeichen lang sein. "
           + "Bitte passen Sie Ihre Eingabe an!");
     }
