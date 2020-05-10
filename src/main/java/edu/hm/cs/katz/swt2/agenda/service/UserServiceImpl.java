@@ -49,12 +49,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+    LOG.info("Fordere Details für einen Anwender an.");
+    LOG.debug("Fordere Details für Anwender \"{}\" an.", username);
+
     Optional<User> findeMitspieler = anwenderRepository.findById(username);
     if (findeMitspieler.isPresent()) {
       User user = findeMitspieler.get();
       return new org.springframework.security.core.userdetails.User(user.getLogin(),
           user.getPassword(), user.isAdministrator() ? ADMIN_ROLES : STANDARD_ROLES);
     } else {
+      LOG.debug("Anwender \"{}\" konnte nicht gefunden werden.", username);
       throw new UsernameNotFoundException("Anwender konnte nicht gefunden werden.");
     }
   }
@@ -62,6 +67,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
   @Override
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public List<UserDisplayDto> getAllUsers() {
+    LOG.info("Erstelle eine Liste aller Anwender.");
     List<UserDisplayDto> result = new ArrayList<>();
     for (User anwender : anwenderRepository.findAll()) {
       result.add(mapper.map(anwender, UserDisplayDto.class));
@@ -72,7 +78,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
   @Override
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public List<UserDisplayDto> findeAdmins() {
-
+    LOG.info("Erstelle eine Liste aller Admins.");
     // Das Mapping auf DTOs geht eleganter, ist dann aber schwer verständlich.
     List<UserDisplayDto> result = new ArrayList<>();
     for (User anwender : anwenderRepository.findByAdministrator(true)) {
@@ -84,7 +90,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
   @Override
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public UserDisplayDto getUserInfo(String login) {
-    LOG.debug("Lese Daten für Anwender {}.", login);
+    LOG.info("Lese Daten eines Anwenders.");
+    LOG.debug("Lese Daten des Anwenders \"{}\".", login);
     User anwender = anwenderRepository.getOne(login);
     return new UserDisplayDto(anwender.getLogin());
   }
@@ -92,7 +99,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
   @Override
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public void legeAn(String login, String password, boolean isAdministrator) {
-    LOG.debug("Erstelle Anwender {}.", login);
+
+    LOG.info("Erstelle einen Anwender.");
+    LOG.debug("Erstelle Anwender \"{}\" mit Passwort ***, isAdmin: {}.", login, isAdministrator);
 
     if (anwenderRepository.existsById(login)) {
       throw new ValidationException(
@@ -164,5 +173,4 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     User anwender = new User(login, "{noop}" + password, isAdministrator);
     anwenderRepository.save(anwender);
   }
-
 }

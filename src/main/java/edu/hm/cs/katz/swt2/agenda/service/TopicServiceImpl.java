@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
 import javax.validation.ValidationException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +40,17 @@ public class TopicServiceImpl implements TopicService {
   @Override
   @PreAuthorize("#login==authentication.name OR hasRole('ROLE_ADMIN')")
   public String createTopic(String title, String login) {
-    LOG.debug("Erstelle Topic {}.", title);
+
+    LOG.info("Erstelle ein Topic.");
+    LOG.debug("Erstelle Topic \"{}\".", title);
+
     if(title.length() < 10){
       throw new ValidationException("Titel müssen mindestens 10 Zeichen lang sein!");
     }
     if(title.length() > 60){
       throw new ValidationException("Maximal Länge von 30 Zeichen überschritten!");
     }
+
     String uuid = uuidProvider.getRandomUuid();
     User creator = anwenderRepository.findById(login).get();
     Topic topic = new Topic(uuid, title, creator);
@@ -59,6 +61,8 @@ public class TopicServiceImpl implements TopicService {
   @Override
   @PreAuthorize("#login==authentication.name")
   public List<OwnerTopicDto> getManagedTopics(String login) {
+    LOG.info("Fordere Liste aller verwalteten Topics eines Anwenders an.");
+    LOG.debug("Fordere Liste aller verwalteten Topics für Anwender \"{}\" an.", login);
     User creator = anwenderRepository.findById(login).get();
     List<Topic> managedTopics = topicRepository.findByCreatorOrderByTitleAsc(creator);
     List<OwnerTopicDto> result = new ArrayList<>();
@@ -71,6 +75,8 @@ public class TopicServiceImpl implements TopicService {
   @Override
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public OwnerTopicDto getManagedTopic(String topicUuid, String login) {
+    LOG.info("Fordere ein verwaltetes Topic eines Anwenders an.");
+    LOG.debug("Fordere ein verwaltetes Topic {} für Anwender \"{}\" an.", topicUuid, login);
     Topic topic = topicRepository.getOne(topicUuid);
     return mapper.createManagedDto(topic);
   }
@@ -78,6 +84,8 @@ public class TopicServiceImpl implements TopicService {
   @Override
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public SubscriberTopicDto getTopic(String uuid, String login) {
+    LOG.info("Fordere Topic mit UUID für einen Anwender an.");
+    LOG.debug("Fordere Topic {} für Anwender \"{}\" an.", uuid, login);
     Topic topic = topicRepository.getOne(uuid);
     return mapper.createDto(topic);
   }
@@ -85,6 +93,8 @@ public class TopicServiceImpl implements TopicService {
   @Override
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public void subscribe(String topicUuid, String login) {
+    LOG.info("Abonniere ein Topic für einen Anwender.");
+    LOG.debug("Abonniere Topic {} für Anwender \"{}\".", topicUuid, login);
     Topic topic = topicRepository.getOne(topicUuid);
     User anwender = anwenderRepository.getOne(login);
     topic.register(anwender);
@@ -93,6 +103,8 @@ public class TopicServiceImpl implements TopicService {
   @Override
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public List<SubscriberTopicDto> getSubscriptions(String login) {
+    LOG.info("Fordere Liste aller abonnierten Topics eines Anwender an.");
+    LOG.debug("Fordere Liste aller abonnierten Topics für Anwender \"{}\" an.", login);
     User creator = anwenderRepository.findById(login).get();
     Collection<Topic> subscriptions = creator.getSubscriptions();
 

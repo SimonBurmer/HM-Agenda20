@@ -57,7 +57,7 @@ public class DemoData {
     Long linkErstellenTask = taskService.createTask(htmlKursUuid, "Link erstellen", LOGIN_FINE);
     taskService.checkTask(linkErstellenTask, LOGIN_ERNIE);
     taskService.createTask(htmlKursUuid, "Leeres HTML-Template erstellen", LOGIN_FINE);
-       
+    
     String cssKursUuid = topicService.createTopic("CSS für Fortgeschrittene", LOGIN_FINE);
     String erniesKursUuid = topicService.createTopic("Ernies Backkurs", LOGIN_ERNIE);
     taskService.createTask(erniesKursUuid, "Googlehupf backen", LOGIN_ERNIE);
