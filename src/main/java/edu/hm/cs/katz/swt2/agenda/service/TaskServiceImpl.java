@@ -53,16 +53,19 @@ public class TaskServiceImpl implements TaskService {
   public Long createTask(String uuid, String titel, String login) {
     LOG.info("Erstelle einen Task.");
     LOG.debug("Erstelle Task \"{}\" mit UUID \"{}\" für Anwender \"{}\".", titel, uuid, login);
-    if(titel.length() < 8){
+    if (titel.length() < 8) {
+      LOG.debug("Titel müssen mindestens 8 Zeichen lang sein!");
       throw new ValidationException("Titel müssen mindestens 8 Zeichen lang sein!");
     }
-    if(titel.length() > 32){
-      throw new ValidationException("Maximal Länge von 32 Zeichen überschritten!");
+    if (titel.length() > 32) {
+      LOG.debug("Maximale Länge von 32 Zeichen überschritten!");
+      throw new ValidationException("Maximale Länge von 32 Zeichen überschritten!");
     }
     User user = anwenderRepository.getOne(login);
     Topic t = topicRepository.findById(uuid).get();
-    if (!user.equals(t.getCreator())){
-      LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login, t.getTitle());
+    if (!user.equals(t.getCreator())) {
+      LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.",
+              login, t.getTitle());
       throw new AccessDeniedException("Kein Zugriff auf das Topic!");
     }
     Task task = new Task(t, titel);

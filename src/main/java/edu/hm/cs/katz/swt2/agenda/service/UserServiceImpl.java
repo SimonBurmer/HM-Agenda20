@@ -104,22 +104,29 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     LOG.debug("Erstelle Anwender \"{}\" mit Passwort ***, isAdmin: {}.", login, isAdministrator);
 
     if (anwenderRepository.existsById(login)) {
+      LOG.debug("Name des Anwenders ist bereits vergeben. Bitte passen Sie Ihre Eingabe an!");
       throw new ValidationException(
           "Name des Anwenders ist bereits vergeben. Bitte passen Sie Ihre Eingabe an!");
     }
 
     if (!login.equals(login.toLowerCase())) {
+      LOG.debug("Name des Anwenders darf nur aus kleingeschriebenen Buchstaben bestehen. "
+              + "Bitte passen Sie Ihre Eingabe an!");
       throw new ValidationException(
           "Name des Anwenders darf nur aus kleingeschriebenen Buchstaben bestehen. "
               + "Bitte passen Sie Ihre Eingabe an!");
     }
 
     if (login.length() < 4 || login.length() > 20) {
+      LOG.debug("Der Name muss zwischen 4 und 20 Zeichen lang sein."
+              + "Bitte passen Sie Ihre Eingabe an!");
       throw new ValidationException(
           "Der Name muss zwischen 4 und 20 Zeichen lang sein. Bitte passen Sie Ihre Eingabe an!");
     }
 
     if (password.length() < 8 || password.length() > 20) {
+      LOG.debug("Das Passwort muss zwischen 8 und 20 Zeichen lang sein. "
+              + "Bitte passen Sie Ihre Eingabe an!");
       throw new ValidationException("Das Passwort muss zwischen 8 und 20 Zeichen lang sein. "
           + "Bitte passen Sie Ihre Eingabe an!");
     }
@@ -127,6 +134,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     String leerzeichen = " ";
 
     if (password.contains(leerzeichen)) {
+      LOG.debug("Das Passwort darf keine Leerzeichen beinhlaten."
+              + "Bitte passen Sie Ihre Eingabe an!");
       throw new ValidationException(
           "Das Passwort darf keine Leerzeichen beinhlaten. Bitte passen Sie Ihre Eingabe an!");
     }
@@ -137,18 +146,24 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 
     if (!pruefenAufGrossbuchstaben.matcher(password).find()) {
+      LOG.debug("Das Passwort muss mindestens einen Großbuchstaben beinhalten. "
+              + "Bitte passen Sie Ihre Eingabe an!");
       throw new ValidationException(
-          "Das Passwort muss mindestens einen Großbuchstabenbuchstaben beinhalten. "
+          "Das Passwort muss mindestens einen Großbuchstaben beinhalten. "
               + "Bitte passen Sie Ihre Eingabe an!");
     }
 
     if (!pruefenAufKleinbuchstaben.matcher(password).find()) {
+      LOG.debug("Das Passwort muss mindestens einen Kleinbuchstaben beinhalten. "
+              + "Bitte passen Sie Ihre Eingabe an!");
       throw new ValidationException(
-          "Das Passwort muss mindestens einen Kleinbuchstabenbuchstaben beinhalten. "
+          "Das Passwort muss mindestens einen Kleinbuchstaben beinhalten. "
               + "Bitte passen Sie Ihre Eingabe an!");
     }
 
     if (!pruefenAufZahl.matcher(password).find()) {
+      LOG.debug("Das Passwort muss mindestens eine Zahl beinhalten."
+              + "Bitte passen Sie Ihre Eingabe an!");
       throw new ValidationException(
           "Das Passwort muss mindestens eine Zahl beinhalten. Bitte passen Sie Ihre Eingabe an!");
 
@@ -157,8 +172,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     Pattern pruefenAufSonderzeichen = Pattern.compile("[*?!$%&]");
 
     if (!pruefenAufSonderzeichen.matcher(password).find()) {
+      LOG.debug("Das Passwort muss mindestens eines dieser Sonderzeichen beinhalten: *?!$%&. "
+              + "Bitte passen Sie Ihre Eingabe an!");
       throw new ValidationException(
-          "Das Passwort muss mindestens einer dieser Sonderzeichen beinhalten: *?!$%&. "
+          "Das Passwort muss mindestens eines dieser Sonderzeichen beinhalten: *?!$%&. "
               + "Bitte passen Sie Ihre Eingabe an!");
     }
 

@@ -44,11 +44,14 @@ public class TopicServiceImpl implements TopicService {
     LOG.info("Erstelle ein Topic.");
     LOG.debug("Erstelle Topic \"{}\".", title);
 
-    if(title.length() < 10){
+    if (title.length() < 10) {
+      LOG.debug("Titel müssen mindestens 10 Zeichen lang sein!");
       throw new ValidationException("Titel müssen mindestens 10 Zeichen lang sein!");
     }
-    if(title.length() > 60){
-      throw new ValidationException("Maximal Länge von 60 Zeichen überschritten!");
+
+    if (title.length() > 60) {
+      LOG.debug("Maximale Länge von 60 Zeichen überschritten!");
+      throw new ValidationException("Maximale Länge von 60 Zeichen überschritten!");
     }
 
     String uuid = uuidProvider.getRandomUuid();
