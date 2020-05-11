@@ -48,7 +48,7 @@ public class TopicServiceImpl implements TopicService {
       throw new ValidationException("Titel müssen mindestens 10 Zeichen lang sein!");
     }
     if(title.length() > 60){
-      throw new ValidationException("Maximal Länge von 30 Zeichen überschritten!");
+      throw new ValidationException("Maximal Länge von 60 Zeichen überschritten!");
     }
 
     String uuid = uuidProvider.getRandomUuid();
