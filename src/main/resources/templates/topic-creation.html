@@ -15,8 +15,8 @@
 
 					<div class="form-group">
 						<input th:field="*{title}" class="form-control"
-							placeholder="Titel" /> <small class="form-text text-muted">
-							Verwenden Sie einen aussagekräftigen Titel! </small>
+							placeholder="Titel" minlength="10" maxlength="60"/> <small class="form-text text-muted">
+							Verwenden Sie einen aussagekräftigen Titel mit 10 bis 60 Zeichen! </small>
 					</div>
 
 					<button type="submit" class="btn btn-primary">Erstellen!</button>
