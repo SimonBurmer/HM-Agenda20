@@ -53,7 +53,7 @@ public class UserController extends AbstractController {
       @ModelAttribute("newUser") UserManagementDto anwender,
       RedirectAttributes redirectAttributes) {
     try {
-      userService.legeAn(anwender.getLogin(), anwender.getPassword(), false);
+      userService.legeAn(anwender.getLogin(), anwender.getName(), anwender.getPassword(), false);
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("error", e.getMessage());
       return "redirect:/users/create";

@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
   @Override
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public void legeAn(String login, String password, boolean isAdministrator) {
+  public void legeAn(String login, String name, String password, boolean isAdministrator) {
 
     LOG.info("Erstelle einen Anwender.");
     LOG.debug("Erstelle Anwender \"{}\" mit Passwort ***, isAdmin: {}.", login, isAdministrator);
@@ -122,6 +122,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
               + "Bitte passen Sie Ihre Eingabe an!");
       throw new ValidationException(
           "Der Name muss zwischen 4 und 20 Zeichen lang sein. Bitte passen Sie Ihre Eingabe an!");
+    }
+
+    if (name.length() < 1 || name.length() > 32) {
+      LOG.debug("Der Name muss zwischen 1 und 32 Zeichen lang sein."
+          + "Bitte passen Sie Ihre Eingabe an!");
+      throw new ValidationException(
+          "Der Name muss zwischen 1 und 32 Zeichen lang sein. Bitte passen Sie Ihre Eingabe an!");
     }
 
     if (password.length() < 8 || password.length() > 20) {
@@ -182,7 +189,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     // Passwörter müssen Hashverfahren benennen.
     // Wir hashen nicht (noop), d.h. wir haben die
     // Passwörter im Klartext in der Datenbank (böse)
-    User anwender = new User(login, "{noop}" + password, isAdministrator);
+    User anwender = new User(login, name, "{noop}" + password, isAdministrator);
     anwenderRepository.save(anwender);
   }
 }

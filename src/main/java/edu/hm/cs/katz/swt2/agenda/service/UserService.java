@@ -12,6 +12,6 @@ public interface UserService {
 
   UserDisplayDto getUserInfo(String login);
 
-  void legeAn(String login, String password, boolean isAdministrator);
+  void legeAn(String login, String name, String password, boolean isAdministrator);
 
 }

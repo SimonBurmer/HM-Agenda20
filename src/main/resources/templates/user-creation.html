@@ -14,6 +14,13 @@
 					method="post">
 
 					<div class="form-group">
+						<input th:field="*{name}" class="form-control"
+							   placeholder="Name" minlength="1" maxlength="32"/>
+						<small class="form-text text-muted">
+						Ihr Name (1 bis 32 Zeichen) </small>
+					</div>
+
+					<div class="form-group">
 						<input th:field="*{login}" class="form-control"
 							placeholder="Login" /> 
 					</div>

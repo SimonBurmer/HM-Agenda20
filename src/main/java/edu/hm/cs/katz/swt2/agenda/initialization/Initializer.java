@@ -38,7 +38,7 @@ public class Initializer {
 
       // TODO: Erzeugung verschieben!
       // TODO: Überprüfung, ob Account schon existiert.
-      anwenderService.legeAn(adminLogin, adminPassword, true);
+      anwenderService.legeAn(adminLogin, "Administrator", adminPassword, true);
     }
   }
   

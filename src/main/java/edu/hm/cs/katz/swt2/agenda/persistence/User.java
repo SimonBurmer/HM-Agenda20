@@ -28,6 +28,11 @@ public class User {
   private String login;
 
   @NotNull
+  @Length(min = 1, max = 32)
+  @Column(length = 32)
+  private String name;
+
+  @NotNull
   @Length(min = 7, max = 32) // lenght includes "{noop}"
   @Column(length = 32)
   private String password;
@@ -55,9 +60,10 @@ public class User {
    * @param password Passwort inklusive Hash "{noop}"
    * @param administrator Flag (true für Administratorrechte)
    */
-  public User(String login, String password, boolean administrator) {
+  public User(String login, String name, String password, boolean administrator) {
     super();
     this.login = login;
+    this.name = name;
     this.password = password;
     this.administrator = administrator;
   }
@@ -73,6 +79,10 @@ public class User {
 
   public String getLogin() {
     return login;
+  }
+
+  public String getName() {
+    return name;
   }
 
   public String getPassword() {
