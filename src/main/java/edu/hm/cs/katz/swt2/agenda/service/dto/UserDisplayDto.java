@@ -10,13 +10,8 @@ package edu.hm.cs.katz.swt2.agenda.service.dto;
 public class UserDisplayDto {
 
   private String login = "";
-
-  public UserDisplayDto(String login) {
-    this.login = login;
-  }
-
-  public UserDisplayDto() {
-  }
+  private int topicCount;
+  private int subscriptionCount;
 
   public String getDisplayName() {
     return login;
@@ -28,5 +23,21 @@ public class UserDisplayDto {
 
   public void setLogin(String login) {
     this.login = login;
+  }
+
+  public int getTopicCount() {
+    return topicCount;
+  }
+
+  public void setTopicCount(int topicCount) {
+    this.topicCount = topicCount;
+  }
+
+  public int getSubscriptionCount() {
+    return subscriptionCount;
+  }
+
+  public void setSubscriptionCount(int subscriptionCount) {
+    this.subscriptionCount = subscriptionCount;
   }
 }

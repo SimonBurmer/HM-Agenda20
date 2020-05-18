@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
   private UserRepository anwenderRepository;
 
   @Autowired
-  private ModelMapper mapper;
+  private DtoMapper mapper;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     LOG.info("Erstelle eine Liste aller Anwender.");
     List<UserDisplayDto> result = new ArrayList<>();
     for (User anwender : anwenderRepository.findAllByOrderByLoginAsc()) {
-      result.add(mapper.map(anwender, UserDisplayDto.class));
+      result.add(mapper.createDto(anwender));
     }
     return result;
   }
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     // Das Mapping auf DTOs geht eleganter, ist dann aber schwer verständlich.
     List<UserDisplayDto> result = new ArrayList<>();
     for (User anwender : anwenderRepository.findByAdministrator(true)) {
-      result.add(mapper.map(anwender, UserDisplayDto.class));
+      result.add(mapper.createDto(anwender));
     }
     return result;
   }
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     LOG.info("Lese Daten eines Anwenders.");
     LOG.debug("Lese Daten des Anwenders \"{}\".", login);
     User anwender = anwenderRepository.getOne(login);
-    return mapper.map(anwender, UserDisplayDto.class);
+    return mapper.createDto(anwender);
   }
 
   @Override

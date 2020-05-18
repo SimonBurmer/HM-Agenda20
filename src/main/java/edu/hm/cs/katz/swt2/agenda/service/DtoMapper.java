@@ -3,6 +3,7 @@ package edu.hm.cs.katz.swt2.agenda.service;
 import edu.hm.cs.katz.swt2.agenda.persistence.Status;
 import edu.hm.cs.katz.swt2.agenda.persistence.Task;
 import edu.hm.cs.katz.swt2.agenda.persistence.Topic;
+import edu.hm.cs.katz.swt2.agenda.persistence.TopicRepository;
 import edu.hm.cs.katz.swt2.agenda.persistence.User;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
@@ -27,11 +28,17 @@ public class DtoMapper {
   @Autowired
   private ModelMapper mapper;
 
+  @Autowired
+  private TopicRepository topicRepository;
+
   /**
    * Erstellt ein {@link UserDisplayDto} aus einem {@link User}.
    */
   public UserDisplayDto createDto(User user) {
-    return mapper.map(user, UserDisplayDto.class);
+    UserDisplayDto dto = mapper.map(user, UserDisplayDto.class);
+    dto.setTopicCount(topicRepository.countByCreator(user));
+    dto.setSubscriptionCount(user.getSubscriptions().size());
+    return dto;
   }
 
   /**
