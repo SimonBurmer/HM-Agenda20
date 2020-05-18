@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     LOG.info("Lese Daten eines Anwenders.");
     LOG.debug("Lese Daten des Anwenders \"{}\".", login);
     User anwender = anwenderRepository.getOne(login);
-    return new UserDisplayDto(anwender.getLogin());
+    return mapper.map(anwender, UserDisplayDto.class);
   }
 
   @Override

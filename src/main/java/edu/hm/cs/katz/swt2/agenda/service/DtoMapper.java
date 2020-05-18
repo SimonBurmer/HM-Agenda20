@@ -31,14 +31,14 @@ public class DtoMapper {
    * Erstellt ein {@link UserDisplayDto} aus einem {@link User}.
    */
   public UserDisplayDto createDto(User user) {
-    return new UserDisplayDto(user.getLogin());
+    return mapper.map(user, UserDisplayDto.class);
   }
 
   /**
    * Erstellt ein {@link SubscriberTopicDto} aus einem {@link Topic}.
    */
   public SubscriberTopicDto createDto(Topic topic) {
-    UserDisplayDto creatorDto = mapper.map(topic.getCreator(), UserDisplayDto.class);
+    UserDisplayDto creatorDto = createDto(topic.getCreator());
     SubscriberTopicDto topicDto =
         new SubscriberTopicDto(topic.getUuid(), creatorDto, topic.getTitle());
     return topicDto;
