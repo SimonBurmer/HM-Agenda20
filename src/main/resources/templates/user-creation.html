@@ -14,17 +14,19 @@
 					method="post">
 
 					<div class="form-group">
-						<input th:field="*{login}" class="form-control"
-							placeholder="Login" /> 
+						<input th:field="*{login}" class="form-control" placeholder="Login" minlength = "4" maxlength= "20" /> 
+						<small class="form-text text-muted">Ein Login muss zwischen 4 und 20 Zeichen haben. Ein Login darf nur aus kleingeschriebenen Buchstaben bestehen.</small>
 					</div>
 
 					<div class="form-group">
 						<input th:field="*{password}" class="form-control"
 							placeholder="Password" type="password" /> 
+						<small class="form-text text-muted">Ein Passwort muss mindestens eine Zahl, einen Großbuchstaben und eines dieser Sonderzeichen beinhalten: *?!$%&.</small>
+						<small class="form-text text-muted">Ein Passwort muss zwischen 4 und 20 Zeichen haben.</small>
 					</div>
 
 					<button type="submit" class="btn btn-primary">Erstellen!</button>
-					<a href="/user" class="btn btn-danger">Abbrechen</a>
+					<a href="/users" class="btn btn-danger">Abbrechen</a>
 				</form>
 			</div>
 		</div>
