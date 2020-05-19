@@ -14,7 +14,7 @@ public interface TopicService {
   /**
    * Erstellt ein neues Topic.
    */
-  String createTopic(String title, String login);
+  String createTopic(String title, String login, String shortDescription, String longDescription);
 
   /**
    * Zugriff auf ein eigenes Topic.

@@ -47,7 +47,7 @@ public class TopicController extends AbstractController {
    */
   @GetMapping("/topics/create")
   public String getTopicCreationView(Model model, Authentication auth) {
-    model.addAttribute("newTopic", new SubscriberTopicDto(null, null, ""));
+    model.addAttribute("newTopic", new SubscriberTopicDto(null, null, "","",""));
     return "topic-creation";
   }
 
@@ -61,7 +61,7 @@ public class TopicController extends AbstractController {
   public String handleTopicCreation(Model model, Authentication auth,
       @ModelAttribute("newTopic") SubscriberTopicDto topic, RedirectAttributes redirectAttributes) {
     try {
-      topicService.createTopic(topic.getTitle(), auth.getName());
+      topicService.createTopic(topic.getTitle(), auth.getName(), topic.getShortDescription(), topic.getLongDescription());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("error", e.getMessage());
       return "redirect:/topics/create";

@@ -39,11 +39,12 @@ public class TopicServiceImpl implements TopicService {
 
   @Override
   @PreAuthorize("#login==authentication.name OR hasRole('ROLE_ADMIN')")
-  public String createTopic(String title, String login) {
+  public String createTopic(String title, String login, String shortDescription, String longDescription) {
 
     LOG.info("Erstelle ein Topic.");
     LOG.debug("Erstelle Topic \"{}\".", title);
 
+    //Check title, shortDescription, longDescription requirements
     if (title.length() < 10) {
       LOG.debug("Titel müssen mindestens 10 Zeichen lang sein!");
       throw new ValidationException("Titel müssen mindestens 10 Zeichen lang sein!");
@@ -53,10 +54,30 @@ public class TopicServiceImpl implements TopicService {
       LOG.debug("Maximale Länge von 60 Zeichen überschritten!");
       throw new ValidationException("Maximale Länge von 60 Zeichen überschritten!");
     }
+    
+    if (shortDescription.length() < 100) {
+      LOG.debug("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
+      throw new ValidationException("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
+    }
+    
+    if (shortDescription.length() > 200) {
+      LOG.debug("Maximale Länge von 200 Zeichen überschritten!");
+      throw new ValidationException("Maximale Länge von 200 Zeichen überschritten!");
+    }
+    
+    if (longDescription.length() < 200) {
+      LOG.debug("Kurzbeschreibungen müssen mindestens 200 Zeichen lang sein!");
+      throw new ValidationException("Kurzbeschreibungen müssen mindestens 200 Zeichen lang sein!");
+    }
+    if (longDescription.length() > 2000) {
+      LOG.debug("Maximale Länge von 1000 Zeichen überschritten!");
+      throw new ValidationException("Maximale Länge von 1000 Zeichen überschritten!");
+    }
+    
 
     String uuid = uuidProvider.getRandomUuid();
     User creator = anwenderRepository.findById(login).get();
-    Topic topic = new Topic(uuid, title, creator);
+    Topic topic = new Topic(uuid, title, creator, shortDescription, longDescription);
     topicRepository.save(topic);
     return uuid;
   }

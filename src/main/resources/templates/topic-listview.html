@@ -7,10 +7,10 @@
 	<div class="container-fluid">
 		<div class="row justify-content-center bg-light">
 			<div class="col-12">
-				<h4 class="display-4">
+				<h3>
 					Eigene Topics <a href="/topics/create" class="btn btn-primary">Topic
 						erstellen</a>
-				</h4>
+				</h3>
 				<span th:if="${#lists.size(managedTopics)==0}">Sie haben
 					keine Topics erstellt!</span>
 			</div>
@@ -20,7 +20,7 @@
 				<div class="card">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${t.title}">Card title</h5>
-						<p class="card-text">Keine Beschreibung</p>
+						<p><small class="card-text" th:text="${t.shortDescription}">Keine Beschreibung</small></p> 
 
 						<a th:href="'/topics/'+${t.uuid}+'/manage'"
 							class="btn btn-primary">Verwalten</a> <a
@@ -34,7 +34,7 @@
 		</div>
 		<div class="row justify-content-center bg-light">
 			<div class="col-12">
-				<h4 class="display-4">Abonnierte Topics</h4>
+				<h6 class="display-4">Abonnierte Topics</h6>
 				<span th:if="${#lists.size(topics)==0}">Sie haben keine
 					Topics abonniert!</span>
 			</div>
@@ -46,7 +46,7 @@
 						<h5 class="card-title" th:text="${t.title}">Card title</h5>
 						<h6 class="card-subtitle mb-2 text-muted"
 							th:text="'Von '+${t.creator.displayName}">Card subtitle</h6>
-						<p class="card-text">Keine Beschreibung</p>
+						<p><small class="card-text" th:text="${t.shortDescription}">Keine Beschreibung</small></p> 
 						<a th:href="'/topics/'+${t.uuid}" class="btn btn-primary">Öffnen</a>
 					</div>
 				</div>

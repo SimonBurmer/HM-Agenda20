@@ -12,7 +12,7 @@ package edu.hm.cs.katz.swt2.agenda.service.dto;
  */
 public class OwnerTopicDto extends SubscriberTopicDto {
 
-  public OwnerTopicDto(String uuid, UserDisplayDto user, String title) {
-    super(uuid, user, title);
+  public OwnerTopicDto(String uuid, UserDisplayDto user, String title,String shortDescription, String longDescription) {
+    super(uuid, user, title, shortDescription, longDescription);
   }
 }

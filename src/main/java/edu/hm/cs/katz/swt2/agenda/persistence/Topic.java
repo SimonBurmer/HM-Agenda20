@@ -31,6 +31,16 @@ public class Topic {
   @NotNull
   private User creator;
 
+  @NotNull
+  @Column(length = 200)
+  @Length(min = 100, max = 200)
+  private String shortDescription;
+
+  @NotNull
+  @Column(length = 1000)
+  @Length(min = 200, max = 2000)
+  private String longDescription;
+
   @OneToMany(mappedBy = "topic")
   private Collection<Task> tasks = new ArrayList<Task>();
 
@@ -51,10 +61,13 @@ public class Topic {
    * @param title Titel, zwischen 10 und 60 Zeichen.
    * @param createdBy Anwender, dem das Topic zugeordnet ist.
    */
-  public Topic(final String uuid, final String title, final User createdBy) {
+  public Topic(final String uuid, final String title, final User createdBy,
+      final String shortDescription, final String longDescription) {
     this.uuid = uuid;
     this.title = title;
     this.creator = createdBy;
+    this.shortDescription = shortDescription;
+    this.longDescription = longDescription;
   }
 
   @Override
@@ -63,6 +76,7 @@ public class Topic {
   }
 
   public String getUuid() {
+
     return uuid;
   }
 
@@ -72,6 +86,14 @@ public class Topic {
 
   public User getCreator() {
     return creator;
+  }
+
+  public String getShortDescription() {
+    return shortDescription;
+  }
+
+  public String getLongDescription() {
+    return longDescription;
   }
 
   public Collection<Task> getTasks() {
