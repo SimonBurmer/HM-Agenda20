@@ -47,9 +47,9 @@ public class DemoData {
     SecurityHelper.escalate(); // admin rights
     LOG.debug("Erzeuge Demo-Daten.");
 
-    anwenderService.legeAn(LOGIN_FINE, "Fine123*", false);
-    anwenderService.legeAn(LOGIN_ERNIE, "Ernie123*", false);
-    anwenderService.legeAn(LOGIN_BERT, "Bert123*", false);
+    anwenderService.legeAn(LOGIN_FINE, "Fine", "Fine123*", false);
+    anwenderService.legeAn(LOGIN_ERNIE,"Ernie", "Ernie123*", false);
+    anwenderService.legeAn(LOGIN_BERT,"Bert", "Bert123*", false);
 
     String htmlKursUuid = topicService.createTopic("HTML für Anfänger", LOGIN_FINE,
         "Was muss man eigentlich können oder wissen, um nicht nur im Internet zu surfen, sondern auch eigene Inhalte im Internet zu präsentieren?",
