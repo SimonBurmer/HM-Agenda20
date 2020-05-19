@@ -20,9 +20,9 @@
 
 					<div class="form-group">
 						<input th:field="*{password}" class="form-control"
-							placeholder="Password" type="password" /> 
+							placeholder="Password" type="password" minlength = "8" maxlength= "20"/> 
 						<small class="form-text text-muted">Ein Passwort muss mindestens eine Zahl, einen Großbuchstaben und eines dieser Sonderzeichen beinhalten: *?!$%&.</small>
-						<small class="form-text text-muted">Ein Passwort muss zwischen 4 und 20 Zeichen haben.</small>
+						<small class="form-text text-muted">Ein Passwort muss zwischen 8 und 20 Zeichen haben.</small>
 					</div>
 
 					<button type="submit" class="btn btn-primary">Erstellen!</button>
