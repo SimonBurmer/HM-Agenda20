@@ -12,8 +12,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 /**
- * Initialisierung von Demo-Daten. Diese Komponente erstellt beim Systemstart Anwender, Topics,
- * Abonnements usw., damit man die Anwendung mit allen Features vorführen kann.
+ * Initialisierung von Demo-Daten. Diese Komponente erstellt beim Systemstart
+ * Anwender, Topics, Abonnements usw., damit man die Anwendung mit allen
+ * Features vorführen kann.
  * 
  * @author Bastian Katz (mailto: bastian.katz@hm.edu)
  */
@@ -21,75 +22,90 @@ import org.springframework.stereotype.Component;
 @Profile("demo")
 public class DemoData {
 
-  private static final String LOGIN_FINE = "fine";
+	private static final String ERNIE_BACKKURS_KURZ = "Was muss man eigentlich können oder wissen, um nicht nur im Internet zu surfen, sondern auch eigene Inhalte im Internet zu präsentieren?";
 
-  private static final String LOGIN_ERNIE = "ernie";
+	private static final String LOGIN_FINE = "fine";
 
-  private static final String LOGIN_BERT = "bert";
+	private static final String LOGIN_ERNIE = "ernie";
 
-  private static final Logger LOG = LoggerFactory.getLogger(DemoData.class);
+	private static final String LOGIN_BERT = "bert";
 
-  @Autowired
-  UserService anwenderService;
+	private static final Logger LOG = LoggerFactory.getLogger(DemoData.class);
 
-  @Autowired
-  TopicService topicService;
+	@Autowired
+	UserService anwenderService;
 
-  @Autowired
-  TaskService taskService;
+	@Autowired
+	TopicService topicService;
 
-  /**
-   * Erstellt die Demo-Daten.
-   */
-  @PostConstruct
-  @SuppressWarnings("unused")
-  public void addData() {
-    SecurityHelper.escalate(); // admin rights
-    LOG.debug("Erzeuge Demo-Daten.");
+	@Autowired
+	TaskService taskService;
 
-    anwenderService.legeAn(LOGIN_FINE, "Fine", "Fine123*", false);
-    anwenderService.legeAn(LOGIN_ERNIE,"Ernie", "Ernie123*", false);
-    anwenderService.legeAn(LOGIN_BERT,"Bert", "Bert123*", false);
+	/**
+	 * Erstellt die Demo-Daten.
+	 */
+	@PostConstruct
+	@SuppressWarnings("unused")
+	public void addData() {
+		SecurityHelper.escalate(); // admin rights
+		LOG.debug("Erzeuge Demo-Daten.");
 
-    String htmlKursUuid = topicService.createTopic("HTML für Anfänger", LOGIN_FINE,
-        "Was muss man eigentlich können oder wissen, um nicht nur im Internet zu surfen, sondern auch eigene Inhalte im Internet zu präsentieren?",
-        "In diesem Tutorial lernen Sie die Grundlagen von HTML kennen. Und keine Sorge, diese vier Buchstaben dürfen Sie gerne deutsch aussprechen. Wofür diese Buchstaben im Einzelnen stehen, verraten wir Ihnen auf jeden Fall noch. Jedenfalls sind Sie herzlich eingeladen, mit uns eine Reise durch die Techniken des Internets zu wagen.\n"
-            + "\n"
-            + "Zunächst: Sie brauchen keine Internetverbindung, um mit HTML Webseiten erstellen und testen zu können. Solche Webseiten bestehen nämlich, wie Sie feststellen werden, aus ganz normalen Dateien, die Sie einfach auf Ihrem Computer speichern können.\n"
-            + "Um HTML-Dateien auf dem Bildschirm anzeigen zu können, benötigen Sie dann nur Ihren Browser, also das Programm, mit dem Sie gerade dieses Tutorial lesen. Die HTML-Dateien (und auch CSS-Stylesheets ab Kapitel 7), um die es im Folgenden hauptsächlich geht, sind reine Textdateien. Um diese Dateien bearbeiten zu können, reicht erstmal ein einfacher Texteditor, der bei Ihrem Betriebssystem bereits vorinstalliert ist.\n"
-            + "Beispiele:\n" + "•   Linux: KWrite, gedit\n" + "•   (Mac) OS X: TextEdit\n"
-            + "•   Windows: Editor/Notepad\n"
-            + "Es gibt aber eine Vielzahl von oft auch kostenlosen Code-Editoren.\n" + "");
-    
-    topicService.subscribe(htmlKursUuid, LOGIN_ERNIE);
-    topicService.subscribe(htmlKursUuid, LOGIN_BERT);
-    Long linkErstellenTask = taskService.createTask(htmlKursUuid, "Link erstellen", LOGIN_FINE);
-    taskService.checkTask(linkErstellenTask, LOGIN_ERNIE);
-    taskService.createTask(htmlKursUuid, "Leeres HTML-Template erstellen", LOGIN_FINE);
+		anwenderService.legeAn(LOGIN_FINE, "Fine", "Fine123*", false);
+		anwenderService.legeAn(LOGIN_ERNIE, "Ernie", "Ernie123*", false);
+		anwenderService.legeAn(LOGIN_BERT, "Bert", "Bert123*", false);
 
-    String cssKursUuid = topicService.createTopic("CSS für Fortgeschrittene", LOGIN_FINE,
-        "Was muss man eigentlich können oder wissen, um nicht nur im Internet zu surfen, sondern auch eigene Inhalte im Internet zu präsentieren?",
-        "In diesem Tutorial lernen Sie die Grundlagen von HTML kennen. Und keine Sorge, diese vier Buchstaben dürfen Sie gerne deutsch aussprechen. Wofür diese Buchstaben im Einzelnen stehen, verraten wir Ihnen auf jeden Fall noch. Jedenfalls sind Sie herzlich eingeladen, mit uns eine Reise durch die Techniken des Internets zu wagen.\n"
-            + "\n"
-            + "Zunächst: Sie brauchen keine Internetverbindung, um mit HTML Webseiten erstellen und testen zu können. Solche Webseiten bestehen nämlich, wie Sie feststellen werden, aus ganz normalen Dateien, die Sie einfach auf Ihrem Computer speichern können.\n"
-            + "Um HTML-Dateien auf dem Bildschirm anzeigen zu können, benötigen Sie dann nur Ihren Browser, also das Programm, mit dem Sie gerade dieses Tutorial lesen. Die HTML-Dateien (und auch CSS-Stylesheets ab Kapitel 7), um die es im Folgenden hauptsächlich geht, sind reine Textdateien. Um diese Dateien bearbeiten zu können, reicht erstmal ein einfacher Texteditor, der bei Ihrem Betriebssystem bereits vorinstalliert ist.\n"
-            + "Beispiele:\n" + "•   Linux: KWrite, gedit\n" + "•   (Mac) OS X: TextEdit\n"
-            + "•   Windows: Editor/Notepad\n"
-            + "Es gibt aber eine Vielzahl von oft auch kostenlosen Code-Editoren.\n" + "");
-    String erniesKursUuid = topicService.createTopic("Ernies Backkurs", LOGIN_ERNIE,
-        "Was muss man eigentlich können oder wissen, um nicht nur im Internet zu surfen, sondern auch eigene Inhalte im Internet zu präsentieren?",
-        "In diesem Tutorial lernen Sie die Grundlagen von HTML kennen. Und keine Sorge, diese vier Buchstaben dürfen Sie gerne deutsch aussprechen. Wofür diese Buchstaben im Einzelnen stehen, verraten wir Ihnen auf jeden Fall noch. Jedenfalls sind Sie herzlich eingeladen, mit uns eine Reise durch die Techniken des Internets zu wagen.\n"
-            + "\n"
-            + "Zunächst: Sie brauchen keine Internetverbindung, um mit HTML Webseiten erstellen und testen zu können. Solche Webseiten bestehen nämlich, wie Sie feststellen werden, aus ganz normalen Dateien, die Sie einfach auf Ihrem Computer speichern können.\n"
-            + "Um HTML-Dateien auf dem Bildschirm anzeigen zu können, benötigen Sie dann nur Ihren Browser, also das Programm, mit dem Sie gerade dieses Tutorial lesen. Die HTML-Dateien (und auch CSS-Stylesheets ab Kapitel 7), um die es im Folgenden hauptsächlich geht, sind reine Textdateien. Um diese Dateien bearbeiten zu können, reicht erstmal ein einfacher Texteditor, der bei Ihrem Betriebssystem bereits vorinstalliert ist.\n"
-            + "Beispiele:\n" + "•   Linux: KWrite, gedit\n" + "•   (Mac) OS X: TextEdit\n"
-            + "•   Windows: Editor/Notepad\n"
-            + "Es gibt aber eine Vielzahl von oft auch kostenlosen Code-Editoren.\n" + "");
-    taskService.createTask(erniesKursUuid, "Googlehupf backen", LOGIN_ERNIE);
-    Long affenMuffinTask =
-        taskService.createTask(erniesKursUuid, "Affenmuffins backen", LOGIN_ERNIE);
-    topicService.subscribe(erniesKursUuid, LOGIN_BERT);
-    taskService.checkTask(affenMuffinTask, LOGIN_BERT);
-  }
+		String htmlKursUuid = topicService.createTopic("HTML für Anfänger", LOGIN_FINE,
+				ERNIE_BACKKURS_KURZ,
+				"In diesem Tutorial lernen Sie die Grundlagen von HTML kennen. Und keine Sorge, diese vier Buchstaben dürfen Sie gerne deutsch aussprechen. Wofür diese Buchstaben im Einzelnen stehen, verraten wir Ihnen auf jeden Fall noch. Jedenfalls sind Sie herzlich eingeladen, mit uns eine Reise durch die Techniken des Internets zu wagen.\n"
+						+ "\n"
+						+ "Zunächst: Sie brauchen keine Internetverbindung, um mit HTML Webseiten erstellen und testen zu können. Solche Webseiten bestehen nämlich, wie Sie feststellen werden, aus ganz normalen Dateien, die Sie einfach auf Ihrem Computer speichern können.\n"
+						+ "Um HTML-Dateien auf dem Bildschirm anzeigen zu können, benötigen Sie dann nur Ihren Browser, also das Programm, mit dem Sie gerade dieses Tutorial lesen. Die HTML-Dateien (und auch CSS-Stylesheets ab Kapitel 7), um die es im Folgenden hauptsächlich geht, sind reine Textdateien. Um diese Dateien bearbeiten zu können, reicht erstmal ein einfacher Texteditor, der bei Ihrem Betriebssystem bereits vorinstalliert ist.\n"
+						+ "Beispiele:\n" + "•   Linux: KWrite, gedit\n" + "•   (Mac) OS X: TextEdit\n"
+						+ "•   Windows: Editor/Notepad\n"
+						+ "Es gibt aber eine Vielzahl von oft auch kostenlosen Code-Editoren.");
+
+		topicService.subscribe(htmlKursUuid, LOGIN_ERNIE);
+		topicService.subscribe(htmlKursUuid, LOGIN_BERT);
+		Long linkErstellenTask = taskService.createTask(htmlKursUuid, "Link erstellen",
+				LOGIN_FINE, "Die Hypertext Markup Language ist eine textbasierte Auszeichnungssprache zur Strukturierung elektronischer Dokumente wie Texte mit Hyperlinks, Bildern und anderen Inhalten.", "Vor der Entwicklung des World Wide Web und dessen Bestandteilen, zu denen auch HTML gehört, war es nicht möglich, Dokumente auf elektronischem Weg einfach, schnell und strukturiert zwischen mehreren Personen auszutauschen und miteinander effizient zu verknüpfen. Man benötigte neben Übertragungsprotokollen auch eine einfach zu verstehende Textauszeichnungssprache. Genau hier lag der Ansatzpunkt von HTML. "
+								+ "Um Forschungsergebnisse mit anderen Mitarbeitern der Europäischen Organisation für Kernforschung (CERN) zu teilen und von den beiden Standorten in Frankreich und in der Schweiz aus zugänglich zu machen, entstand 1989 am CERN ein Projekt, welches sich mit der Lösung dieser Aufgabe beschäftigte. Am 3. November 1992 erschien die erste Version der HTML-Spezifikation.");
+		taskService.checkTask(linkErstellenTask, LOGIN_ERNIE);
+		taskService.createTask(htmlKursUuid, "Leeres HTML-Template erstellen", LOGIN_FINE,
+				"Die Hypertext Markup Language ist eine textbasierte Auszeichnungssprache zur Strukturierung elektronischer Dokumente wie Texte mit Hyperlinks, Bildern und anderen Inhalten.", "Vor der Entwicklung des World Wide Web und dessen Bestandteilen, zu denen auch HTML gehört, war es nicht möglich, Dokumente auf elektronischem Weg einfach, schnell und strukturiert zwischen mehreren Personen auszutauschen und miteinander effizient zu verknüpfen. Man benötigte neben Übertragungsprotokollen auch eine einfach zu verstehende Textauszeichnungssprache. Genau hier lag der Ansatzpunkt von HTML. "
+								+ "Um Forschungsergebnisse mit anderen Mitarbeitern der Europäischen Organisation für Kernforschung (CERN) zu teilen und von den beiden Standorten in Frankreich und in der Schweiz aus zugänglich zu machen, entstand 1989 am CERN ein Projekt, welches sich mit der Lösung dieser Aufgabe beschäftigte. Am 3. November 1992 erschien die erste Version der HTML-Spezifikation.");
+
+		String cssKursUuid = topicService.createTopic("CSS für Fortgeschrittene", LOGIN_FINE,
+				ERNIE_BACKKURS_KURZ,
+				"In diesem Tutorial lernen Sie die Grundlagen von HTML kennen. Und keine Sorge, diese vier Buchstaben dürfen Sie gerne deutsch aussprechen. Wofür diese Buchstaben im Einzelnen stehen, verraten wir Ihnen auf jeden Fall noch. Jedenfalls sind Sie herzlich eingeladen, mit uns eine Reise durch die Techniken des Internets zu wagen.\n"
+						+ "\n"
+						+ "Zunächst: Sie brauchen keine Internetverbindung, um mit HTML Webseiten erstellen und testen zu können. Solche Webseiten bestehen nämlich, wie Sie feststellen werden, aus ganz normalen Dateien, die Sie einfach auf Ihrem Computer speichern können.\n"
+						+ "Um HTML-Dateien auf dem Bildschirm anzeigen zu können, benötigen Sie dann nur Ihren Browser, also das Programm, mit dem Sie gerade dieses Tutorial lesen. Die HTML-Dateien (und auch CSS-Stylesheets ab Kapitel 7), um die es im Folgenden hauptsächlich geht, sind reine Textdateien. Um diese Dateien bearbeiten zu können, reicht erstmal ein einfacher Texteditor, der bei Ihrem Betriebssystem bereits vorinstalliert ist.\n"
+						+ "Beispiele:\n" + "•   Linux: KWrite, gedit\n" + "•   (Mac) OS X: TextEdit\n"
+						+ "•   Windows: Editor/Notepad\n"
+						+ "Es gibt aber eine Vielzahl von oft auch kostenlosen Code-Editoren.\n" + "");
+		String erniesKursUuid = topicService.createTopic("Ernies Backkurs", LOGIN_ERNIE,
+				ERNIE_BACKKURS_KURZ,
+				"In diesem Tutorial lernen Sie die Grundlagen von HTML kennen. Und keine Sorge, diese vier Buchstaben dürfen Sie gerne deutsch aussprechen. Wofür diese Buchstaben im Einzelnen stehen, verraten wir Ihnen auf jeden Fall noch. Jedenfalls sind Sie herzlich eingeladen, mit uns eine Reise durch die Techniken des Internets zu wagen.\n"
+						+ "\n"
+						+ "Zunächst: Sie brauchen keine Internetverbindung, um mit HTML Webseiten erstellen und testen zu können. Solche Webseiten bestehen nämlich, wie Sie feststellen werden, aus ganz normalen Dateien, die Sie einfach auf Ihrem Computer speichern können.\n"
+						+ "Um HTML-Dateien auf dem Bildschirm anzeigen zu können, benötigen Sie dann nur Ihren Browser, also das Programm, mit dem Sie gerade dieses Tutorial lesen. Die HTML-Dateien (und auch CSS-Stylesheets ab Kapitel 7), um die es im Folgenden hauptsächlich geht, sind reine Textdateien. Um diese Dateien bearbeiten zu können, reicht erstmal ein einfacher Texteditor, der bei Ihrem Betriebssystem bereits vorinstalliert ist.\n"
+						+ "Beispiele:\n" + "•   Linux: KWrite, gedit\n" + "•   (Mac) OS X: TextEdit\n"
+						+ "•   Windows: Editor/Notepad\n"
+						+ "Es gibt aber eine Vielzahl von oft auch kostenlosen Code-Editoren.\n" + "");
+		taskService.createTask(erniesKursUuid, "Googlehupf backen", LOGIN_ERNIE,
+				"Der Kuchen gehört zu den feinen Backwaren. Es handelt sich um ein zumeist süßes Backwerk. Man unterscheidet vor allem nach der Art der Herstellung Blechkuchen.", "Der Kuchenteig besteht je nach Rezept aus Mehl, Zucker, Bindemittel (z. B. Ei) sowie Fett (Butter oder Margarine), einer Flüssigkeit (Milch, Wasser oder Fruchtsaft), Aromen (z. B. Backaroma) und einem Triebmittel (Backpulver oder Hefe), die miteinander vermengt werden. Wichtige Teigarten sind Hefeteig, Mürbeteig (Knetteig) und Rührteig.\n"
+								+ "\n"
+								+ "Bäckereien und Konditoreien bieten Kuchen stückweise oder als Backblecheinheiten an. In Supermärkten gibt es von Großbäckereien hergestellte Kuchen.\n"
+								+ "\n"
+								+ "Das Backen von Kuchen ist vor allem in Europa und Nordamerika traditionell verbreitet, während es auf anderen Kontinenten nur eine untergeordnete Rolle spielt; in Asien sind fast ausschließlich Reiskuchen bekannt. In China haben außerdem die Mondkuchen eine besondere Bedeutung.");
+		Long affenMuffinTask = taskService.createTask(erniesKursUuid, "Affenmuffins backen", LOGIN_ERNIE,
+				"Der Kuchen gehört zu den feinen Backwaren. Es handelt sich um ein zumeist süßes Backwerk. Man unterscheidet vor allem nach der Art der Herstellung Blechkuchen.", "Der Kuchenteig besteht je nach Rezept aus Mehl, Zucker, Bindemittel (z. B. Ei) sowie Fett (Butter oder Margarine), einer Flüssigkeit (Milch, Wasser oder Fruchtsaft), Aromen (z. B. Backaroma) und einem Triebmittel (Backpulver oder Hefe), die miteinander vermengt werden. Wichtige Teigarten sind Hefeteig, Mürbeteig (Knetteig) und Rührteig.\n"
+								+ "\n"
+								+ "Bäckereien und Konditoreien bieten Kuchen stückweise oder als Backblecheinheiten an. In Supermärkten gibt es von Großbäckereien hergestellte Kuchen.\n"
+								+ "\n"
+								+ "Das Backen von Kuchen ist vor allem in Europa und Nordamerika traditionell verbreitet, während es auf anderen Kontinenten nur eine untergeordnete Rolle spielt; in Asien sind fast ausschließlich Reiskuchen bekannt. In China haben außerdem die Mondkuchen eine besondere Bedeutung.");
+		topicService.subscribe(erniesKursUuid, LOGIN_BERT);
+		taskService.checkTask(affenMuffinTask, LOGIN_BERT);
+	}
 
 }

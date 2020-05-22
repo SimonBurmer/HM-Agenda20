@@ -8,7 +8,7 @@
 	<div class="container-fluid">
 		<div class="row justify-content-center bg-light">
 			<div class="col-12">
-				<h4 class="display-4">Eigene Aufgaben</h4>
+				<h3 class="display-4">Eigene Aufgaben</h3>
 				<span th:if="${#lists.size(tasks)==0}">Sie haben keine
 					Aufgaben!</span>
 			</div>
@@ -23,7 +23,8 @@
 							<h6 class="card-subtitle mb-2 text-muted"
 								th:text="'In '+${t.topic.title}">Card subtitle</h6>
 
-							<p class="card-text">Keine Beschreibung</p>
+							<p><small class="card-text" th:text="${t.taskShortDescription}">Keine Beschreibung</small></p> 
+
 						</div>
 					</div>
 					<div class="col-md-4">

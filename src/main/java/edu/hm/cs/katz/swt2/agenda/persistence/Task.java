@@ -11,84 +11,106 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 /**
- * Modellklasse für die Speicherung der Aufgaben. Enthält die Abbildung auf eine Datenbanktabelle in
- * Form von JPA-Annotation.
+ * Modellklasse für die Speicherung der Aufgaben. Enthält die Abbildung auf eine
+ * Datenbanktabelle in Form von JPA-Annotation.
  * 
  * @author Bastian Katz (mailto: bastian.katz@hm.edu)
  */
 @Entity
 public class Task {
 
-  @Id
-  @NotNull
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private Long id;
+	@Id
+	@NotNull
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
 
-  @NotNull
-  @Length(min = 8, max = 32)
-  @Column(length = 32)
-  private String title;
+	@NotNull
+	@Length(min = 8, max = 32)
+	@Column(length = 32)
+	private String title;
 
-  @NotNull
-  @ManyToOne
-  private Topic topic;
+	@NotNull
+	@Column(length = 200)
+	@Length(min = 100, max = 200)
+	private String taskShortDescription;
 
-  /**
-   * JPA-kompatibler Kostruktor. Wird nur von JPA verwendet und darf private sein.
-   */
-  public Task() {
-    // JPA benötigt einen Default-Konstruktor!
-  }
+	@NotNull
+	@Column(length = 1000)
+	@Length(min = 200, max = 2000)
+	private String taskLongDescription;
 
-  /**
-   * Konstruktor zum Erstellen eines neuen Tasks.
-   * 
-   * @param topic Topic, darf nicht null sein.
-   * @param title Titel, darf nicht null sein.
-   */
-  public Task(final Topic topic, final String title) {
-    this.topic = topic;
-    topic.addTask(this);
-    this.title = title;
-  }
+	@NotNull
+	@ManyToOne
+	private Topic topic;
 
-  @Override
-  public String toString() {
-    return "Task \"" + title + "\"";
-  }
+	/**
+	 * JPA-kompatibler Kostruktor. Wird nur von JPA verwendet und darf private sein.
+	 */
+	public Task() {
+		// JPA benötigt einen Default-Konstruktor!
+	}
 
-  public Long getId() {
-    return id;
-  }
+	/**
+	 * Konstruktor zum Erstellen eines neuen Tasks.
+	 * 
+	 * @param topic Topic, darf nicht null sein.
+	 * @param title Titel, darf nicht null sein.
+	 */
+	public Task(final Topic topic, final String title, final String taskShortDescription,
+			final String taskLongDescription) {
+		this.topic = topic;
+		topic.addTask(this);
+		this.title = title;
+		this.taskShortDescription = taskShortDescription;
+		this.taskLongDescription = taskLongDescription;
+	}
 
-  public String getTitle() {
-    return title;
-  }
+	@Override
+	public String toString() {
+		return "Task \"" + title + "\"";
+	}
 
-  public Topic getTopic() {
-    return topic;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  /*
-   * Standard-Methoden. Es ist sinnvoll, hier auf die Auswertung der Assoziationen zu verzichten,
-   * nur die Primärschlüssel zu vergleichen und insbesonderen Getter zu verwenden, um auch mit den
-   * generierten Hibernate-Proxys kompatibel zu bleiben.
-   */
+	public String getTitle() {
+		return title;
+	}
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, topic);
-  }
+	public String getTaskShortDescription() {
+		return taskShortDescription;
+	}
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (!(obj instanceof Task)) {
-      return false;
-    }
-    Task other = (Task) obj;
-    return Objects.equals(getId(), other.getId());
-  }
+	public String getTaskLongDescription() {
+		return taskLongDescription;
+	}
+
+	public Topic getTopic() {
+		return topic;
+	}
+
+	/*
+	 * Standard-Methoden. Es ist sinnvoll, hier auf die Auswertung der Assoziationen
+	 * zu verzichten, nur die Primärschlüssel zu vergleichen und insbesonderen
+	 * Getter zu verwenden, um auch mit den generierten Hibernate-Proxys kompatibel
+	 * zu bleiben.
+	 */
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, topic);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Task)) {
+			return false;
+		}
+		Task other = (Task) obj;
+		return Objects.equals(getId(), other.getId());
+	}
 }

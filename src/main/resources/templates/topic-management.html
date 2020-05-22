@@ -26,7 +26,7 @@
 				<div class="card">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${task.title}">Card title</h5>
-						<p class="card-text">Keine Beschreibung</p>
+						<p class="card-text" th:text="${task.taskShortDescription}"></p>
 
 						<a th:href="'/tasks/'+${task.id}+'/manage'"
 							class="btn btn-primary">Verwalten</a>

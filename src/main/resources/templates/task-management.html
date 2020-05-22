@@ -5,7 +5,21 @@
 <body>
 	<nav th:replace="fragments :: navigation"></nav>
 
-	<h2>Verwaltungs-Ansicht für Task <i th:text="${task.title}"></i></h2>
+	<h2>
+		Verwaltungs-Ansicht für Task <i th:text="${task.title}"></i>
+	</h2>
+
+	<div class="row row-cols-1 bg-light">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title" th:text="${task.title}">Card title</h5>
+				<p class="card-text" th:text="${task.taskShortDescription}"></p>
+				<p class="card-text" th:text="${task.taskLongDescription}"></p>
+			</div>
+		</div>
+	</div>
+
+
 
 	<th:block th:replace="fragments :: scripts">
 </body>
