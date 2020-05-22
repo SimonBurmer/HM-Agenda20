@@ -8,19 +8,38 @@
 	<div class="container-fluid">
 		<div class="row justify-content-center bg-light">
 			<div class="col-12">
-				<h4 class="display-4">Task erstellen für <i th:text="${topic.title}">Titel</i></h4>
+				<h4 class="display-4">
+					Task erstellen für <i th:text="${topic.title}">Titel</i>
+				</h4>
 
-				<form id="formName" th:action="@{/topics/{uuid}/createTask(uuid=${topic.uuid})}" th:object="${newTask}"
-					method="post">
+				<form id="formName"
+					th:action="@{/topics/{uuid}/createTask(uuid=${topic.uuid})}"
+					th:object="${newTask}" method="post">
 
 					<div class="form-group">
 						<input th:field="*{title}" class="form-control"
-							placeholder="Titel" /> <small class="form-text text-muted">
-							Verwenden Sie einen aussagekräftigen Titel! </small>
+							placeholder="Titel" minlength="8" maxlength="32" /> <small
+							class="form-text text-muted"> Verwenden Sie einen
+							aussagekräftigen Titel mit 8 bis 32 Zeichen! </small>
+					</div>
+
+					<div class="form-group">
+						<textarea th:field="*{taskShortDescription}" class="form-control"
+							placeholder="Kurzbeschreibung" minlength="100" maxlength="200"></textarea>
+						<small class="form-text text-muted"> Verwenden Sie eine
+							aussagekräftige Kurzbeschreibung mit 100 bis 200 Zeichen! </small>
+					</div>
+
+					<div class="form-group">
+						<textarea th:field="*{taskLongDescription}" class="form-control"
+							placeholder="Langbeschreibung" minlength="200" maxlength="2000"></textarea>
+						<small class="form-text text-muted"> Verwenden Sie eine
+							aussagekräftige Langbeschreibung mit 200 bis 2000 Zeichen! </small>
 					</div>
 
 					<button type="submit" class="btn btn-primary">Erstellen!</button>
-					<a th:href="'/topics/'+${topic.uuid}+'/manage'" class="btn btn-danger">Abbrechen</a>
+					<a th:href="'/topics/'+${topic.uuid}+'/manage'"
+						class="btn btn-danger">Abbrechen</a>
 				</form>
 			</div>
 		</div>

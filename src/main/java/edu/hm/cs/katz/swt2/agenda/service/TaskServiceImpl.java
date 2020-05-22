@@ -31,183 +31,200 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(rollbackFor = Exception.class)
 public class TaskServiceImpl implements TaskService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(TaskServiceImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(TaskServiceImpl.class);
 
-  @Autowired
-  private TaskRepository taskRepository;
+	@Autowired
+	private TaskRepository taskRepository;
 
-  @Autowired
-  private TopicRepository topicRepository;
+	@Autowired
+	private TopicRepository topicRepository;
 
-  @Autowired
-  private UserRepository anwenderRepository;
+	@Autowired
+	private UserRepository anwenderRepository;
 
-  @Autowired
-  private StatusRepository statusRepository;
+	@Autowired
+	private StatusRepository statusRepository;
 
-  @Autowired
-  private DtoMapper mapper;
+	@Autowired
+	private DtoMapper mapper;
 
-  @Override
-  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-  public Long createTask(String uuid, String titel, String login) {
-    LOG.info("Erstelle einen Task.");
-    LOG.debug("Erstelle Task \"{}\" mit UUID \"{}\" für Anwender \"{}\".", titel, uuid, login);
-    if (titel.length() < 8) {
-      LOG.debug("Titel müssen mindestens 8 Zeichen lang sein!");
-      throw new ValidationException("Titel müssen mindestens 8 Zeichen lang sein!");
-    }
-    if (titel.length() > 32) {
-      LOG.debug("Maximale Länge von 32 Zeichen überschritten!");
-      throw new ValidationException("Maximale Länge von 32 Zeichen überschritten!");
-    }
-    User user = anwenderRepository.getOne(login);
-    Topic t = topicRepository.findById(uuid).get();
-    if (!user.equals(t.getCreator())) {
-      LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.",
-              login, t.getTitle());
-      throw new AccessDeniedException("Kein Zugriff auf das Topic!");
-    }
-    Task task = new Task(t, titel);
-    taskRepository.save(task);
-    return task.getId();
-  }
+	@Override
+	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+	public Long createTask(String uuid, String titel, String login, String taskShortDescription, String taskLongDescription) {
+		LOG.info("Erstelle einen Task.");
+		LOG.debug("Erstelle Task \"{}\" mit UUID \"{}\" für Anwender \"{}\".", titel, uuid, login);
 
-  @Override
-  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-  public SubscriberTaskDto getTask(Long taskId, String login) {
-    LOG.info("Sehe einen Task für einen Subscriber ein.");
-    LOG.debug("Sehe Task {} für Subscriber \"{}\" ein.", taskId, login);
-    Task task = taskRepository.getOne(taskId);
-    Topic topic = task.getTopic();
-    User user = anwenderRepository.getOne(login);
-    if (!(topic.getCreator().equals(user) || topic.getSubscriber().contains(user))) {
-      LOG.warn("Login {} ist nicht berechtigt Task {} einzusehen!", login, taskId);
-      throw new AccessDeniedException("Zugriff verweigert.");
-    }
-    Status status = getOrCreateStatus(taskId, login);
-    return mapper.createReadDto(task, status);
-  }
+		if (titel.length() < 8) {
+			LOG.debug("Titel müssen mindestens 8 Zeichen lang sein!");
+			throw new ValidationException("Titel müssen mindestens 8 Zeichen lang sein!");
+		}
+		if (titel.length() > 32) {
+			LOG.debug("Maximale Länge von 32 Zeichen überschritten!");
+			throw new ValidationException("Maximale Länge von 32 Zeichen überschritten!");
+		}
 
-  @Override
-  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-  public OwnerTaskDto getManagedTask(Long taskId, String login) {
-    LOG.info("Sehe einen Task für den Owner ein.");
-    LOG.debug("Sehe Task {} für Owner \"{}\" ein.", taskId, login);
-    Task task = taskRepository.getOne(taskId);
-    Topic topic = task.getTopic();
-    User createdBy = topic.getCreator();
-    if (!login.equals(createdBy.getLogin())) {
-      LOG.warn("Login \"{}\" ist nicht berechtigt Task {} einzusehen.", login, taskId);
-      throw new AccessDeniedException("Zugriff verweigert.");
-    }
-    return mapper.createManagedDto(task);
-  }
+		if (taskShortDescription.length() < 100) {
+			LOG.debug("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
+			throw new ValidationException("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
+		}
+		if (taskShortDescription.length() > 200) {
+			LOG.debug("Maximale Länge von 200 Zeichen überschritten!");
+			throw new ValidationException("Maximale Länge von 200 Zeichen ueberschritten!");
+		}
 
-  @Override
-  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-  public List<SubscriberTaskDto> getSubscribedTasks(String login) {
-    LOG.info("Fordere Liste zugeordneter Tasks für einen Anwender an.");
-    LOG.debug("Fordere Liste zugeordneter Tasks für Anwender \"{}\" an.", login);
-    User user = anwenderRepository.getOne(login);
-    Collection<Topic> topics = user.getSubscriptions();
-    return extracted(user, topics);
-  }
+		if (taskLongDescription.length() < 200) {
+			LOG.debug("Langbeschreibungen müssen mindestens 200 Zeichen lang sein!");
+			throw new ValidationException("Langbeschreibungen müssen mindestens 200 Zeichen lang sein!");
+		}
+		if (taskLongDescription.length() > 2000) {
+			LOG.debug("Maximale Länge von 2000 Zeichen überschritten!");
+			throw new ValidationException("Maximale Länge von 2000 Zeichen überschritten!");
+		}
 
-  private List<SubscriberTaskDto> extracted(User user, Collection<Topic> topics) {
-    Collection<Status> status = user.getStatus();
-    Map<Task, Status> statusForTask = new HashMap<>();
-    for (Status currentStatus : status) {
-      statusForTask.put(currentStatus.getTask(), currentStatus);
-    }
+		User user = anwenderRepository.getOne(login);
+		Topic t = topicRepository.findById(uuid).get();
+		if (!user.equals(t.getCreator())) {
+			LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login, t.getTitle());
+			throw new AccessDeniedException("Kein Zugriff auf das Topic!");
+		}
+		Task task = new Task(t, titel, taskShortDescription, taskLongDescription);
+		taskRepository.save(task);
+		return task.getId();
+	}
 
-    List<SubscriberTaskDto> result = new ArrayList<>();
+	@Override
+	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+	public SubscriberTaskDto getTask(Long taskId, String login) {
+		LOG.info("Sehe einen Task für einen Subscriber ein.");
+		LOG.debug("Sehe Task {} für Subscriber \"{}\" ein.", taskId, login);
+		Task task = taskRepository.getOne(taskId);
+		Topic topic = task.getTopic();
+		User user = anwenderRepository.getOne(login);
+		if (!(topic.getCreator().equals(user) || topic.getSubscriber().contains(user))) {
+			LOG.warn("Login {} ist nicht berechtigt Task {} einzusehen!", login, taskId);
+			throw new AccessDeniedException("Zugriff verweigert.");
+		}
+		Status status = getOrCreateStatus(taskId, login);
+		return mapper.createReadDto(task, status);
+	}
 
-    for (Topic t : topics) {
-      for (Task task : t.getTasks()) {
-        if (statusForTask.get(task) == null) {
-          Status createdStatus = getOrCreateStatus(task.getId(), user.getLogin());
-          statusForTask.put(task, createdStatus);
-        }
-        result.add(mapper.createReadDto(task, statusForTask.get(task)));
-      }
-    }
+	@Override
+	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+	public OwnerTaskDto getManagedTask(Long taskId, String login) {
+		LOG.info("Sehe einen Task für den Owner ein.");
+		LOG.debug("Sehe Task {} für Owner \"{}\" ein.", taskId, login);
+		Task task = taskRepository.getOne(taskId);
+		Topic topic = task.getTopic();
+		User createdBy = topic.getCreator();
+		if (!login.equals(createdBy.getLogin())) {
+			LOG.warn("Login \"{}\" ist nicht berechtigt Task {} einzusehen.", login, taskId);
+			throw new AccessDeniedException("Zugriff verweigert.");
+		}
+		return mapper.createManagedDto(task);
+	}
 
-    // Sortiere das Ergebnis erst nach Titel
-    result.sort(new Comparator<SubscriberTaskDto>() {
-      @Override
-      public int compare(SubscriberTaskDto o1, SubscriberTaskDto o2) {
-        // Vergleichskriterium ist der Titel
-        return o1.getTitle().compareTo(o2.getTitle());
-      }
-    });
-    // und dann nach Status (benötigt stabilen Sortieralgorithmus)
-    result.sort(new Comparator<SubscriberTaskDto>() {
-      @Override
-      public int compare(SubscriberTaskDto o1, SubscriberTaskDto o2) {
-        // Vergleichskriterium ist der StatusEnum nach Definitionsreihenfolge
-        return o1.getStatus().getStatus().compareTo(o2.getStatus().getStatus());
-      }
-    });
+	@Override
+	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+	public List<SubscriberTaskDto> getSubscribedTasks(String login) {
+		LOG.info("Fordere Liste zugeordneter Tasks für einen Anwender an.");
+		LOG.debug("Fordere Liste zugeordneter Tasks für Anwender \"{}\" an.", login);
+		User user = anwenderRepository.getOne(login);
+		Collection<Topic> topics = user.getSubscriptions();
+		return extracted(user, topics);
+	}
 
-    return result;
-  }
+	private List<SubscriberTaskDto> extracted(User user, Collection<Topic> topics) {
+		Collection<Status> status = user.getStatus();
+		Map<Task, Status> statusForTask = new HashMap<>();
+		for (Status currentStatus : status) {
+			statusForTask.put(currentStatus.getTask(), currentStatus);
+		}
 
-  @Override
-  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-  public List<SubscriberTaskDto> getTasksForTopic(String uuid, String login) {
-    LOG.info("Fordere Liste aller Tasks für Topic eines Anwenders an.");
-    LOG.debug("Fordere Liste aller Tasks für Topic mit UUID {} und Anwender \"{}\" an.",
-            uuid, login);
-    User user = anwenderRepository.getOne(login);
-    Topic topic = topicRepository.getOne(uuid);
+		List<SubscriberTaskDto> result = new ArrayList<>();
 
-    return extracted(user, SetUtils.hashSet(topic));
-  }
+		for (Topic t : topics) {
+			for (Task task : t.getTasks()) {
+				if (statusForTask.get(task) == null) {
+					Status createdStatus = getOrCreateStatus(task.getId(), user.getLogin());
+					statusForTask.put(task, createdStatus);
+				}
+				result.add(mapper.createReadDto(task, statusForTask.get(task)));
+			}
+		}
 
+		// Sortiere das Ergebnis erst nach Titel
+		result.sort(new Comparator<SubscriberTaskDto>() {
+			@Override
+			public int compare(SubscriberTaskDto o1, SubscriberTaskDto o2) {
+				// Vergleichskriterium ist der Titel
+				return o1.getTitle().compareTo(o2.getTitle());
+			}
+		});
+		// und dann nach Status (benötigt stabilen Sortieralgorithmus)
+		result.sort(new Comparator<SubscriberTaskDto>() {
+			@Override
+			public int compare(SubscriberTaskDto o1, SubscriberTaskDto o2) {
+				// Vergleichskriterium ist der StatusEnum nach Definitionsreihenfolge
+				return o1.getStatus().getStatus().compareTo(o2.getStatus().getStatus());
+			}
+		});
 
-  @Override
-  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-  public void checkTask(Long taskId, String login) {
-    LOG.info("Setze Status von Task auf FERTIG.");
-    LOG.debug("Setze Status von Task {} für Login \"{}\" auf FERTIG.", taskId, login);
-    Status status = getOrCreateStatus(taskId, login);
-    status.setStatus(StatusEnum.FERTIG);
-    LOG.debug("Status von {} und Anwender {} gesetzt auf {}.", status.getTask(),
-        status.getUser(), status.getStatus());
-  }
+		return result;
+	}
 
-  @Override
-  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-  public List<OwnerTaskDto> getManagedTasks(String uuid, String login) {
-    LOG.info("Fordere verwaltete Tasks Liste für ein Topic eines Anwenders an.");
-    LOG.debug("Fordere verwaltete Tasks Liste für Topic {} und Anwender \"{}\" an.", uuid, login);
-    List<OwnerTaskDto> result = new ArrayList<>();
-    Topic topic = topicRepository.getOne(uuid);
-    for (Task task : topic.getTasks()) {
-      result.add(mapper.createManagedDto(task));
-    }
+	@Override
+	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+	public List<SubscriberTaskDto> getTasksForTopic(String uuid, String login) {
+		LOG.info("Fordere Liste aller Tasks für Topic eines Anwenders an.");
+		LOG.debug("Fordere Liste aller Tasks für Topic mit UUID {} und Anwender \"{}\" an.", uuid, login);
+		User user = anwenderRepository.getOne(login);
+		Topic topic = topicRepository.getOne(uuid);
 
-    // Sortiere das Ergebnis nach Titel
-    result.sort(new Comparator<OwnerTaskDto>() {
-      @Override
-      public int compare(OwnerTaskDto o1, OwnerTaskDto o2) {
-        // Vergleichskriterium ist der Titel
-        return o1.getTitle().compareTo(o2.getTitle());
-      }
-    });
+		return extracted(user, SetUtils.hashSet(topic));
+	}
 
-    return result;
-  }
+	@Override
+	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+	public void checkTask(Long taskId, String login) {
+		LOG.info("Setze Status von Task auf FERTIG.");
+		LOG.debug("Setze Status von Task {} für Login \"{}\" auf FERTIG.", taskId, login);
+		Status status = getOrCreateStatus(taskId, login);
+		status.setStatus(StatusEnum.FERTIG);
+		LOG.debug("Status von {} und Anwender {} gesetzt auf {}.", status.getTask(), status.getUser(),
+				status.getStatus());
+	}
 
-  private Status getOrCreateStatus(Long taskId, String login) {
-    User user = anwenderRepository.getOne(login);
-    Task task = taskRepository.getOne(taskId);
-    Status status = statusRepository.findByUserAndTask(user, task);
-    if (status == null) {
-      status = new Status(task, user);
-      statusRepository.save(status);
-    }
-    return status;
-  }
+	@Override
+	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+	public List<OwnerTaskDto> getManagedTasks(String uuid, String login) {
+		LOG.info("Fordere verwaltete Tasks Liste für ein Topic eines Anwenders an.");
+		LOG.debug("Fordere verwaltete Tasks Liste für Topic {} und Anwender \"{}\" an.", uuid, login);
+		List<OwnerTaskDto> result = new ArrayList<>();
+		Topic topic = topicRepository.getOne(uuid);
+		for (Task task : topic.getTasks()) {
+			result.add(mapper.createManagedDto(task));
+		}
+
+		// Sortiere das Ergebnis nach Titel
+		result.sort(new Comparator<OwnerTaskDto>() {
+			@Override
+			public int compare(OwnerTaskDto o1, OwnerTaskDto o2) {
+				// Vergleichskriterium ist der Titel
+				return o1.getTitle().compareTo(o2.getTitle());
+			}
+		});
+
+		return result;
+	}
+
+	private Status getOrCreateStatus(Long taskId, String login) {
+		User user = anwenderRepository.getOne(login);
+		Task task = taskRepository.getOne(taskId);
+		Status status = statusRepository.findByUserAndTask(user, task);
+		if (status == null) {
+			status = new Status(task, user);
+			statusRepository.save(status);
+		}
+		return status;
+	}
 }
