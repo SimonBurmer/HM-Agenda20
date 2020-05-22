@@ -37,7 +37,7 @@ public class Topic {
   private String shortDescription;
 
   @NotNull
-  @Column(length = 1000)
+  @Column(length = 2000)
   @Length(min = 200, max = 2000)
   private String longDescription;
 

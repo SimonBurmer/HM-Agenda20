@@ -22,6 +22,14 @@ import org.springframework.stereotype.Component;
 @Profile("demo")
 public class DemoData {
 
+	private static final String ERNIE_BACKKURS_LANG = "In diesem Tutorial lernen Sie die Grundlagen von HTML kennen. Und keine Sorge, diese vier Buchstaben dürfen Sie gerne deutsch aussprechen. Wofür diese Buchstaben im Einzelnen stehen, verraten wir Ihnen auf jeden Fall noch. Jedenfalls sind Sie herzlich eingeladen, mit uns eine Reise durch die Techniken des Internets zu wagen.\n"
+			+ "\n"
+			+ "Zunächst: Sie brauchen keine Internetverbindung, um mit HTML Webseiten erstellen und testen zu können. Solche Webseiten bestehen nämlich, wie Sie feststellen werden, aus ganz normalen Dateien, die Sie einfach auf Ihrem Computer speichern können.\n"
+			+ "Um HTML-Dateien auf dem Bildschirm anzeigen zu können, benötigen Sie dann nur Ihren Browser, also das Programm, mit dem Sie gerade dieses Tutorial lesen. Die HTML-Dateien (und auch CSS-Stylesheets ab Kapitel 7), um die es im Folgenden hauptsächlich geht, sind reine Textdateien. Um diese Dateien bearbeiten zu können, reicht erstmal ein einfacher Texteditor, der bei Ihrem Betriebssystem bereits vorinstalliert ist.\n"
+			+ "Beispiele:\n" + "•   Linux: KWrite, gedit\n" + "•   (Mac) OS X: TextEdit\n"
+			+ "•   Windows: Editor/Notepad\n"
+			+ "Es gibt aber eine Vielzahl von oft auch kostenlosen Code-Editoren.\n" + "";
+
 	private static final String ERNIE_BACKKURS_KURZ = "Was muss man eigentlich können oder wissen, um nicht nur im Internet zu surfen, sondern auch eigene Inhalte im Internet zu präsentieren?";
 
 	private static final String LOGIN_FINE = "fine";
@@ -76,22 +84,10 @@ public class DemoData {
 
 		String cssKursUuid = topicService.createTopic("CSS für Fortgeschrittene", LOGIN_FINE,
 				ERNIE_BACKKURS_KURZ,
-				"In diesem Tutorial lernen Sie die Grundlagen von HTML kennen. Und keine Sorge, diese vier Buchstaben dürfen Sie gerne deutsch aussprechen. Wofür diese Buchstaben im Einzelnen stehen, verraten wir Ihnen auf jeden Fall noch. Jedenfalls sind Sie herzlich eingeladen, mit uns eine Reise durch die Techniken des Internets zu wagen.\n"
-						+ "\n"
-						+ "Zunächst: Sie brauchen keine Internetverbindung, um mit HTML Webseiten erstellen und testen zu können. Solche Webseiten bestehen nämlich, wie Sie feststellen werden, aus ganz normalen Dateien, die Sie einfach auf Ihrem Computer speichern können.\n"
-						+ "Um HTML-Dateien auf dem Bildschirm anzeigen zu können, benötigen Sie dann nur Ihren Browser, also das Programm, mit dem Sie gerade dieses Tutorial lesen. Die HTML-Dateien (und auch CSS-Stylesheets ab Kapitel 7), um die es im Folgenden hauptsächlich geht, sind reine Textdateien. Um diese Dateien bearbeiten zu können, reicht erstmal ein einfacher Texteditor, der bei Ihrem Betriebssystem bereits vorinstalliert ist.\n"
-						+ "Beispiele:\n" + "•   Linux: KWrite, gedit\n" + "•   (Mac) OS X: TextEdit\n"
-						+ "•   Windows: Editor/Notepad\n"
-						+ "Es gibt aber eine Vielzahl von oft auch kostenlosen Code-Editoren.\n" + "");
+				ERNIE_BACKKURS_LANG);
 		String erniesKursUuid = topicService.createTopic("Ernies Backkurs", LOGIN_ERNIE,
 				ERNIE_BACKKURS_KURZ,
-				"In diesem Tutorial lernen Sie die Grundlagen von HTML kennen. Und keine Sorge, diese vier Buchstaben dürfen Sie gerne deutsch aussprechen. Wofür diese Buchstaben im Einzelnen stehen, verraten wir Ihnen auf jeden Fall noch. Jedenfalls sind Sie herzlich eingeladen, mit uns eine Reise durch die Techniken des Internets zu wagen.\n"
-						+ "\n"
-						+ "Zunächst: Sie brauchen keine Internetverbindung, um mit HTML Webseiten erstellen und testen zu können. Solche Webseiten bestehen nämlich, wie Sie feststellen werden, aus ganz normalen Dateien, die Sie einfach auf Ihrem Computer speichern können.\n"
-						+ "Um HTML-Dateien auf dem Bildschirm anzeigen zu können, benötigen Sie dann nur Ihren Browser, also das Programm, mit dem Sie gerade dieses Tutorial lesen. Die HTML-Dateien (und auch CSS-Stylesheets ab Kapitel 7), um die es im Folgenden hauptsächlich geht, sind reine Textdateien. Um diese Dateien bearbeiten zu können, reicht erstmal ein einfacher Texteditor, der bei Ihrem Betriebssystem bereits vorinstalliert ist.\n"
-						+ "Beispiele:\n" + "•   Linux: KWrite, gedit\n" + "•   (Mac) OS X: TextEdit\n"
-						+ "•   Windows: Editor/Notepad\n"
-						+ "Es gibt aber eine Vielzahl von oft auch kostenlosen Code-Editoren.\n" + "");
+				ERNIE_BACKKURS_LANG);
 		taskService.createTask(erniesKursUuid, "Googlehupf backen", LOGIN_ERNIE,
 				"Der Kuchen gehört zu den feinen Backwaren. Es handelt sich um ein zumeist süßes Backwerk. Man unterscheidet vor allem nach der Art der Herstellung Blechkuchen.", "Der Kuchenteig besteht je nach Rezept aus Mehl, Zucker, Bindemittel (z. B. Ei) sowie Fett (Butter oder Margarine), einer Flüssigkeit (Milch, Wasser oder Fruchtsaft), Aromen (z. B. Backaroma) und einem Triebmittel (Backpulver oder Hefe), die miteinander vermengt werden. Wichtige Teigarten sind Hefeteig, Mürbeteig (Knetteig) und Rührteig.\n"
 								+ "\n"

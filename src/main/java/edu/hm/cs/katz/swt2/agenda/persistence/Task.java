@@ -35,7 +35,7 @@ public class Task {
 	private String taskShortDescription;
 
 	@NotNull
-	@Column(length = 1000)
+	@Column(length = 2000)
 	@Length(min = 200, max = 2000)
 	private String taskLongDescription;
 
