@@ -19,18 +19,42 @@
 
 <body>
 	<div th:fragment="navigation">
-		<nav class="navbar navbar-expand-sm navbar navbar-dark"
-			style="background-color: #000000;">
-			<a class="navbar-brand" href="/"><img src="/assets/logo.png"
-				width="30" height="30" alt="">Agenda</a>
+		<div id="sidebar-wrapper" style="background-color: #1F2933;">
+			<div class="sidebar-heading">
+				<a class="text-white" href="/"><img src="/assets/logo.png" width="30" height="30"
+					alt="">Agenda</a>
+			</div>
 
+
+
+			<div class="list-group list-group-flush">
+				<a href="#" class="list-group-item list-group-item-action"
+					style="background-color: #1F2933;">Dashboard</a> <a href="#"
+					class="list-group-item list-group-item-action"
+					style="background-color:#1F2933;">Shortcuts</a> <a href="#"
+					class="list-group-item list-group-item-action"
+					style="background-color: #1F2933;">Overview</a> <a href="#"
+					class="list-group-item list-group-item-action"
+					style="background-color:#1F2933;">Events</a> <a href="#"
+					class="list-group-item list-group-item-action"
+					style="background-color: #1F2933;">Profile</a> <a href="#"
+					class="list-group-item list-group-item-action"
+					style="background-color:#1F2933;">Status</a>
+			</div>
+		</div>
+	</div>
+	<div th:fragment="Content-navigation">
+		<nav class="navbar navbar-expand-sm navbar navbar-dark"
+			style="background-color: #1F2933;">
+			
+			
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#navbarSupportedContent"
 				aria-controls="navbarSupportedContent" aria-expanded="false"
 				aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-
+			<button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li th:if="${administration}" class="nav-item"><a
@@ -40,8 +64,8 @@
 					<li th:if="${user}" class="nav-item"><a class="nav-link"
 						href="/topics">Topics</a></li>
 				</ul>
-				<span th:if="${user}" class="nav-link text-white">Sie sind eingeloggt
-					als <strong th:text=${user.displayName}></strong>
+				<span th:if="${user}" class="nav-link text-white">Sie sind
+					eingeloggt als <strong th:text=${user.displayName}></strong>
 				</span>
 				<form th:if="${user}" th:action="@{/logout}" method="post">
 					<button class="btn btn-secondary" type="submit">Abmelden</button>
@@ -49,6 +73,7 @@
 				<a class="btn btn-secondary" th:unless="${user}" href="/login">Anmelden</a>
 			</div>
 		</nav>
+
 		<div th:if="${success!=null}"
 			class="alert alert-success
 			alert-dismissible fade show"
@@ -91,7 +116,6 @@
 		</div>
 	</div>
 
-
 	<th:block th:fragment="scripts">
 		<!-- Optional JavaScript -->
 		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -106,5 +130,13 @@
 			src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
 			integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
 			crossorigin="anonymous"></script>
+			
+				<!-- Menu Toggle Script -->
+		<script>
+			$("#menu-toggle").click(function(e) {
+				e.preventDefault();
+				$("#wrapper").toggleClass("toggled");
+			});
+		</script>
 	</th:block>
 </body>
