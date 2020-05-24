@@ -2,31 +2,30 @@
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments :: head" />
-<body>
+<body class="bg-dark">
 	<nav th:replace="fragments :: navigation"></nav>
 
-	<div class="container-fluid">
-		<div class="row justify-content-center bg-light">
-			<div class="col-12">
+	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
+		<div class="row pb-4">
+			<div class="col-auto">
 				<h4 class="display-4">
-					Ihr Topic <i th:text="${topic.title}"></i> <a
-						th:href="'/topics/'+${topic.uuid}+'/createTask'"
-						class="btn btn-primary">Task erstellen</a>
+					Ihr Topic <i th:text="${topic.title}"></i>
 				</h4>
-				<div th:if="${condition}">
-					<form th:action="'/topics/'+${topic.uuid}+'/delete'" method=post>
-						<button class="btn btn-danger" type=submit>Topic löschen</button>
-					</form>
-				</div>
 			</div>
-
+			<div class="col-auto justify-content-center" th:if="${condition}">
+				<a th:href="'/topics/'+${topic.uuid}+'/createTask'"
+					class="btn btn-primary mb-1">Task erstellen</a>
+				<form th:action="'/topics/'+${topic.uuid}+'/delete'" method=post>
+					<button class="btn btn-danger" type=submit>Topic löschen</button>
+				</form>
+			</div>
 		</div>
-		<div class="row justify-content-center bg-light">
+		<div class="row justify-content-center">
 			<div class="col-12">
 				<p th:text="${topic.longDescription}"></p>
 			</div>
 		</div>
-		<div class="row row-cols-1 bg-light">
+		<div class="row row-cols-1">
 			<div class="col mb-4" th:each="task : ${tasks}">
 				<div class="card">
 					<div class="card-body">
