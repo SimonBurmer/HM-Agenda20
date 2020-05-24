@@ -76,7 +76,7 @@ public class DtoMapper {
 	 */
 	public OwnerTopicDto createManagedDto(Topic topic) {
 		return new OwnerTopicDto(topic.getUuid(), createDto(topic.getCreator()), topic.getTitle(),
-				topic.getShortDescription(), topic.getLongDescription());
+				topic.getShortDescription(), topic.getLongDescription(), topic.getSubscriber());
 	}
 
 	public OwnerTaskDto createManagedDto(Task task) {

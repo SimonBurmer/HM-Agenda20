@@ -13,8 +13,13 @@
 						th:href="'/topics/'+${topic.uuid}+'/createTask'"
 						class="btn btn-primary">Task erstellen</a>
 				</h4>
+				<div th:if="${condition}">
+					<form th:action="'/topics/'+${topic.uuid}+'/delete'" method=post>
+						<button class="btn btn-danger" type=submit>Topic löschen</button>
+					</form>
+				</div>
 			</div>
-			
+
 		</div>
 		<div class="row justify-content-center bg-light">
 			<div class="col-12">

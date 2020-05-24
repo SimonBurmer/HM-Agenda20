@@ -107,10 +107,10 @@ public class TopicServiceImpl implements TopicService {
 
   @Override
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-  public SubscriberTopicDto getTopic(String uuid, String login) {
+  public SubscriberTopicDto getTopic(String topicUuid, String login) {
     LOG.info("Fordere Topic mit UUID für einen Anwender an.");
-    LOG.debug("Fordere Topic {} für Anwender \"{}\" an.", uuid, login);
-    Topic topic = topicRepository.getOne(uuid);
+    LOG.debug("Fordere Topic {} für Anwender \"{}\" an.", topicUuid, login);
+    Topic topic = topicRepository.getOne(topicUuid);
     return mapper.createDto(topic);
   }
 
@@ -141,6 +141,19 @@ public class TopicServiceImpl implements TopicService {
       result.add(mapper.createDto(topic));
     }
     return result;
+  }
+  
+  @Override
+  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+  public void deleteTopic(String topicUuid, String login) {
+    LOG.info("Löschen eins Topics von einem Anwender.");
+    LOG.debug("Lösche Topic {} von Anwender \"{}\".", topicUuid, login);
+    Topic topic = topicRepository.getOne(topicUuid);
+    User creator = anwenderRepository.getOne(login);
+    if(topic.getCreator().equals(creator)) {
+      topicRepository.delete(topic);
+    }
+    
   }
 
 }

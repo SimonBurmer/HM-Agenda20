@@ -4,6 +4,7 @@ import edu.hm.cs.katz.swt2.agenda.service.TaskService;
 import edu.hm.cs.katz.swt2.agenda.service.TopicService;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -47,7 +48,7 @@ public class TopicController extends AbstractController {
    */
   @GetMapping("/topics/create")
   public String getTopicCreationView(Model model, Authentication auth) {
-    model.addAttribute("newTopic", new SubscriberTopicDto(null, null, "","",""));
+    model.addAttribute("newTopic", new SubscriberTopicDto(null, null, "", "", ""));
     return "topic-creation";
   }
 
@@ -61,7 +62,8 @@ public class TopicController extends AbstractController {
   public String handleTopicCreation(Model model, Authentication auth,
       @ModelAttribute("newTopic") SubscriberTopicDto topic, RedirectAttributes redirectAttributes) {
     try {
-      topicService.createTopic(topic.getTitle(), auth.getName(), topic.getShortDescription(), topic.getLongDescription());
+      topicService.createTopic(topic.getTitle(), auth.getName(), topic.getShortDescription(),
+          topic.getLongDescription());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("error", e.getMessage());
       return "redirect:/topics/create";
@@ -79,9 +81,12 @@ public class TopicController extends AbstractController {
     OwnerTopicDto topic = topicService.getManagedTopic(uuid, auth.getName());
     model.addAttribute("topic", topic);
     model.addAttribute("tasks", taskService.getManagedTasks(uuid, auth.getName()));
+    if(topic.getSubscriber() == null) {
+      model.addAttribute("condition",true);
+    } 
     return "topic-management";
   }
-
+ 
   /**
    * Erzeugt Anzeige für die Nachfrage beim Abonnieren eines Topics.
    */
@@ -114,5 +119,21 @@ public class TopicController extends AbstractController {
     model.addAttribute("topic", topic);
     model.addAttribute("tasks", taskService.getTasksForTopic(uuid, auth.getName()));
     return "topic";
+  }
+
+  /**
+   * Löscht ein Topic.
+   */
+  @PostMapping("/topics/{uuid}/delete")
+  public String deleteTopic(Authentication auth, @PathVariable("uuid") String uuid,
+      RedirectAttributes redirectAttributes) {
+    try {
+      topicService.deleteTopic(uuid, auth.getName());
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("error", e.getMessage());
+      return "redirect:/topics";
+    }
+    redirectAttributes.addFlashAttribute("success", "Topic wurde gelöscht.");
+    return "redirect:/topics";
   }
 }
