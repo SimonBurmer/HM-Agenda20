@@ -96,6 +96,14 @@ public class Topic {
     return longDescription;
   }
 
+  public void setShortDescription(String shortDescription) {
+    this.shortDescription = shortDescription;
+  }
+
+  public void setLongDescription(String longDescription) {
+    this.longDescription = longDescription;
+  }
+  
   public Collection<Task> getTasks() {
     return Collections.unmodifiableCollection(tasks);
   }

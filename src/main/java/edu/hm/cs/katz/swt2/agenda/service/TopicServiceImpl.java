@@ -15,6 +15,7 @@ import javax.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,12 +40,13 @@ public class TopicServiceImpl implements TopicService {
 
   @Override
   @PreAuthorize("#login==authentication.name OR hasRole('ROLE_ADMIN')")
-  public String createTopic(String title, String login, String shortDescription, String longDescription) {
+  public String createTopic(String title, String login, String shortDescription,
+      String longDescription) {
 
     LOG.info("Erstelle ein Topic.");
     LOG.debug("Erstelle Topic \"{}\".", title);
 
-    //Check title, shortDescription, longDescription requirements
+    // Check title, shortDescription, longDescription requirements
     if (title.length() < 10) {
       LOG.debug("Titel müssen mindestens 10 Zeichen lang sein!");
       throw new ValidationException("Titel müssen mindestens 10 Zeichen lang sein!");
@@ -54,17 +56,17 @@ public class TopicServiceImpl implements TopicService {
       LOG.debug("Maximale Länge von 60 Zeichen überschritten!");
       throw new ValidationException("Maximale Länge von 60 Zeichen überschritten!");
     }
-    
+
     if (shortDescription.length() < 100) {
       LOG.debug("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
       throw new ValidationException("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
     }
-    
+
     if (shortDescription.length() > 200) {
       LOG.debug("Maximale Länge von 200 Zeichen überschritten!");
       throw new ValidationException("Maximale Länge von 200 Zeichen überschritten!");
     }
-    
+
     if (longDescription.length() < 200) {
       LOG.debug("Kurzbeschreibungen müssen mindestens 200 Zeichen lang sein!");
       throw new ValidationException("Kurzbeschreibungen müssen mindestens 200 Zeichen lang sein!");
@@ -73,7 +75,7 @@ public class TopicServiceImpl implements TopicService {
       LOG.debug("Maximale Länge von 1000 Zeichen überschritten!");
       throw new ValidationException("Maximale Länge von 1000 Zeichen überschritten!");
     }
-    
+
 
     String uuid = uuidProvider.getRandomUuid();
     User creator = anwenderRepository.findById(login).get();
@@ -135,14 +137,14 @@ public class TopicServiceImpl implements TopicService {
     TopicComparator tpComp = new TopicComparator();
     List<Topic> subscriptionsList = new ArrayList<Topic>(subscriptions);
     Collections.sort(subscriptionsList, tpComp);
-    
+
     List<SubscriberTopicDto> result = new ArrayList<>();
     for (Topic topic : subscriptionsList) {
       result.add(mapper.createDto(topic));
     }
     return result;
   }
-  
+
   @Override
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public void deleteTopic(String topicUuid, String login) {
@@ -150,10 +152,44 @@ public class TopicServiceImpl implements TopicService {
     LOG.debug("Lösche Topic {} von Anwender \"{}\".", topicUuid, login);
     Topic topic = topicRepository.getOne(topicUuid);
     User creator = anwenderRepository.getOne(login);
-    if(topic.getCreator().equals(creator)) {
-      topicRepository.delete(topic);
+    if (!topic.getCreator().equals(creator)) {
+      throw new AccessDeniedException("Kein Zugriff auf das Topic!");
     }
-    
+    topicRepository.delete(topic);
   }
 
+  
+  @Override
+  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+  public void updateTopic(String topicUuid, String login, String shortDescription,
+      String longDescription) {
+    LOG.info("Update eine Topic von einem Anwender.");
+    LOG.debug("Update Topic {} von Anwender \"{}\".", topicUuid, login);
+    Topic topic = topicRepository.getOne(topicUuid);
+    User creator = anwenderRepository.getOne(login);
+    if (!topic.getCreator().equals(creator)) {
+      throw new AccessDeniedException("Kein Zugriff auf das Topic!");
+    }
+    if (shortDescription.length() < 100) {
+      LOG.debug("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
+      throw new ValidationException("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
+    }
+
+    if (shortDescription.length() > 200) {
+      LOG.debug("Maximale Länge von 200 Zeichen überschritten!");
+      throw new ValidationException("Maximale Länge von 200 Zeichen überschritten!");
+    }
+
+    if (longDescription.length() < 200) {
+      LOG.debug("Kurzbeschreibungen müssen mindestens 200 Zeichen lang sein!");
+      throw new ValidationException("Kurzbeschreibungen müssen mindestens 200 Zeichen lang sein!");
+    }
+    if (longDescription.length() > 2000) {
+      LOG.debug("Maximale Länge von 1000 Zeichen überschritten!");
+      throw new ValidationException("Maximale Länge von 1000 Zeichen überschritten!");
+    }
+    
+    topic.setShortDescription(shortDescription);
+    topic.setLongDescription(longDescription);
+  }
 }

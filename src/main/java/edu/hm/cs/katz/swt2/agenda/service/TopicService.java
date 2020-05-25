@@ -46,4 +46,11 @@ public interface TopicService {
    * Löschen eines Topics.
    */
   public void deleteTopic(String topicUuid, String login);
+  
+  
+  /**
+   * Aktualisieren eines Topics.
+   */
+  public void updateTopic(String topicUuid, String login, String shortDescription,
+      String longDescriptionn);
 }
