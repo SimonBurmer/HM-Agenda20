@@ -6,20 +6,22 @@
 	<nav th:replace="fragments :: navigation"></nav>
 
 	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
-		<div class="row pb-4">
+		<div class="row">
 			<div class="col-auto">
 				<h4 class="display-4">
 					Ihr Topic <i th:text="${topic.title}"></i>
 				</h4>
 			</div>
-			<div class="col-auto justify-content-center" th:if="${condition}">
+			<div class="col-auto justify-content-center">
 				<a th:href="'/topics/'+${topic.uuid}+'/createTask'"
 					class="btn btn-primary mb-1">Task erstellen</a>
-				<form th:action="'/topics/'+${topic.uuid}+'/delete'" method=post>
+				<form th:action="'/topics/'+${topic.uuid}+'/delete'" method=post
+					th:if="${condition}">
 					<button class="btn btn-danger" type=submit>Topic löschen</button>
 				</form>
 			</div>
 		</div>
+		<hr class="my-4">
 		<div class="row justify-content-center">
 			<div class="col-12 mb-2">
 				<p th:text="${topic.shortDescription}"></p>

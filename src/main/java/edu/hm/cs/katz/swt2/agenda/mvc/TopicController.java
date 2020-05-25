@@ -4,7 +4,6 @@ import edu.hm.cs.katz.swt2.agenda.service.TaskService;
 import edu.hm.cs.katz.swt2.agenda.service.TopicService;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -81,7 +80,7 @@ public class TopicController extends AbstractController {
     OwnerTopicDto topic = topicService.getManagedTopic(uuid, auth.getName());
     model.addAttribute("topic", topic);
     model.addAttribute("tasks", taskService.getManagedTasks(uuid, auth.getName()));
-    if(topic.getSubscriber() == null) {
+    if(topic.getSubscriber().isEmpty()) {
       model.addAttribute("condition",true);
     } 
     return "topic-management";

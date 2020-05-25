@@ -19,6 +19,7 @@ public class OwnerTopicDto extends SubscriberTopicDto {
 
   public OwnerTopicDto(String uuid, UserDisplayDto user, String title,String shortDescription, String longDescription, Collection<User> subscriber) {
     super(uuid, user, title, shortDescription, longDescription);
+    this.subscriber = subscriber;
   }
 
   public Collection<User> getSubscriber() {
