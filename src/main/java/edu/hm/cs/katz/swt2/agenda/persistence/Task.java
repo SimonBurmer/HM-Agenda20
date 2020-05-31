@@ -90,6 +90,13 @@ public class Task {
 		return topic;
 	}
 
+	public void setTaskShortDescription(String taskShortDescription) {
+		this.taskShortDescription = taskShortDescription;
+	}
+
+	public void setTaskLongDescription(String taskLongDescription) {
+		this.taskLongDescription = taskLongDescription;
+	}
 	/*
 	 * Standard-Methoden. Es ist sinnvoll, hier auf die Auswertung der Assoziationen
 	 * zu verzichten, nur die Primärschlüssel zu vergleichen und insbesonderen

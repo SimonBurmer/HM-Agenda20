@@ -5,21 +5,38 @@
 <body>
 	<nav th:replace="fragments :: navigation"></nav>
 
-	<h2>
-		Verwaltungs-Ansicht für Task <i th:text="${task.title}"></i>
-	</h2>
+	<div class="container-fluid">
+		<div class="row justify-content-center bg-light">
+			<div class="col-12">
+				<h4 class="display-4">
+					Task <i th:text="${task.title}">Titel</i> ändern
+				</h4>
 
-	<div class="row row-cols-1 bg-light">
-		<div class="card">
-			<div class="card-body">
-				<h5 class="card-title" th:text="${task.title}">Card title</h5>
-				<p class="card-text" th:text="${task.taskShortDescription}"></p>
-				<p class="card-text" th:text="${task.taskLongDescription}"></p>
+				<form id="formName"
+					  th:action="@{/tasks/{id}/manage(id=${task.id})}"
+					  th:object="${task}" method="post">
+
+					<div class="form-group">
+						<textarea th:field="*{taskShortDescription}" class="form-control"
+								  placeholder="Kurzbeschreibung" minlength="100" maxlength="200"></textarea>
+						<small class="form-text text-muted"> Verwenden Sie eine
+							aussagekräftige Kurzbeschreibung mit 100 bis 200 Zeichen! </small>
+					</div>
+
+					<div class="form-group">
+						<textarea th:field="*{taskLongDescription}" class="form-control"
+								  placeholder="Langbeschreibung" minlength="200" maxlength="2000"></textarea>
+						<small class="form-text text-muted"> Verwenden Sie eine
+							aussagekräftige Langbeschreibung mit 200 bis 2000 Zeichen! </small>
+					</div>
+
+					<button type="submit" class="btn btn-primary">Speichern</button>
+					<a th:href="'/topics/'+${task.topic.uuid}+'/manage'"
+					   class="btn btn-danger">Zurück zum Topic</a>
+				</form>
 			</div>
 		</div>
 	</div>
-
-
 
 	<th:block th:replace="fragments :: scripts">
 </body>

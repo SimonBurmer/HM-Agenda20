@@ -18,6 +18,11 @@ public interface TaskService {
       String taskLongDescription);
 
   /**
+   * Aktualisiert die Beschreibung eines Tasks.
+   */
+  void updateTask(Long id, String login, String taskShortDescription, String taskLongDescription);
+
+  /**
    * Zugriff auf einen Task (priviligierte Sicht für Ersteller des Topics).
    */
   OwnerTaskDto getManagedTask(Long taskId, String login);

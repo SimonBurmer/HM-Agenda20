@@ -94,6 +94,41 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+	public void updateTask(Long id, String login, String taskShortDescription, String taskLongDescription) {
+		LOG.info("Aktualisiere einen Task.");
+		LOG.debug("Aktualisiere Task \"{}\" für Anwender \"{}\".", id, login);
+
+		if (taskShortDescription.length() < 100) {
+			LOG.debug("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
+			throw new ValidationException("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
+		}
+		if (taskShortDescription.length() > 200) {
+			LOG.debug("Maximale Länge von 200 Zeichen überschritten!");
+			throw new ValidationException("Maximale Länge von 200 Zeichen ueberschritten!");
+		}
+
+		if (taskLongDescription.length() < 200) {
+			LOG.debug("Langbeschreibungen müssen mindestens 200 Zeichen lang sein!");
+			throw new ValidationException("Langbeschreibungen müssen mindestens 200 Zeichen lang sein!");
+		}
+		if (taskLongDescription.length() > 2000) {
+			LOG.debug("Maximale Länge von 2000 Zeichen überschritten!");
+			throw new ValidationException("Maximale Länge von 2000 Zeichen überschritten!");
+		}
+
+		Task taskToUpdate = taskRepository.getOne(id);
+		User changingUser = anwenderRepository.getOne(login);
+		if (!changingUser.equals(taskToUpdate.getTopic().getCreator())) {
+			LOG.warn("Anwender {} ist nicht berechtigt, einen Task im Topic {} zu ändern.", login, taskToUpdate.getTitle());
+			throw new AccessDeniedException("Kein Zugriff auf das Topic!");
+		}
+
+		taskToUpdate.setTaskShortDescription(taskShortDescription);
+		taskToUpdate.setTaskLongDescription(taskLongDescription);
+	}
+
+	@Override
+	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public SubscriberTaskDto getTask(Long taskId, String login) {
 		LOG.info("Sehe einen Task für einen Subscriber ein.");
 		LOG.debug("Sehe Task {} für Subscriber \"{}\" ein.", taskId, login);

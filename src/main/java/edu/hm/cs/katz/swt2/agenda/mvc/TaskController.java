@@ -1,5 +1,6 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
+import edu.hm.cs.katz.swt2.agenda.persistence.TaskRepository;
 import edu.hm.cs.katz.swt2.agenda.service.TaskService;
 import edu.hm.cs.katz.swt2.agenda.service.TopicService;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
@@ -73,6 +74,26 @@ public class TaskController extends AbstractController {
 		OwnerTaskDto task = taskService.getManagedTask(id, auth.getName());
 		model.addAttribute("task", task);
 		return "task-management";
+	}
+
+	/**
+	 * Aktualisiert die Kurz- und Langbeschreibung eines Tasks.
+	 */
+	@PostMapping("tasks/{id}/manage")
+	public String handleUpdate(@ModelAttribute("task") TaskDto task, Authentication auth,
+		@PathVariable("id") Long id, @RequestHeader(value="referer", required = true) String referer,
+		RedirectAttributes redirectAttributes) {
+		try {
+			taskService.updateTask(id, auth.getName(), task.getTaskShortDescription(),
+				task.getTaskLongDescription());
+		} catch (Exception e) {
+			// Zeige die Fehlermeldung der Exception als Flash Attribut an.
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
+			return "redirect:" + referer;
+		}
+		// Zeige die erfolgreiche Aktualisierung als Flash Attribut an.
+		redirectAttributes.addFlashAttribute("success", "Task aktualisiert!");
+		return "redirect:" + referer;
 	}
 
 	/**
