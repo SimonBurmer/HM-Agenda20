@@ -14,7 +14,8 @@ public interface TaskService {
   /**
    * Erstellt einen neuen Task.
    */
-  Long createTask(String topicUuid, String title, String login, String taskShortDescription,String taskLongDescription);
+  Long createTask(String topicUuid, String title, String login, String taskShortDescription,
+      String taskLongDescription);
 
   /**
    * Zugriff auf einen Task (priviligierte Sicht für Ersteller des Topics).
@@ -45,4 +46,9 @@ public interface TaskService {
    * Markiert einen Task für einen Abonnenten als "done".
    */
   void checkTask(Long taskId, String login);
+
+  /**
+   * Setzt den Status eines Tasks für einen Abonnenten zurück auf NEU.
+   */
+  void resetTask(Long taskId, String login);
 }

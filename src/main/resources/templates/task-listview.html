@@ -27,12 +27,20 @@
 
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-2">
 						<form th:unless="${t.status.status.toString()=='FERTIG'}"
 							id="formName" th:action="@{/tasks/{id}/check(id=${t.id})}"
 							th:object="${t}" method="post">
 
-							<button type="submit" class="btn btn-success">Done!</button>
+							<button type="submit" class="btn btn-success">Erledigt</button>
+						</form>
+					</div>
+					<div class="col-md-2">
+						<form th:if="${t.status.status.toString()=='FERTIG'}"
+							  id="formName" th:action="@{/tasks/{id}/reset(id=${t.id})}"
+							  th:object="${t}" method="post">
+
+							<button type="submit" class="btn btn-secondary">Zurücksetzen</button>
 						</form>
 					</div>
 

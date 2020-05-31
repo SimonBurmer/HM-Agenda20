@@ -85,6 +85,15 @@ public class TaskController extends AbstractController {
 	}
 
 	/**
+	 * Verarbeitet die Markierung eines Tasks als "Zurückgesetzt".
+	 */
+	@PostMapping("tasks/{id}/reset")
+	public String handleTaskReset(Authentication auth, @PathVariable("id") Long id, @RequestHeader(value = "referer", required = true) String referer) {
+		taskService.resetTask(id, auth.getName());
+		return "redirect:" + referer;
+	}
+
+	/**
 	 * Erstellt die Übersicht aller Tasks abonnierter Topics für einen Anwender.
 	 */
 	@GetMapping("tasks")

@@ -196,6 +196,17 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+	public void resetTask(Long taskId, String login) {
+		LOG.info("Setze Status von Task auf NEU.");
+		LOG.debug("Setze Status von Task {} für Login \"{}\" auf NEU.", taskId, login);
+		Status status = getOrCreateStatus(taskId, login);
+		status.setStatus(StatusEnum.NEU);
+		LOG.debug("Status von {} und Anwender {} gesetzt auf {}.", status.getTask(), status.getUser(),
+			status.getStatus());
+	}
+
+	@Override
+	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public List<OwnerTaskDto> getManagedTasks(String uuid, String login) {
 		LOG.info("Fordere verwaltete Tasks Liste für ein Topic eines Anwenders an.");
 		LOG.debug("Fordere verwaltete Tasks Liste für Topic {} und Anwender \"{}\" an.", uuid, login);
