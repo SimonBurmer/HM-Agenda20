@@ -2,51 +2,50 @@
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments :: head" />
-<body>
+<body class="bg-dark">
 	<nav th:replace="fragments :: navigation"></nav>
 
-	<div class="container-fluid">
-		<div class="row justify-content-center bg-light">
-			<div class="col-12">
+	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
+		<div class="row">
+			<div class="col-auto">
 				<h4 class="display-4">
 					Aufgaben-Übersicht für das Topic <i th:text="${topic.title}"></i>
 				</h4>
 			</div>
 		</div>
-		<div class="row justify-content-center bg-light">
+		<div class="row justify-content-center bg-dark">
 			<div class="col-12">
 				<p th:text="${topic.longDescription}"></p>
 			</div>
 		</div>
-		<div class="row row-cols-1 bg-light">
+
+		<div class="row row-cols-1 bg-dark">
 			<div class="col mb-4" th:each="task : ${tasks}">
-				<div class="card">
+				<div class="card bg-dark">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${task.title}">Card title</h5>
 						<p class="card-text" th:text="${task.taskShortDescription}"></p>
-						<div class="container">
-							<div class="row">
-								<div class="col text-left">
-									<a th:href="'/tasks/'+${task.id}" class="btn btn-primary">Öffnen</a>
-								</div>
-								<div class="col text-right">
-									<form th:unless="${task.status.status.toString()=='FERTIG'}"
-										  id="formName" th:action="@{/tasks/{id}/check(id=${task.id})}"
-										  th:object="${task}" method="post">
+						
+						<a th:href="'/tasks/'+${task.id}" class="btn btn-sm btn-primary">Öffnen</a>
 
-										<button type="submit" class="btn btn-success">Erledigt</button>
-									</form>
-								</div>
-								<div class="col text-left">
-									<form th:if="${task.status.status.toString()=='FERTIG'}"
-										  id="formName" th:action="@{/tasks/{id}/reset(id=${task.id})}"
-										  th:object="${task}" method="post">
 
-										<button type="submit" class="btn btn-secondary">Zurücksetzen</button>
-									</form>
-								</div>
-							</div>
-						</div>
+						<form th:unless="${task.status.status.toString()=='FERTIG'}"
+							id="formName" th:action="@{/tasks/{id}/check(id=${task.id})}"
+							th:object="${task}" method="post">
+
+							<button type="submit" class="btn btn-sm btn-success">Erledigt</button>
+						</form>
+
+
+						<form th:if="${task.status.status.toString()=='FERTIG'}"
+							id="formName" th:action="@{/tasks/{id}/reset(id=${task.id})}"
+							th:object="${task}" method="post">
+
+							<button type="submit" class="btn btn-sm btn-secondary">Zurücksetzen</button>
+						</form>
+
+
+
 					</div>
 				</div>
 			</div>

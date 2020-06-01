@@ -2,52 +2,48 @@
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments :: head" />
-<body>
+<body class="bg-dark">
 	<nav th:replace="fragments :: navigation"></nav>
 
-	<div class="container-fluid">
-		<div class="row justify-content-center bg-light">
-			<div class="col-12">
+	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
+		<div class="row">
+			<div class="col-auto">
 				<h4 class="display-4">Eigene Aufgaben</h4>
 				<span th:if="${#lists.size(tasks)==0}">Sie haben keine
 					Aufgaben!</span>
 			</div>
 		</div>
-		<div class="row row-cols-md-12 bg-light">
-			<div class="card col-md-12" th:each="t : ${tasks}" th:classappend="${t.status.status.toString()=='FERTIG'} ? text-secondary : text-primary">
-				<div class="row align-items-center">
-					<div class="col-md-8">
-						<div class="card-body"
-							>
-							<h5 class="card-title" th:text="${t.title}">Card title</h5>
-							<h6 class="card-subtitle mb-2 text-muted"
-								th:text="'In '+${t.topic.title}">Card subtitle</h6>
+		<div class="row row-cols-1 bg-dark">
+			<div class="col mb-4" th:each="task : ${tasks}">
+				<div class="card bg-dark">
+					<div class="card-body">
+						<h5 class="card-title" th:text="${task.title}">Card title</h5>
+						<p class="card-text" th:text="${task.taskShortDescription}"></p>
 
-							<p><small class="card-text" th:text="${t.taskShortDescription}">Keine Beschreibung</small></p> 
 
-						</div>
-					</div>
-					<div class="col-md-2">
-						<form th:unless="${t.status.status.toString()=='FERTIG'}"
-							id="formName" th:action="@{/tasks/{id}/check(id=${t.id})}"
-							th:object="${t}" method="post">
+						<a th:href="'/tasks/'+${task.id}" class="btn btn-sm btn-primary">Öffnen</a>
 
-							<button type="submit" class="btn btn-success">Erledigt</button>
+
+						<form th:unless="${task.status.status.toString()=='FERTIG'}"
+							id="formName" th:action="@{/tasks/{id}/check(id=${task.id})}"
+							th:object="${task}" method="post">
+
+							<button type="submit" class="btn btn-sm btn-success">Erledigt</button>
+						</form>
+
+
+						<form th:if="${task.status.status.toString()=='FERTIG'}"
+							id="formName" th:action="@{/tasks/{id}/reset(id=${task.id})}"
+							th:object="${task}" method="post">
+
+							<button type="submit" class="btn btn-sm btn-secondary">Zurücksetzen</button>
 						</form>
 					</div>
-					<div class="col-md-2">
-						<form th:if="${t.status.status.toString()=='FERTIG'}"
-							  id="formName" th:action="@{/tasks/{id}/reset(id=${t.id})}"
-							  th:object="${t}" method="post">
-
-							<button type="submit" class="btn btn-secondary">Zurücksetzen</button>
-						</form>
-					</div>
-
 				</div>
 			</div>
 		</div>
 	</div>
+
 
 	<th:block th:replace="fragments :: scripts">
 </body>

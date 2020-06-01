@@ -2,17 +2,17 @@
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments :: head" />
-<body>
+<body class="bg-dark">
 	<nav th:replace="fragments :: navigation"></nav>
 
-	<div class="container-fluid">
-		<div class="row justify-content-center bg-light">
-			<div class="col-12">
+	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
+		<div class="row">
+			<div class="col-auto">
 				<h4 class="display-4">
 					Topic <i th:text=${topic.title}></i> abonnieren
 				</h4>
 
-				<div class="card">
+				<div class="card bg-dark">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${topic.title}">Card title</h5>
 						<h6 class="card-subtitle mb-2 text-muted"
@@ -22,8 +22,8 @@
 							th:action="@{/topics/{uuid}/register(uuid=${topic.uuid})}"
 							method="post">
 
-							<button type="submit" class="btn btn-primary">Abonnieren</button>
-							<a href="/topics" class="btn btn-danger">Abbrechen</a>
+							<button type="submit" class="btn btn-sm btn-primary">Abonnieren</button>
+							<a href="/topics" class="btn btn-sm btn-danger">Abbrechen</a>
 
 						</form>
 					</div>

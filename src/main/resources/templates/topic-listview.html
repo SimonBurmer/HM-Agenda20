@@ -2,11 +2,11 @@
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments :: head" />
-<body>
+<body class="bg-dark">
 	<nav th:replace="fragments :: navigation"></nav>
-	<div class="container-fluid">
-		<div class="row justify-content-center bg-light">
-			<div class="col-12">
+	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
+		<div class="row">
+			<div class="col-auto">
 				<h4 class="display-4">
 					Eigene Topics <a href="/topics/create" class="btn btn-primary">Topic
 						erstellen</a>
@@ -15,39 +15,39 @@
 					keine Topics erstellt!</span>
 			</div>
 		</div>
-		<div class="row row-cols-1 row-cols-md-3 bg-light">
+		<div class="row row-cols-1 row-cols-md-3 bg-dark">
 			<div class="col mb-4" th:each="t : ${managedTopics}">
-				<div class="card">
+				<div class="card bg-dark">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${t.title}">Card title</h5>
 						<p><small class="card-text" th:text="${t.shortDescription}">Keine Beschreibung</small></p> 
 
 						<a th:href="'/topics/'+${t.uuid}+'/manage'"
-							class="btn btn-primary">Verwalten</a> <a
+							class="btn btn-sm btn-primary">Verwalten</a> <a
 							th:href="'/topics/'+${t.uuid}+'/register'"
-							class="btn btn-outline-primary">Abo-Link</a>
+							class="btn btn-sm btn-outline-primary">Abo-Link</a>
 							<p><small
 							class="form-text text-muted"> Kopieren Sie den Link zum Abonnieren (Rechtsklick, Link/Adresse kopieren) und geben ihn an Teilnehmer aus!</small></p>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row justify-content-center bg-light">
-			<div class="col-12">
+		<div class="row">
+			<div class="col-auto">
 				<h6 class="display-4">Abonnierte Topics</h6>
 				<span th:if="${#lists.size(topics)==0}">Sie haben keine
 					Topics abonniert!</span>
 			</div>
 		</div>
-		<div class="row row-cols-1 row-cols-md-3 bg-light">
+		<div class="row row-cols-1 row-cols-md-3 bg-dark">
 			<div class="col mb-4" th:each="t : ${topics}">
-				<div class="card">
+				<div class="car bg-dark">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${t.title}">Card title</h5>
 						<h6 class="card-subtitle mb-2 text-muted"
 							th:text="'Von '+${t.creator.displayName}">Card subtitle</h6>
 						<p><small class="card-text" th:text="${t.shortDescription}">Keine Beschreibung</small></p> 
-						<a th:href="'/topics/'+${t.uuid}" class="btn btn-primary">Öffnen</a>
+						<a th:href="'/topics/'+${t.uuid}" class="btn tbn-sm btn-primary">Öffnen</a>
 					</div>
 				</div>
 			</div>

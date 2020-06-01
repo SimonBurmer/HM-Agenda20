@@ -54,19 +54,23 @@
 						<h5 class="card-title" th:text="${task.title}">Card title</h5>
 						<p class="card-text" th:text="${task.taskShortDescription}"></p>
 
-						<a th:href="'/tasks/'+${task.id}+'/manage'"
-							class="btn btn-primary">Verwalten</a>
+						
+							<a th:href="'/tasks/'+${task.id}+'/manage'"
+								class="btn btn-sm btn-primary">Verwalten</a>
 
-						<form th:action="'/tasks/'+${task.id}+'/delete'" method="post">
-							<button class="btn btn-danger" type="submit">Löschen</button>
-						</form>
+
+							
+								<form th:action="'/tasks/'+${task.id}+'/delete'" method="post">
+									<button class="btn btn-sm btn-danger" type="submit">Löschen</button>
+								</form>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
+		
 
-	<th:block th:replace="fragments :: scripts">
+		<th:block th:replace="fragments :: scripts">
 </body>
 </html>
 
