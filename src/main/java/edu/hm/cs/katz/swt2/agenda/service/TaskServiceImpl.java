@@ -11,6 +11,8 @@ import edu.hm.cs.katz.swt2.agenda.persistence.User;
 import edu.hm.cs.katz.swt2.agenda.persistence.UserRepository;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.TaskDto;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -50,7 +52,17 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-	public Long createTask(String uuid, String titel, String login, String taskShortDescription, String taskLongDescription) {
+	public void deleteTask(Long id, String login) {
+		LOG.info("Löschen eins Task von einem Anwender.");
+		LOG.debug("Lösche Task {} von Anwender \"{}\".", id, login);
+		Task task = taskRepository.getOne(id);
+		taskRepository.delete(task);
+	}
+
+	@Override
+	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+	public Long createTask(String uuid, String titel, String login, String taskShortDescription,
+			String taskLongDescription) {
 		LOG.info("Erstelle einen Task.");
 		LOG.debug("Erstelle Task \"{}\" mit UUID \"{}\" für Anwender \"{}\".", titel, uuid, login);
 
@@ -119,7 +131,8 @@ public class TaskServiceImpl implements TaskService {
 		Task taskToUpdate = taskRepository.getOne(id);
 		User changingUser = anwenderRepository.getOne(login);
 		if (!changingUser.equals(taskToUpdate.getTopic().getCreator())) {
-			LOG.warn("Anwender {} ist nicht berechtigt, einen Task im Topic {} zu ändern.", login, taskToUpdate.getTitle());
+			LOG.warn("Anwender {} ist nicht berechtigt, einen Task im Topic {} zu ändern.", login,
+					taskToUpdate.getTitle());
 			throw new AccessDeniedException("Kein Zugriff auf das Topic!");
 		}
 
@@ -237,7 +250,7 @@ public class TaskServiceImpl implements TaskService {
 		Status status = getOrCreateStatus(taskId, login);
 		status.setStatus(StatusEnum.NEU);
 		LOG.debug("Status von {} und Anwender {} gesetzt auf {}.", status.getTask(), status.getUser(),
-			status.getStatus());
+				status.getStatus());
 	}
 
 	@Override

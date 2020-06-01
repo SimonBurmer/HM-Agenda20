@@ -46,8 +46,8 @@ public class TaskController extends AbstractController {
 	public String handleTaskCreation(Model model, Authentication auth, @PathVariable("uuid") String uuid,
 			@ModelAttribute("newTask") TaskDto newTask, RedirectAttributes redirectAttributes) {
 		try {
-			taskService.createTask(uuid, newTask.getTitle(), auth.getName(),
-					newTask.getTaskShortDescription(), newTask.getTaskLongDescription());
+			taskService.createTask(uuid, newTask.getTitle(), auth.getName(), newTask.getTaskShortDescription(),
+					newTask.getTaskLongDescription());
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("error", e.getMessage());
 			return "redirect:/topics/" + uuid + "/createTask";
@@ -77,15 +77,33 @@ public class TaskController extends AbstractController {
 	}
 
 	/**
+	 * Lösche einen Task.
+	 */
+	@PostMapping("tasks/{id}/delete")
+	public String handleDeletion(Authentication auth, @PathVariable("id") Long id,
+			RedirectAttributes redirectAttributes) {
+		TaskDto task = taskService.getManagedTask(id, auth.getName());
+		try {
+
+			taskService.deleteTask(id, auth.getName());
+		} catch (Exception e) {
+			// Zeige die Fehlermeldung der Exception als Flash Attribut an.
+			redirectAttributes.addAttribute("error", e.getMessage());
+		}
+		// Zeige die erfolgreiche Löschung als Flash Attribut an.
+		redirectAttributes.addAttribute("success", "Task gelöscht");
+		return "redirect:/topics/" + task.getTopic().getUuid() + "/manage";
+
+	}
+
+	/**
 	 * Aktualisiert die Kurz- und Langbeschreibung eines Tasks.
 	 */
 	@PostMapping("tasks/{id}/manage")
-	public String handleUpdate(@ModelAttribute("task") TaskDto task, Authentication auth,
-		@PathVariable("id") Long id, @RequestHeader(value="referer", required = true) String referer,
-		RedirectAttributes redirectAttributes) {
+	public String handleUpdate(@ModelAttribute("task") TaskDto task, Authentication auth, @PathVariable("id") Long id,
+			@RequestHeader(value = "referer", required = true) String referer, RedirectAttributes redirectAttributes) {
 		try {
-			taskService.updateTask(id, auth.getName(), task.getTaskShortDescription(),
-				task.getTaskLongDescription());
+			taskService.updateTask(id, auth.getName(), task.getTaskShortDescription(), task.getTaskLongDescription());
 		} catch (Exception e) {
 			// Zeige die Fehlermeldung der Exception als Flash Attribut an.
 			redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -100,7 +118,8 @@ public class TaskController extends AbstractController {
 	 * Verarbeitet die Markierung eines Tasks als "Done".
 	 */
 	@PostMapping("tasks/{id}/check")
-	public String handleTaskChecking(Authentication auth, @PathVariable("id") Long id, @RequestHeader(value = "referer", required = true) String referer) {
+	public String handleTaskChecking(Authentication auth, @PathVariable("id") Long id,
+			@RequestHeader(value = "referer", required = true) String referer) {
 		taskService.checkTask(id, auth.getName());
 		return "redirect:" + referer;
 	}
@@ -109,7 +128,8 @@ public class TaskController extends AbstractController {
 	 * Verarbeitet die Markierung eines Tasks als "Zurückgesetzt".
 	 */
 	@PostMapping("tasks/{id}/reset")
-	public String handleTaskReset(Authentication auth, @PathVariable("id") Long id, @RequestHeader(value = "referer", required = true) String referer) {
+	public String handleTaskReset(Authentication auth, @PathVariable("id") Long id,
+			@RequestHeader(value = "referer", required = true) String referer) {
 		taskService.resetTask(id, auth.getName());
 		return "redirect:" + referer;
 	}
