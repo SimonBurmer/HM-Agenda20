@@ -84,14 +84,14 @@ public class TaskController extends AbstractController {
 			RedirectAttributes redirectAttributes) {
 		TaskDto task = taskService.getManagedTask(id, auth.getName());
 		try {
-
 			taskService.deleteTask(id, auth.getName());
 		} catch (Exception e) {
 			// Zeige die Fehlermeldung der Exception als Flash Attribut an.
-			redirectAttributes.addAttribute("error", e.getMessage());
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
+			return "redirect:/topics/" + task.getTopic().getUuid() + "/manage";
 		}
 		// Zeige die erfolgreiche Löschung als Flash Attribut an.
-		redirectAttributes.addAttribute("success", "Task gelöscht");
+		redirectAttributes.addFlashAttribute("success", "Task gelöscht");
 		return "redirect:/topics/" + task.getTopic().getUuid() + "/manage";
 
 	}
