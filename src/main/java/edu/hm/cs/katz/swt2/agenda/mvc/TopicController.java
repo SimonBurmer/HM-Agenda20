@@ -81,12 +81,12 @@ public class TopicController extends AbstractController {
     OwnerTopicDto topic = topicService.getManagedTopic(uuid, auth.getName());
     model.addAttribute("topic", topic);
     model.addAttribute("tasks", taskService.getManagedTasks(uuid, auth.getName()));
-    if(topic.getSubscriber().isEmpty()) {
-      model.addAttribute("condition",true);
-    } 
+    if (topic.getSubscriber().isEmpty()) {
+      model.addAttribute("condition", true);
+    }
     return "topic-management";
   }
- 
+
   /**
    * Erzeugt Anzeige für die Nachfrage beim Abonnieren eines Topics.
    */
@@ -136,36 +136,25 @@ public class TopicController extends AbstractController {
     redirectAttributes.addFlashAttribute("success", "Topic wurde gelöscht.");
     return "redirect:/topics";
   }
-  
+
   /**
    * Aktualisiert ein Topic.
    */
   @PostMapping("/topics/{uuid}/manage")
-  public String handelUpdateTopic(@ModelAttribute("topic") OwnerTopicDto topic, @PathVariable("uuid") String uuid, @RequestHeader(value = "referer", required = true) String referer,Authentication auth) {
-    topicService.updateTopic(uuid, auth.getName(), topic.getShortDescription(), topic.getLongDescription());
-    return "redirect:"+ referer;
+  public String handelUpdateTopic(@ModelAttribute("topic") OwnerTopicDto topic,
+      @PathVariable("uuid") String uuid,
+      @RequestHeader(value = "referer", required = true) String referer, Authentication auth,
+      RedirectAttributes redirectAttributes) {
+    try {
+      topicService.updateTopic(uuid, auth.getName(), topic.getShortDescription(),
+          topic.getLongDescription());
+    } catch (Exception e) {
+      // Zeige die Fehlermeldung der Exception als Flash Attribut an.
+      redirectAttributes.addFlashAttribute("error", e.getMessage());
+      return "redirect:" + referer;
+    }
+    // Zeige die erfolgreiche Aktualisierung als Flash Attribut an.
+    redirectAttributes.addFlashAttribute("success", "Task aktualisiert!");
+    return "redirect:" + referer;
   }
-  
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
