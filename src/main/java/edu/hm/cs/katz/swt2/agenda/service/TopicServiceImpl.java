@@ -72,8 +72,8 @@ public class TopicServiceImpl implements TopicService {
       throw new ValidationException("Kurzbeschreibungen müssen mindestens 200 Zeichen lang sein!");
     }
     if (longDescription.length() > 2000) {
-      LOG.debug("Maximale Länge von 1000 Zeichen überschritten!");
-      throw new ValidationException("Maximale Länge von 1000 Zeichen überschritten!");
+      LOG.debug("Maximale Länge von 2000 Zeichen überschritten!");
+      throw new ValidationException("Maximale Länge von 2000 Zeichen überschritten!");
     }
 
 
@@ -185,8 +185,8 @@ public class TopicServiceImpl implements TopicService {
       throw new ValidationException("Kurzbeschreibungen müssen mindestens 200 Zeichen lang sein!");
     }
     if (longDescription.length() > 2000) {
-      LOG.debug("Maximale Länge von 1000 Zeichen überschritten!");
-      throw new ValidationException("Maximale Länge von 1000 Zeichen überschritten!");
+      LOG.debug("Maximale Länge von 2000 Zeichen überschritten!");
+      throw new ValidationException("Maximale Länge von 2000 Zeichen überschritten!");
     }
     
     topic.setShortDescription(shortDescription);
