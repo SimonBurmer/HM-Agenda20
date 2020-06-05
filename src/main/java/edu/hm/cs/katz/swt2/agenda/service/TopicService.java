@@ -53,4 +53,6 @@ public interface TopicService {
    */
   public void updateTopic(String topicUuid, String login, String shortDescription,
       String longDescriptionn);
+
+String getTopicUuid(String key);
 }

@@ -192,4 +192,22 @@ public class TopicServiceImpl implements TopicService {
     topic.setShortDescription(shortDescription);
     topic.setLongDescription(longDescription);
   }
+
+@Override
+public String getTopicUuid(String key) {
+	LOG.info("Uuid auflösen für Key {}.", key);
+	if (key.length()<8) {
+		throw new ValidationException("Kurzschlüssel ist zu kurz. Ein Kurzschlüssel hat 8 Zeichen");
+	}
+	
+	if (key.length()>=9) {
+		throw new ValidationException("Kurzschlüssel ist zu lang. Ein Kurzschlüssel hat 8 Zeichen");
+	}
+	Topic topic = topicRepository.findByUuidEndingWith(key);
+	
+	if (topic == null) {
+		throw new ValidationException("Zu diesem Kurzschlüssel gibt es kein Topic!");
+	}
+	return topic.getUuid();
+}
 }
