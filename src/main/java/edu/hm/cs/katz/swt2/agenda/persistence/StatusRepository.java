@@ -1,5 +1,6 @@
 package edu.hm.cs.katz.swt2.agenda.persistence;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,4 +22,13 @@ public interface StatusRepository extends JpaRepository<Status, Long> {
    * @return Status, <code>null</code>, wenn noch kein Status existiert.
    */
   Status findByUserAndTask(User user, Task task);
+  
+  /**
+   * Findet alle Status für einen gegebenen Task.
+   * 
+   * @param task Task
+   * @return Status, <code>null</code>, wenn noch kein Status existiert.
+   */
+  List<Status> findByTask(Task task);
+  
 }

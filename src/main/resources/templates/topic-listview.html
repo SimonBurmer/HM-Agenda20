@@ -20,14 +20,25 @@
 				<div class="card bg-dark">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${t.title}">Card title</h5>
-						<p><small class="card-text" th:text="${t.shortDescription}">Keine Beschreibung</small></p> 
+						<p>
+							<small class="card-text" th:text="${t.shortDescription}">Keine
+								Beschreibung</small>
+						</p>
+						<p>
+							<small>Anzahl Subscriber: <i
+								th:text="${t.AmountSubscriber}"></i></small>
+						</p>
+
 
 						<a th:href="'/topics/'+${t.uuid}+'/manage'"
 							class="btn btn-sm btn-primary">Verwalten</a> <a
 							th:href="'/topics/'+${t.uuid}+'/register'"
 							class="btn btn-sm btn-outline-primary">Abo-Link</a>
-							<p><small
-							class="form-text text-muted"> Kopieren Sie den Link zum Abonnieren (Rechtsklick, Link/Adresse kopieren) und geben ihn an Teilnehmer aus!</small></p>
+						<p>
+							<small class="form-text text-muted"> Kopieren Sie den
+								Link zum Abonnieren (Rechtsklick, Link/Adresse kopieren) und
+								geben ihn an Teilnehmer aus!</small>
+						</p>
 					</div>
 				</div>
 			</div>
@@ -46,7 +57,14 @@
 						<h5 class="card-title" th:text="${t.title}">Card title</h5>
 						<h6 class="card-subtitle mb-2 text-muted"
 							th:text="'Von '+${t.creator.displayName}">Card subtitle</h6>
-						<p><small class="card-text" th:text="${t.shortDescription}">Keine Beschreibung</small></p> 
+						<p>
+							<small class="card-text" th:text="${t.shortDescription}">Keine
+								Beschreibung</small>
+						</p>
+						<p>
+							<small>Anzahl offener Tasks: <i
+								th:text="${t.amountUnfinishedTasks}"></i></small>
+						</p>
 						<a th:href="'/topics/'+${t.uuid}" class="btn tbn-sm btn-primary">Öffnen</a>
 					</div>
 				</div>

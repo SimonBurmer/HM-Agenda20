@@ -11,7 +11,6 @@ import edu.hm.cs.katz.swt2.agenda.persistence.User;
 import edu.hm.cs.katz.swt2.agenda.persistence.UserRepository;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
-import edu.hm.cs.katz.swt2.agenda.service.dto.TaskDto;
 
 import java.util.ArrayList;
 import java.util.Collection;

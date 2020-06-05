@@ -53,13 +53,9 @@
 					<div class="card-body">
 						<h5 class="card-title" th:text="${task.title}">Card title</h5>
 						<p class="card-text" th:text="${task.taskShortDescription}"></p>
-
-						
+						<p><small>Anzahl Subscriber die den Task abgeschlossen haben: <i th:text="${task.amountFinished}"></i></small></p>
 							<a th:href="'/tasks/'+${task.id}+'/manage'"
-								class="btn btn-sm btn-primary">Verwalten</a>
-
-
-							
+								class="btn btn-sm btn-primary">Verwalten</a>							
 								<form th:action="'/tasks/'+${task.id}+'/delete'" method="post">
 									<button class="btn btn-sm btn-danger" type="submit">Löschen</button>
 								</form>

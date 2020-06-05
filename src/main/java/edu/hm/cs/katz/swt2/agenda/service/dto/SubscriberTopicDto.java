@@ -15,17 +15,33 @@ public class SubscriberTopicDto {
   private String title;
   private String shortDescription;
   private String longDescription;
+  private int amountUnfinishedTasks;
 
   /**
-   * Konstruktor.
+   * Konstruktor mit amountUnfinishedTasks
    */
-  public SubscriberTopicDto(String uuid, UserDisplayDto creator, String title, String shortDescription, String longDescription) {
+  public SubscriberTopicDto(String uuid, UserDisplayDto creator, String title,
+      String shortDescription, String longDescription, int amountUnfinishedTasks) {
+    this.uuid = uuid;
+    this.creator = creator;
+    this.title = title;
+    this.shortDescription = shortDescription;
+    this.longDescription = longDescription;
+    this.amountUnfinishedTasks = amountUnfinishedTasks;
+  }
+  
+  /**
+   * Konstruktor ohne amountUnfinishedTasks
+   */
+  public SubscriberTopicDto(String uuid, UserDisplayDto creator, String title,
+      String shortDescription, String longDescription) {
     this.uuid = uuid;
     this.creator = creator;
     this.title = title;
     this.shortDescription = shortDescription;
     this.longDescription = longDescription;
   }
+
 
   public String getUuid() {
     return uuid;
@@ -57,5 +73,9 @@ public class SubscriberTopicDto {
 
   public void setLongDescription(String longDescription) {
     this.longDescription = longDescription;
+  }
+
+  public int getAmountUnfinishedTasks() {
+    return amountUnfinishedTasks;
   }
 }

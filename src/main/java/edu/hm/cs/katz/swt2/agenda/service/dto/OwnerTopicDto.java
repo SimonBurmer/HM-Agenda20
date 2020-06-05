@@ -16,10 +16,13 @@ import edu.hm.cs.katz.swt2.agenda.persistence.User;
 public class OwnerTopicDto extends SubscriberTopicDto {
   
   private Collection<User> subscriber;
+  
+  private int amountSubscriber;
 
-  public OwnerTopicDto(String uuid, UserDisplayDto user, String title,String shortDescription, String longDescription, Collection<User> subscriber) {
-    super(uuid, user, title, shortDescription, longDescription);
+  public OwnerTopicDto(String uuid, UserDisplayDto user, String title,String shortDescription, String longDescription, Collection<User> subscriber, int amountSubscriber) {
+    super(uuid, user, title, shortDescription, longDescription,0);
     this.subscriber = subscriber;
+    this.amountSubscriber = amountSubscriber;
   }
 
   public Collection<User> getSubscriber() {
@@ -30,5 +33,7 @@ public class OwnerTopicDto extends SubscriberTopicDto {
     this.subscriber = subscriber;
   }
   
-  
+  public int getAmountSubscriber() {
+    return amountSubscriber;
+  }  
 }

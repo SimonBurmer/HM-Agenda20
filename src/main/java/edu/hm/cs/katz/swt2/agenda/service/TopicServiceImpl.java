@@ -113,7 +113,7 @@ public class TopicServiceImpl implements TopicService {
     LOG.info("Fordere Topic mit UUID für einen Anwender an.");
     LOG.debug("Fordere Topic {} für Anwender \"{}\" an.", topicUuid, login);
     Topic topic = topicRepository.getOne(topicUuid);
-    return mapper.createDto(topic);
+    return mapper.createDto(topic, login);
   }
 
   @Override
@@ -140,7 +140,7 @@ public class TopicServiceImpl implements TopicService {
 
     List<SubscriberTopicDto> result = new ArrayList<>();
     for (Topic topic : subscriptionsList) {
-      result.add(mapper.createDto(topic));
+      result.add(mapper.createDto(topic, login));
     }
     return result;
   }
