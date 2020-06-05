@@ -19,7 +19,8 @@
 			<div class="col mb-4" th:each="t : ${managedTopics}">
 				<div class="card bg-dark">
 					<div class="card-body">
-						<h5 class="card-title" th:text="${t.title}">Card title</h5>
+												<h5 class="card-title" th:text="${t.title} +' ('+${t.key}+')'">Card
+							title</h5>
 						<p>
 							<small class="card-text" th:text="${t.shortDescription}">Keine
 								Beschreibung</small>
@@ -31,19 +32,12 @@
 
 
 						<a th:href="'/topics/'+${t.uuid}+'/manage'"
-							class="btn btn-sm btn-primary">Verwalten</a> <a
-							th:href="'/topics/'+${t.uuid}+'/register'"
-							class="btn btn-sm btn-outline-primary">Abo-Link</a>
-						<p>
-							<small class="form-text text-muted"> Kopieren Sie den
-								Link zum Abonnieren (Rechtsklick, Link/Adresse kopieren) und
-								geben ihn an Teilnehmer aus!</small>
-						</p>
+							class="btn btn-sm btn-primary">Verwalten</a>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row row-cols-1 row-cols-md-3 bg-dark">
 			<div class="col-auto">
 				<h6 class="display-4">Abonnierte Topics</h6>
 				<span th:if="${#lists.size(topics)==0}">Sie haben keine
