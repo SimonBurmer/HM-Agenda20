@@ -40,18 +40,23 @@ public interface TopicService {
    * Abonnieren eines Topics.
    */
   void subscribe(String topicUuid, String login);
+
+  /**
+   * De-Abonnieren eines Topics.
+   */
+  void unsubscribe(String topicUuid, String login);
   
   
   /**
    * Löschen eines Topics.
    */
-  public void deleteTopic(String topicUuid, String login);
+  void deleteTopic(String topicUuid, String login);
   
   
   /**
    * Aktualisieren eines Topics.
    */
-  public void updateTopic(String topicUuid, String login, String shortDescription,
+  void updateTopic(String topicUuid, String login, String shortDescription,
       String longDescriptionn);
 
 String getTopicUuid(String key);

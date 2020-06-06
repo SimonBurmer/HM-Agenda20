@@ -126,6 +126,15 @@ public class TopicServiceImpl implements TopicService {
     topic.register(anwender);
   }
 
+  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+  @Override public void unsubscribe(String topicUuid, String login) {
+    LOG.info("De-Abonniere ein Topic für einen Anwender.");
+    LOG.debug("De-Abonniere Topic {} für Anwender \"{}\".", topicUuid, login);
+    Topic topic = topicRepository.getOne(topicUuid);
+    User anwender = anwenderRepository.getOne(login);
+    topic.unregister(anwender);
+  }
+
   @Override
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public List<SubscriberTopicDto> getSubscriptions(String login) {
@@ -199,12 +208,12 @@ public String getTopicUuid(String key) {
 	if (key.length()<8) {
 		throw new ValidationException("Kurzschlüssel ist zu kurz. Ein Kurzschlüssel hat 8 Zeichen");
 	}
-	
+
 	if (key.length()>=9) {
 		throw new ValidationException("Kurzschlüssel ist zu lang. Ein Kurzschlüssel hat 8 Zeichen");
 	}
 	Topic topic = topicRepository.findByUuidEndingWith(key);
-	
+
 	if (topic == null) {
 		throw new ValidationException("Zu diesem Kurzschlüssel gibt es kein Topic!");
 	}

@@ -117,6 +117,11 @@ public class Topic {
     anwender.addSubscription(this);
   }
 
+  public void unregister(User anwender) {
+    subscriber.remove(anwender);
+    anwender.getSubscriptions().remove(this);
+  }
+
   public Collection<User> getSubscriber() {
     return Collections.unmodifiableCollection(subscriber);
   }

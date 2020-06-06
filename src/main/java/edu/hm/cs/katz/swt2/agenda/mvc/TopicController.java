@@ -110,6 +110,29 @@ public class TopicController extends AbstractController {
   }
 
   /**
+   * Erzeugt die Anzeige für die Nachfrage beim De-Abonnieren eines Topics.
+   */
+  @GetMapping("/topics/{uuid}/unregister")
+  public String getTaskUnRegistrationView(Model model, Authentication auth,
+      @PathVariable("uuid") String uuid) {
+    SubscriberTopicDto topic = topicService.getTopic(uuid, auth.getName());
+    model.addAttribute("topic", topic);
+    return "topic-unregistration";
+  }
+
+  /**
+   * Nimmt das Abonnement (d.h. die Bestätigung auf die Nachfrage) entgegen und löscht das Abo.
+   */
+  @PostMapping("/topics/{uuid}/unregister")
+  public String handleTaskUnRegistration(Model model, Authentication auth,
+      @PathVariable("uuid") String uuid, RedirectAttributes redirectAttributes) {
+    topicService.unsubscribe(uuid, auth.getName());
+    String topicTitle = topicService.getTopic(uuid, auth.getName()).getTitle();
+    redirectAttributes.addFlashAttribute("info", "Abo \"" + topicTitle + "\" wurde beendet.");
+    return "redirect:/topics/";
+  }
+
+  /**
    * Erstellt Übersicht eines Topics für einen Abonennten.
    */
   @GetMapping("/topics/{uuid}")
