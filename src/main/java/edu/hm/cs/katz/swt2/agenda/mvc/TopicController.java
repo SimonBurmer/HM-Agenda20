@@ -126,9 +126,12 @@ public class TopicController extends AbstractController {
   @PostMapping("/topics/{uuid}/unregister")
   public String handleTaskUnRegistration(Model model, Authentication auth,
       @PathVariable("uuid") String uuid, RedirectAttributes redirectAttributes) {
+    // Erst den Anwender aus den Subscribern des Topics entfernen ...
     topicService.unsubscribe(uuid, auth.getName());
-    String topicTitle = topicService.getTopic(uuid, auth.getName()).getTitle();
-    redirectAttributes.addFlashAttribute("info", "Abo \"" + topicTitle + "\" wurde beendet.");
+    // ... dann alle Statuseinträge des Benutzers für Tasks des Topics löschen
+    taskService.deleteTaskStatusesforTopic(uuid, auth.getName());
+    // Danach darf getTopic() nicht mehr aufgerufen werden, da sonst die Status neu erstellt werden!
+    redirectAttributes.addFlashAttribute("info", "Abo wurde beendet.");
     return "redirect:/topics/";
   }
 

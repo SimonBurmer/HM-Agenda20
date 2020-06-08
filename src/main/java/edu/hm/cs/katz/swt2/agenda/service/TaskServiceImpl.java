@@ -285,4 +285,17 @@ public class TaskServiceImpl implements TaskService {
 		}
 		return status;
 	}
+
+	@Override
+	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+	public void deleteTaskStatusesforTopic(String topicUuid, String login) {
+		User user = anwenderRepository.getOne(login);
+		Topic topic = topicRepository.getOne(topicUuid);
+		Collection<Task> tasks = topic.getTasks();
+		int numberOfDeletedStatuses = 0;
+		for (Task task : tasks) {
+			numberOfDeletedStatuses += statusRepository.deleteByUserAndTask(user, task);
+		}
+		LOG.debug("{} Status gelöscht", numberOfDeletedStatuses);
+	}
 }

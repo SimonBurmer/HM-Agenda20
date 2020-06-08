@@ -30,5 +30,14 @@ public interface StatusRepository extends JpaRepository<Status, Long> {
    * @return Status, <code>null</code>, wenn noch kein Status existiert.
    */
   List<Status> findByTask(Task task);
+
+  /**
+   * Löscht den Status für einen gegebenen Task und einen gegebenen Anwender.
+   *
+   * @param user Anwender
+   * @param task Task
+   * @return int Anzahl der gelöschten Status
+   */
+  int deleteByUserAndTask(User user, Task task);
   
 }

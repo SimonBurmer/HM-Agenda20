@@ -61,4 +61,9 @@ public interface TaskService {
 	 * Setzt den Status eines Tasks für einen Abonnenten zurück auf NEU.
 	 */
 	void resetTask(Long taskId, String login);
+
+	/**
+	 * Löscht für einen Abonnenten alle Status für Tasks eines Topics.
+	 */
+	void deleteTaskStatusesforTopic(String topicUuid, String login);
 }
