@@ -15,29 +15,25 @@
 		</div>
 		<div class="row row-cols-1 bg-dark">
 			<div class="col mb-4" th:each="task : ${tasks}">
-				<div class="card bg-dark">
+				<div class="card bg-dark" th:classappend="${task.status.status.toString()=='FERTIG'} ? border-secondary : border-primary">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${task.title}">Card title</h5>
 						<p class="card-text" th:text="${task.taskShortDescription}"></p>
 
-
-						<a th:href="'/tasks/'+${task.id}" class="btn btn-sm btn-primary">Öffnen</a>
-
-
 						<form th:unless="${task.status.status.toString()=='FERTIG'}"
 							id="formName" th:action="@{/tasks/{id}/check(id=${task.id})}"
 							th:object="${task}" method="post">
-
-							<button type="submit" class="btn btn-sm btn-success">Erledigt</button>
+							<a th:href="'/tasks/'+${task.id}" class="btn btn-sm btn-primary mr-2">Öffnen</a>
+							<button type="submit" class="btn btn-sm btn-success mr-2">Erledigt</button>
 						</form>
-
 
 						<form th:if="${task.status.status.toString()=='FERTIG'}"
 							id="formName" th:action="@{/tasks/{id}/reset(id=${task.id})}"
 							th:object="${task}" method="post">
-
-							<button type="submit" class="btn btn-sm btn-secondary">Zurücksetzen</button>
+							<a th:href="'/tasks/'+${task.id}" class="btn btn-sm btn-primary mr-2">Öffnen</a>
+							<button type="submit" class="btn btn-sm btn-outline-secondary mr-2">Zurücksetzen</button>
 						</form>
+
 					</div>
 				</div>
 			</div>
