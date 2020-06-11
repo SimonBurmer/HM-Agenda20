@@ -1,5 +1,7 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
+import edu.hm.cs.katz.swt2.agenda.service.TaskService;
+import edu.hm.cs.katz.swt2.agenda.service.TopicService;
 import edu.hm.cs.katz.swt2.agenda.service.UserService;
 import edu.hm.cs.katz.swt2.agenda.service.dto.UserDisplayDto;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,11 @@ public class TopicControllerTest {
     MockMvc mvc;
 
     // Zugriff auf den TopicController durch die MockBean Objekte (simulierter HTTP Zugriff)
+    @MockBean
+    TopicService topicService;
+
+    @MockBean
+    TaskService taskService;
 
     @MockBean
     UserService userService;
