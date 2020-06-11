@@ -243,6 +243,25 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+	public void updateComment(Long taskId, String login, String comment) {
+		LOG.info("Aktualisiere den Kommentar zu einem Task eines Anwenders.");
+		String commentLogString = comment;
+		if (comment.length() > 10) {
+			commentLogString = comment.substring(0, 9);
+		}
+		LOG.debug("\t taskId={} login={} comment:{}...", taskId, login, commentLogString);
+
+		// Input Validation
+		if (comment.length() > 500) {
+			LOG.debug("Kommentare dürfen maximal 500 Zeichen lang sein!");
+			throw new ValidationException("Kommentare dürfen maximal 500 Zeichen lang sein!");
+		}
+		Status statusToUpdate = getOrCreateStatus(taskId, login);
+		statusToUpdate.setComment(comment);
+	}
+
+	@Override
+	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public void resetTask(Long taskId, String login) {
 		LOG.info("Setze Status von Task auf NEU.");
 		LOG.debug("Setze Status von Task {} für Login \"{}\" auf NEU.", taskId, login);

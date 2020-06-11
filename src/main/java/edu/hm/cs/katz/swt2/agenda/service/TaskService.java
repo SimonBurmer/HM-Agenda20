@@ -58,6 +58,11 @@ public interface TaskService {
 	void checkTask(Long taskId, String login);
 
 	/**
+	 * Aktualisiere den Kommentar zu einem Task.
+	 */
+	void updateComment(Long taskId, String login, String comment);
+
+	/**
 	 * Setzt den Status eines Tasks für einen Abonnenten zurück auf NEU.
 	 */
 	void resetTask(Long taskId, String login);

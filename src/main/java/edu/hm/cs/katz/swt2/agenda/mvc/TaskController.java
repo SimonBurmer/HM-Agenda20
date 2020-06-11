@@ -5,9 +5,11 @@ import edu.hm.cs.katz.swt2.agenda.service.TaskService;
 import edu.hm.cs.katz.swt2.agenda.service.TopicService;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.StatusDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.TaskDto;
 import java.util.List;
+import javax.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -61,8 +63,9 @@ public class TaskController extends AbstractController {
 	 */
 	@GetMapping("tasks/{id}")
 	public String getSubscriberTaskView(Model model, Authentication auth, @PathVariable("id") Long id) {
-		TaskDto task = taskService.getTask(id, auth.getName());
+		SubscriberTaskDto task = taskService.getTask(id, auth.getName());
 		model.addAttribute("task", task);
+		model.addAttribute("status", task.getStatus());
 		return "task";
 	}
 
@@ -121,6 +124,24 @@ public class TaskController extends AbstractController {
 	public String handleTaskChecking(Authentication auth, @PathVariable("id") Long id,
 			@RequestHeader(value = "referer", required = true) String referer) {
 		taskService.checkTask(id, auth.getName());
+		return "redirect:" + referer;
+	}
+
+	/**
+	 * Aktualisiert den Kommentar zu einem Task.
+	 */
+	@PostMapping("tasks/{id}/comment")
+	public String handleTaskComment(Model model, Authentication auth, @PathVariable("id") Long id,
+									@RequestHeader(value = "referer", required = true) String referer,
+									@ModelAttribute("comment") StatusDto comment,
+									RedirectAttributes redirectAttributes) {
+		try {
+			taskService.updateComment(id, auth.getName(), comment.getComment());
+		} catch (ValidationException e) {
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
+			return "redirect:" + referer;
+		}
+		redirectAttributes.addFlashAttribute("success", "Kommentar gespeichert!");
 		return "redirect:" + referer;
 	}
 

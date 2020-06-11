@@ -91,8 +91,8 @@ public class DtoMapper {
   /**
    * Erstellt ein {@link StatusDto} aus einem {@link Status}.
    */
-  public StatusDto createDto(Status status) {
-    return new StatusDto(status.getStatus());
+  public StatusDto createDto(Status status, String comment) {
+    return new StatusDto(status.getStatus(), comment);
   }
 
   /**
@@ -102,7 +102,7 @@ public class DtoMapper {
     Topic topic = task.getTopic();
     SubscriberTopicDto topicDto = createDto(topic);
     return new SubscriberTaskDto(task.getId(), task.getTitle(), task.getTaskShortDescription(),
-        task.getTaskLongDescription(), topicDto, createDto(status));
+        task.getTaskLongDescription(), topicDto, createDto(status, status.getComment()));
   }
 
   /**
