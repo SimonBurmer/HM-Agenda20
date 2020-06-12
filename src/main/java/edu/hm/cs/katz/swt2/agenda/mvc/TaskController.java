@@ -1,5 +1,6 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
+import edu.hm.cs.katz.swt2.agenda.common.StatusEnum;
 import edu.hm.cs.katz.swt2.agenda.persistence.TaskRepository;
 import edu.hm.cs.katz.swt2.agenda.service.TaskService;
 import edu.hm.cs.katz.swt2.agenda.service.TopicService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -138,9 +140,28 @@ public class TaskController extends AbstractController {
 	 * Erstellt die Übersicht aller Tasks abonnierter Topics für einen Anwender.
 	 */
 	@GetMapping("tasks")
-	public String getSubscriberTaskListView(Model model, Authentication auth) {
-		List<SubscriberTaskDto> tasks = taskService.getSubscribedTasks(auth.getName());
+	public String getSubscriberTaskListView(Model model, Authentication auth,
+			@RequestParam(name = "search", required = false, defaultValue = "") String search,
+			@RequestParam(name = "flag", required = false) boolean flag) {
+
+		List<SubscriberTaskDto> tasks;
+
+		if (flag) {
+			tasks = taskService.getSubscribedTasks(auth.getName(), search);
+			
+			
+			for(int i = 0; i<= tasks.size(); i++) {
+				if(tasks.get(i).getStatus().getStatus() == StatusEnum.FERTIG) {
+					tasks.remove(i);
+				}
+			}
+			
+		} else {
+			tasks = taskService.getSubscribedTasks(auth.getName(), search);
+		}
+		model.addAttribute("search", new Search());
 		model.addAttribute("tasks", tasks);
+		model.addAttribute("flag", false);
 		return "task-listview";
 	}
 }

@@ -44,8 +44,9 @@ public interface TaskService {
 
 	/**
 	 * Zugriff auf alle Tasks abonnierter Topics.
+	 * @param search 
 	 */
-	List<SubscriberTaskDto> getSubscribedTasks(String login);
+	List<SubscriberTaskDto> getSubscribedTasks(String login, String search);
 
 	/**
 	 * Zugriff auf alle Tasks eines abonnierten Topics.

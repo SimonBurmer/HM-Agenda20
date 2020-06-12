@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.validation.ValidationException;
@@ -172,12 +173,19 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-	public List<SubscriberTaskDto> getSubscribedTasks(String login) {
+	public List<SubscriberTaskDto> getSubscribedTasks(String login, String search) {
 		LOG.info("Fordere Liste zugeordneter Tasks für einen Anwender an.");
 		LOG.debug("Fordere Liste zugeordneter Tasks für Anwender \"{}\" an.", login);
 		User user = anwenderRepository.getOne(login);
 		Collection<Topic> topics = user.getSubscriptions();
-		return extracted(user, topics);
+		List<SubscriberTaskDto> result = extracted(user, topics);
+		for (Iterator<SubscriberTaskDto> it = result.iterator(); it.hasNext();) {
+			SubscriberTaskDto next = it.next();
+			if(!next.getTitle().contains(search)) {
+				it.remove();
+			}
+		}
+		return result;
 	}
 
 	private List<SubscriberTaskDto> extracted(User user, Collection<Topic> topics) {

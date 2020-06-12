@@ -86,7 +86,7 @@ public class TopicServiceImpl implements TopicService {
 
   @Override
   @PreAuthorize("#login==authentication.name")
-  public List<OwnerTopicDto> getManagedTopics(String login) {
+  public List<OwnerTopicDto> getManagedTopics(String login, String search) {
     LOG.info("Fordere Liste aller verwalteten Topics eines Anwenders an.");
     LOG.debug("Fordere Liste aller verwalteten Topics für Anwender \"{}\" an.", login);
     User creator = anwenderRepository.findById(login).get();
@@ -95,6 +95,9 @@ public class TopicServiceImpl implements TopicService {
     for (Topic topic : managedTopics) {
       result.add(mapper.createManagedDto(topic));
     }
+    
+    result.removeIf(t -> !t.getTitle().contains(search));
+    
     return result;
   }
 
@@ -137,7 +140,7 @@ public class TopicServiceImpl implements TopicService {
 
   @Override
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-  public List<SubscriberTopicDto> getSubscriptions(String login) {
+  public List<SubscriberTopicDto> getSubscriptions(String login, String search) {
     LOG.info("Fordere Liste aller abonnierten Topics eines Anwender an.");
     LOG.debug("Fordere Liste aller abonnierten Topics für Anwender \"{}\" an.", login);
     User creator = anwenderRepository.findById(login).get();
@@ -151,6 +154,9 @@ public class TopicServiceImpl implements TopicService {
     for (Topic topic : subscriptionsList) {
       result.add(mapper.createDto(topic, login));
     }
+    
+    result.removeIf(t -> !t.getTitle().contains(search));
+    
     return result;
   }
 
