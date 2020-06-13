@@ -84,9 +84,6 @@ public class TopicController extends AbstractController {
 		OwnerTopicDto topic = topicService.getManagedTopic(uuid, auth.getName());
 		model.addAttribute("topic", topic);
 		model.addAttribute("tasks", taskService.getManagedTasks(uuid, auth.getName()));
-		if (topic.getSubscriber().isEmpty()) {
-			model.addAttribute("condition", true);
-		}
 		return "topic-management";
 	}
 

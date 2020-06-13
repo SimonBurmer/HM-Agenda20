@@ -15,7 +15,7 @@
 			<div class="col-auto justify-content-center">
 				<a th:href="'/topics/'+${topic.uuid}+'/createTask'" class="btn btn-primary mb-1">Task erstellen</a>
 				<form th:action="'/topics/'+${topic.uuid}+'/delete'" method=post
-					th:if="${condition}">
+					th:if="${topic.subscriber.isEmpty()}">
 					<button class="btn btn-danger" type=submit>Topic löschen</button>
 				</form>
 			</div>
