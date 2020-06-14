@@ -171,12 +171,10 @@ public class TopicController extends AbstractController {
 		try {
 			topicService.updateTopic(uuid, auth.getName(), topic.getShortDescription(), topic.getLongDescription());
 		} catch (Exception e) {
-			// Zeige die Fehlermeldung der Exception als Flash Attribut an.
 			redirectAttributes.addFlashAttribute("error", e.getMessage());
 			return "redirect:" + referer;
 		}
-		// Zeige die erfolgreiche Aktualisierung als Flash Attribut an.
-		redirectAttributes.addFlashAttribute("success", "Task aktualisiert!");
+		redirectAttributes.addFlashAttribute("success", "Topic aktualisiert!");
 		return "redirect:" + referer;
 	}
 }

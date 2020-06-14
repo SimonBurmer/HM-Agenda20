@@ -15,8 +15,7 @@ import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.UserDisplayDto;
 import java.util.List;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,8 +28,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DtoMapper {
-
-  private static final Logger LOG = LoggerFactory.getLogger(DtoMapper.class);
 
   @Autowired
   private ModelMapper mapper;
@@ -84,8 +81,10 @@ public class DtoMapper {
 
     amountUnfinishedTasks = topicTasks.size() - amountFinished;
     UserDisplayDto creatorDto = createDto(topic.getCreator());
-    return new SubscriberTopicDto(topic.getUuid(), creatorDto, topic.getTitle(),
-        topic.getShortDescription(), topic.getLongDescription(), amountUnfinishedTasks);
+    SubscriberTopicDto subscriberTopicDto = new SubscriberTopicDto(topic.getUuid(), creatorDto,
+        topic.getTitle(), topic.getShortDescription(), topic.getLongDescription());
+    subscriberTopicDto.setAmountUnfinishedTasks(amountUnfinishedTasks);
+    return subscriberTopicDto;
   }
 
   /**
@@ -111,18 +110,15 @@ public class DtoMapper {
    */
   public OwnerTopicDto createManagedDto(Topic topic) {
     int amountSubscriber = 0;
-    try {
-      amountSubscriber = topic.getSubscriber().size();
-    } catch (NullPointerException e) {
-      LOG.error("Subscriberliste referenziert Null");
-    }
-    return new OwnerTopicDto(topic.getUuid(), createDto(topic.getCreator()), topic.getTitle(),
-        topic.getShortDescription(), topic.getLongDescription(), topic.getSubscriber(),
-        amountSubscriber);
+    amountSubscriber = topic.getSubscriber().size();
+    OwnerTopicDto ownerTopicDto = new OwnerTopicDto(topic.getUuid(), createDto(topic.getCreator()), topic.getTitle(),
+        topic.getShortDescription(), topic.getLongDescription(), topic.getSubscriber());
+    ownerTopicDto.setAmountSubscriber(amountSubscriber);
+    return ownerTopicDto;
   }
 
   /**
-   * Erstellt ein {@link OwnerTaskDto} aus einem {@link Task}. Berechnet die Anzahl der Usere die
+   * Erstellt ein {@link OwnerTaskDto} aus einem {@link Task}. Berechnet die Anzahl der User die
    * diesen Task abgeschlossen haben.
    */
   public OwnerTaskDto createManagedDto(Task task) {
