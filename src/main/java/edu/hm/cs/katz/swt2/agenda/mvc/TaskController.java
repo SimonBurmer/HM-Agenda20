@@ -141,27 +141,13 @@ public class TaskController extends AbstractController {
 	 */
 	@GetMapping("tasks")
 	public String getSubscriberTaskListView(Model model, Authentication auth,
-			@RequestParam(name = "search", required = false, defaultValue = "") String search,
-			@RequestParam(name = "flag", required = false) boolean flag) {
-
-		List<SubscriberTaskDto> tasks;
-
-		if (flag) {
-			tasks = taskService.getSubscribedTasks(auth.getName(), search);
-			
-			
-			for(int i = 0; i<= tasks.size(); i++) {
-				if(tasks.get(i).getStatus().getStatus() == StatusEnum.FERTIG) {
-					tasks.remove(i);
-				}
-			}
-			
-		} else {
-			tasks = taskService.getSubscribedTasks(auth.getName(), search);
-		}
-		model.addAttribute("search", new Search());
+			@RequestParam(name = "search", required = false, defaultValue = "") String searchParameter,
+			@RequestParam(name = "onlyNewTasks", required = false, defaultValue = "no") String onlyNewTasksParameter) {
+		Search search = new Search(searchParameter, onlyNewTasksParameter);
+		List<SubscriberTaskDto> tasks = taskService.getSubscribedTasks(auth.getName(), search);
+		model.addAttribute("search", search);
 		model.addAttribute("tasks", tasks);
-		model.addAttribute("flag", false);
 		return "task-listview";
 	}
+
 }

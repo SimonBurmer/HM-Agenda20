@@ -1,6 +1,7 @@
 package edu.hm.cs.katz.swt2.agenda.service;
 
 import edu.hm.cs.katz.swt2.agenda.common.StatusEnum;
+import edu.hm.cs.katz.swt2.agenda.mvc.Search;
 import edu.hm.cs.katz.swt2.agenda.persistence.Status;
 import edu.hm.cs.katz.swt2.agenda.persistence.StatusRepository;
 import edu.hm.cs.katz.swt2.agenda.persistence.Task;
@@ -173,16 +174,25 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-	public List<SubscriberTaskDto> getSubscribedTasks(String login, String search) {
+	public List<SubscriberTaskDto> getSubscribedTasks(String login, Search search) {
+
 		LOG.info("Fordere Liste zugeordneter Tasks für einen Anwender an.");
 		LOG.debug("Fordere Liste zugeordneter Tasks für Anwender \"{}\" an.", login);
 		User user = anwenderRepository.getOne(login);
 		Collection<Topic> topics = user.getSubscriptions();
 		List<SubscriberTaskDto> result = extracted(user, topics);
-		for (Iterator<SubscriberTaskDto> it = result.iterator(); it.hasNext();) {
-			SubscriberTaskDto next = it.next();
-			if(!next.getTitle().contains(search)) {
-				it.remove();
+		if (search.hasParameters()) {
+			LOG.debug("\tsearch={} isOnlyNewTasks={}", search.getSearch(), search.isOnlyNewTasks());
+			for (Iterator<SubscriberTaskDto> it = result.iterator(); it.hasNext();) {
+				SubscriberTaskDto next = it.next();
+				if (!next.getTitle().contains(search.getSearch())) {
+					it.remove();
+					continue;
+				}
+				if (search.isOnlyNewTasks() && next.getStatus().getStatus() != StatusEnum.NEU) {
+					it.remove();
+				}
+
 			}
 		}
 		return result;
@@ -306,4 +316,5 @@ public class TaskServiceImpl implements TaskService {
 		}
 		LOG.debug("{} Status gelöscht", numberOfDeletedStatuses);
 	}
+
 }

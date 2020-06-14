@@ -20,9 +20,11 @@
 							placeholder="Suchen" />
 					</div>
 					<div class="form-check">
-						<input type="checkbox" class="form-check-input" th:checked="${flag}" id="exampleCheck1">
-						<label class="form-check-label" for="exampleCheck1">nur
-							offene Tasks</label>
+						<input type="checkbox" class="form-check-input"
+							th:checked="*{onlyNewTasks} ? 'checked'" value="yes"
+							name="onlyNewTasks" id="onlyNewTasksID"> <label
+							class="form-check-label" for="onlyNewTasksID">nur offene
+							Tasks</label>
 					</div>
 					<button type="submit" class="btn btn-sm btn-primary">Suchen</button>
 				</form>

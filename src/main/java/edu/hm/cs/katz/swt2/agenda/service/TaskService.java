@@ -1,5 +1,6 @@
 package edu.hm.cs.katz.swt2.agenda.service;
 
+import edu.hm.cs.katz.swt2.agenda.mvc.Search;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
 import java.util.List;
@@ -46,7 +47,7 @@ public interface TaskService {
 	 * Zugriff auf alle Tasks abonnierter Topics.
 	 * @param search 
 	 */
-	List<SubscriberTaskDto> getSubscribedTasks(String login, String search);
+	List<SubscriberTaskDto> getSubscribedTasks(String login, Search search);
 
 	/**
 	 * Zugriff auf alle Tasks eines abonnierten Topics.
