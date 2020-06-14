@@ -5,7 +5,7 @@
 <body class="bg-dark">
 	<nav th:replace="fragments :: navigation"></nav>
 	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
-		<div class="row">
+		<div class="row justify-content-between">
 			<div class="col-auto">
 				<h4 class="display-4">
 					Eigene Topics <a href="/topics/create" class="btn btn-primary">Topic
@@ -14,15 +14,13 @@
 				<span th:if="${#lists.size(managedTopics)==0}">Sie haben
 					keine Topics erstellt!</span>
 			</div>
-		</div>
-		<div class="row">
 			<form class="form-inline" th:object="${search}"
 				th:action="@{/topics}" method="get">
 				<div class="form-group bg-dark">
 					<input th:field="*{search}" class="form-control"
 						placeholder="Suchen" />
 				</div>
-				<button type="submit" class="btn btn-sm btn-primary">Suchen</button>
+				<button type="submit" class="btn btn-primary">Suchen</button>
 			</form>
 		</div>
 		<div class="row row-cols-1 row-cols-md-3 bg-dark">
@@ -35,13 +33,10 @@
 							<small class="card-text" th:text="${t.shortDescription}">Keine
 								Beschreibung</small>
 						</p>
-						<p>
-							<small>Anzahl Subscriber: <i
-								th:text="${t.AmountSubscriber}"></i></small>
-						</p>
-
 						<a th:href="'/topics/'+${t.uuid}+'/manage'"
-							class="btn btn-sm btn-primary">Verwalten</a>
+							class="btn btn-sm btn-primary">Verwalten</a> <small>Anzahl
+							Subscriber: <i th:text="${t.AmountSubscriber}"></i>
+						</small>
 					</div>
 				</div>
 			</div>
@@ -64,14 +59,13 @@
 							<small class="card-text" th:text="${t.shortDescription}">Keine
 								Beschreibung</small>
 						</p>
-						<p>
-							<small>Anzahl offener Tasks: <i
-								th:text="${t.amountUnfinishedTasks}"></i></small>
-						</p>
 						<a th:href="'/topics/'+${t.uuid}"
 							class="btn btn-sm btn-primary mr-2">Öffnen</a> <a
 							th:href="'/topics/'+${t.uuid}+'/unregister'"
-							class="btn btn-sm btn-outline-warning mr-2">Abo beenden</a>
+							class="btn btn-sm btn-outline-warning mr-2">Abo beenden</a> <small>Anzahl
+							offener Tasks: <i th:text="${t.amountUnfinishedTasks}"></i>
+						</small>
+
 					</div>
 				</div>
 			</div>

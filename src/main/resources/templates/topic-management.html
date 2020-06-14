@@ -51,10 +51,10 @@
 					<div class="card-body">
 						<h5 class="card-title" th:text="${task.title}">Card title</h5>
 						<p class="card-text" th:text="${task.taskShortDescription}"></p>
-						<p><small>Anzahl Subscriber die den Task abgeschlossen haben: <i th:text="${task.amountFinished}"></i></small></p>
 						<form th:action="'/tasks/'+${task.id}+'/delete'" method="post">
 							<a th:href="'/tasks/'+${task.id}+'/manage'" class="btn btn-sm btn-primary mr-2">Verwalten</a>
 							<button class="btn btn-sm btn-danger mr-2" type="submit">Löschen</button>
+							<small>Subscriber haben diesen Task abgeschlossen: <i th:text="${task.amountFinished}"></i></small>
 						</form>
 					</div>
 				</div>
