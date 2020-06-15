@@ -37,6 +37,10 @@ public class IndexController extends AbstractController {
 		return "index";
 	}
 
+	
+	/**
+	 * Erstellt aus dem Key die komplette Uuid und gibt den Aufruf zum registrieren zurück.
+	 */
 	@PostMapping("/register")
 	public String handleRegistrationKey(@ModelAttribute("registration") Registration registration, RedirectAttributes redirectAttributes) {
 		String uuid = "";
