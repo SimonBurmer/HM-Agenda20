@@ -32,6 +32,8 @@ public class IndexController extends AbstractController {
 	@GetMapping("/")
 	public String getIndexView(Model model, Authentication auth) {
 		model.addAttribute("registration", new Registration());
+		if(auth != null)
+		model.addAttribute("topics", topicService.getSubscriptions(auth.getName(),""));
 		return "index";
 	}
 

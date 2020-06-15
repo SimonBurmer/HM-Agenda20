@@ -29,10 +29,11 @@ body {
 	<div class="container">
 		<div
 			class="row justify-content-center mt-5 align-items-center rgba-gradient">
-			<div class="col-6">
+			<div class="col-6 mt-4" th:unless="${user}">
 				<h1 class="display-4">Deine Agenda</h1>
 				<p class="lead">Keine Deadline mehr verpassen!</p>
 				<hr class="my-4">
+				<div style="height: 30vh;">
 				<p>
 					Agenda ist eine einfache Verwaltung für Aufgaben in Kursen.
 					Kursleiter*innen oder Teilnehmer*innen legen einmalig ein <i>Topic</i>
@@ -40,13 +41,41 @@ body {
 					ein. Teilnehmer*innen abonnieren das Topic und haben so ständig
 					eine Übersicht über alle noch offenen Aufgaben.
 				</p>
+				</div>
 			</div>
-			<div class="col-3">
-				<h4 class="display-4">Login</h4>
+			<div class="col-6 mt-4" th:if="${user}">
+				<h1 class="display-4">Hallo <i th:text="${user.name}"></i>!</h1>
+				<p class="lead">
+					Deine Topics:
+				</p>
+				<div style="height: 30vh;" class="overflow-auto">
+					<div class="col mb-4 border border-secondary" th:each="t : ${topics}">
+						<div class="card-body">
+							<h5 class="card-title" th:text="${t.title}">Card title</h5>
+							<h6 class="card-subtitle mb-2 text-muted"
+								th:text="'Von '+${t.creator.displayName}">Card subtitle</h6>
+							<p>
+								<small class="card-text" th:text="${t.shortDescription}">Keine
+									Beschreibung</small>
+							</p>
+							<a th:href="'/topics/'+${t.uuid}"
+								class="btn btn-sm btn-primary mr-2">Öffnen</a> <a
+								th:href="'/topics/'+${t.uuid}+'/unregister'"
+								class="btn btn-sm btn-outline-warning mr-2">Abo beenden</a> <small>Anzahl
+								offener Tasks: <i th:text="${t.amountUnfinishedTasks}"></i>
+							</small>
 
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-4">
 				<div class="container">
-					<form class="form-signin" method="post" action="/login">
-						<h2 class="form-signin-heading">Please sign in</h2>
+					<form th:unless="${user}" class="form-signin" method="post"
+						action="/login">
+						<h2 class="form-signin-heading">Please sign in:</h2>
 						<p>
 							<label for="username" class="sr-only">Username</label> <input
 								type="text" id="username" name="username" class="form-control"
@@ -60,6 +89,17 @@ body {
 						<button class="btn btn-lg btn-primary btn-block" type="submit">Sign
 							in</button>
 					</form>
+					<form class="form-inline" th:object="${registration}"
+						th:if="${user}" th:action="@{/register}" method="post">
+						<h2 class="form-signin-heading">Topic-Suche:</h2>
+						<div class="form-group bg-dark">
+							<input th:field="*{key}" class="form-control"
+								placeholder="Kurzschlüssel" />
+							<button type="submit" class="btn btn-primary">Suchen</button>
+						</div>
+					</form>
+					<small th:if="${user}" class="form-text text-muted">Den
+						Kurzschlüssel erhalten Sie bei Ihrem Kursleiter!</small>
 				</div>
 			</div>
 		</div>
@@ -67,3 +107,8 @@ body {
 	<th:block th:replace="fragments :: scripts">
 </body>
 </html>
+
+
+
+
+
