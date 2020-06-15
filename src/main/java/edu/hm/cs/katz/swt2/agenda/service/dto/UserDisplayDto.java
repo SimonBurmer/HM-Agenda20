@@ -12,7 +12,7 @@ public class UserDisplayDto {
   private String login = "";
   private String name;
   private int topicCount;
-  private int subscriptionCount;
+  private int subscriptionCount; 
 
   public String getDisplayName() {
     return getName();

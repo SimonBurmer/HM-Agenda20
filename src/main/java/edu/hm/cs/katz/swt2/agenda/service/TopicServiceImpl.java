@@ -7,10 +7,15 @@ import edu.hm.cs.katz.swt2.agenda.persistence.User;
 import edu.hm.cs.katz.swt2.agenda.persistence.UserRepository;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.UserDisplayDto;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,6 +124,31 @@ public class TopicServiceImpl implements TopicService {
     return mapper.createDto(topic, login);
   }
 
+  @Override
+  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+  public Map<SubscriberTopicDto, Integer> getSubscribedUsersWithFinishedTasks(String topicUuid, String login) {
+    LOG.info("Fordere Abbonenten eines Topics an.");
+    LOG.debug("Fordere Abbonenten {} für Topic \"{}\" an.", topicUuid, login);
+    
+    Topic topic = topicRepository.getOne(topicUuid);
+	Collection<User> subscribers = topic.getSubscriber();
+       
+	
+	Map<SubscriberTopicDto, Integer> mappedSubscribersWithFinishedTaks = new HashMap<>();
+	
+	for(User u : subscribers) {
+		
+		SubscriberTopicDto subscriberTopic = mapper.createDto(topic, u.getLogin());
+		
+		Integer finishedTaks = subscriberTopic.getAmountFinishedTasks();
+		
+		mappedSubscribersWithFinishedTaks.put(subscriberTopic, finishedTaks);
+	}
+	
+    return mappedSubscribersWithFinishedTaks;
+  }
+  
+    
   @Override
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public void subscribe(String topicUuid, String login) {

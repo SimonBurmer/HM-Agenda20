@@ -1,9 +1,17 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
+import edu.hm.cs.katz.swt2.agenda.persistence.Topic;
+import edu.hm.cs.katz.swt2.agenda.persistence.User;
 import edu.hm.cs.katz.swt2.agenda.service.TaskService;
 import edu.hm.cs.katz.swt2.agenda.service.TopicService;
+import edu.hm.cs.katz.swt2.agenda.service.TopicServiceImpl;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
+import net.bytebuddy.agent.builder.AgentBuilder.Listener;
+
+import java.util.Collection;
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,6 +23,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import antlr.collections.List;
 
 /**
  * Controller-Klasse für alle Interaktionen, die die Anzeige und Verwaltung von
@@ -143,6 +153,19 @@ public class TopicController extends AbstractController {
 		model.addAttribute("topic", topic);
 		model.addAttribute("tasks", taskService.getTasksForTopic(uuid, auth.getName()));
 		return "topic";
+	}
+
+	/**
+	 * Erstellt die Liste der Teilnehmenden eines Topics
+	 */
+	@GetMapping("/topics/{uuid}/subscriberlist")
+	public String createSubscriberlist(Model model, Authentication auth, @PathVariable("uuid") String uuid) {
+		
+		SubscriberTopicDto subscribers = topicService.getSubscribedUsersWithFinishedTasks(uuid, auth.getName());
+		
+		model.addAttribute("subscribers", subscribers);
+		
+		return "topic-subscriberlist";
 	}
 
 	/**

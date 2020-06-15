@@ -16,6 +16,8 @@ public class SubscriberTopicDto {
   private String shortDescription;
   private String longDescription;
   private int amountUnfinishedTasks;
+  private int amountFinishedTasks;
+  private int amountTasks;
 
   /**
    * Konstruktor mit amountUnfinishedTasks
@@ -67,5 +69,21 @@ public class SubscriberTopicDto {
   public void setAmountUnfinishedTasks(int amountUnfinishedTasks) {
     this.amountUnfinishedTasks = amountUnfinishedTasks;
   }
+
+public int getAmountTasks() {
+	return amountTasks;
+}
+
+public void setAmountTasks(int amountTasks) {
+	this.amountTasks = amountTasks;
+}
+
+public int getAmountFinishedTasks() {
+	return amountFinishedTasks;
+}
+
+public void setAmountFinishedTasks(int amountFinishedTasks) {
+	this.amountFinishedTasks = amountFinishedTasks;
+}
 
 }
