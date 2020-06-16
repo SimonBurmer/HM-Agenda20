@@ -6,19 +6,15 @@
 	<nav th:replace="fragments :: navigation"></nav>
 
 	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
-		<div class="row">
+		<div class="row justify-content-between">
 			<div class="col-auto">
 				<h4 class="display-4">Eigene Aufgaben</h4>
 				<span th:if="${#lists.size(tasks)==0}">Sie haben keine
 					Aufgaben!</span>
 			</div>
-			<div class="row">
+			<div class="row justify-content-between">
 				<form class="form-inline" th:object="${search}"
 					th:action="@{/tasks}" method="get">
-					<div class="form-group bg-dark">
-						<input th:field="*{search}" class="form-control"
-							placeholder="Suchen" />
-					</div>
 					<div class="form-check">
 						<input type="checkbox" class="form-check-input"
 							th:checked="*{onlyNewTasks} ? 'checked'" value="yes"
@@ -26,7 +22,14 @@
 							class="form-check-label" for="onlyNewTasksID">nur offene
 							Tasks</label>
 					</div>
-					<button type="submit" class="btn btn-sm btn-primary">Suchen</button>
+					
+					<div class="form-group bg-dark">
+						<input th:field="*{search}" class="form-control"
+							placeholder="Suchen" />
+					</div>
+					<button type="submit" class="btn btn-primary">Suchen</button>
+
+
 				</form>
 
 
