@@ -7,12 +7,14 @@ import edu.hm.cs.katz.swt2.agenda.persistence.Task;
 import edu.hm.cs.katz.swt2.agenda.persistence.Topic;
 import edu.hm.cs.katz.swt2.agenda.persistence.TopicRepository;
 import edu.hm.cs.katz.swt2.agenda.persistence.User;
+import edu.hm.cs.katz.swt2.agenda.persistence.UserRepository;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.StatusDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.UserDisplayDto;
+import java.util.Collection;
 import java.util.List;
 import org.modelmapper.ModelMapper;
 
@@ -41,6 +43,9 @@ public class DtoMapper {
 
 	@Autowired
 	private StatusRepository statusRepository;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	/**
 	 * Erstellt ein {@link UserDisplayDto} aus einem {@link User}.
@@ -71,14 +76,18 @@ public class DtoMapper {
 		int amountFinishedTasks = 0;
 		int amountTasks = 0;
 
-		List<SubscriberTaskDto> topicTasks = taskService.getTasksForTopic(topic.getUuid(), login);
-		for (SubscriberTaskDto t : topicTasks) {
-			if (t.getStatus().getStatus().equals(StatusEnum.FERTIG)) {
-				++amountFinishedTasks;
+		Collection<Task> tasks = topic.getTasks();
+		User user = userRepository.findById(login).get();
+		for (Task task : tasks) {
+			Status statusForTask = statusRepository.findByUserAndTask(user, task);
+			if (statusForTask != null) {
+				if (statusForTask.getStatus() == StatusEnum.FERTIG) {
+					amountFinishedTasks++;
+				}
 			}
 		}
 
-		amountTasks = topicTasks.size();
+		amountTasks = tasks.size();
 		amountUnfinishedTasks = amountTasks - amountFinishedTasks;
 
 		UserDisplayDto creatorDto = createDto(topic.getCreator());

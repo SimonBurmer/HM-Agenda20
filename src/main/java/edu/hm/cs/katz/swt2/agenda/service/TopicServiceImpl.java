@@ -144,16 +144,9 @@ public class TopicServiceImpl implements TopicService {
 		}
 		System.out.println("Test5");
 		subscribersWithFinishedTaks.sort(new Comparator<SubscriberTopicDto>() {
-
 			@Override
 			public int compare(SubscriberTopicDto left, SubscriberTopicDto right) {
-
-				if ((left.getAmountFinishedTasks() - right.getAmountFinishedTasks()) < 0) {
-					return -1;
-				} else if ((left.getAmountFinishedTasks() - right.getAmountFinishedTasks()) > 0) {
-					return 1;
-				}
-				return 0;
+				return ((Integer) right.getAmountFinishedTasks()).compareTo(left.getAmountFinishedTasks());
 			}
 		});
 		
