@@ -12,6 +12,7 @@ package edu.hm.cs.katz.swt2.agenda.service.dto;
 public class SubscriberTopicDto {
   private String uuid;
   private UserDisplayDto creator;
+  private UserDisplayDto subscriberForTopic;
   private String title;
   private String shortDescription;
   private String longDescription;
@@ -84,6 +85,14 @@ public int getAmountFinishedTasks() {
 
 public void setAmountFinishedTasks(int amountFinishedTasks) {
 	this.amountFinishedTasks = amountFinishedTasks;
+}
+
+public UserDisplayDto getSubscriberForTopic() {
+	return subscriberForTopic;
+}
+
+public void setSubscriberForTopic(UserDisplayDto subscriberForTopic) {
+	this.subscriberForTopic = subscriberForTopic;
 }
 
 }

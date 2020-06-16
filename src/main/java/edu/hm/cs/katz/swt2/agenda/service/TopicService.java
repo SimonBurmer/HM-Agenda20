@@ -69,7 +69,7 @@ public interface TopicService {
 	String getTopicUuid(String key);
 
 	/**
-	 * Liefert eine Map von Abbonenten eines Topics mit dazugehörenden abgeschlossenen Tasks.
+	 * Liefert eine Liste von Abbonenten eines Topics mit dazugehörenden abgeschlossenen Tasks.
 	 */
-	Map<SubscriberTopicDto, Integer> getSubscribedUsersWithFinishedTasks(String topicUuid, String login);
+	List<SubscriberTopicDto> getSubscribedUsersWithFinishedTasks(String topicUuid, String login);
 }

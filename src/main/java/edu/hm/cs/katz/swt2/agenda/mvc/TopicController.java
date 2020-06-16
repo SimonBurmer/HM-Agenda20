@@ -11,6 +11,7 @@ import net.bytebuddy.agent.builder.AgentBuilder.Listener;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import antlr.collections.List;
+
 
 /**
  * Controller-Klasse für alle Interaktionen, die die Anzeige und Verwaltung von
@@ -160,10 +161,14 @@ public class TopicController extends AbstractController {
 	 */
 	@GetMapping("/topics/{uuid}/subscriberlist")
 	public String createSubscriberlist(Model model, Authentication auth, @PathVariable("uuid") String uuid) {
+		System.out.println("Test--Test");
+		List<SubscriberTopicDto> subscribers = topicService.getSubscribedUsersWithFinishedTasks(uuid, auth.getName());
 		
-		SubscriberTopicDto subscribers = topicService.getSubscribedUsersWithFinishedTasks(uuid, auth.getName());
+		System.out.println("Simon--Simon");
 		
 		model.addAttribute("subscribers", subscribers);
+		System.out.println(subscribers);
+		System.out.println("Ludwig--Ludwig");
 		
 		return "topic-subscriberlist";
 	}
