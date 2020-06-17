@@ -29,6 +29,7 @@
 							
 							<th scope="col">Name</th>
 							<th scope="col">erledigte Tasks</th>
+							<th scope="col">unerledigte Tasks</th>
 							
 						</tr>
 					</thead>
@@ -36,6 +37,7 @@
 						
 						<td th:text="${subscriber.subscriberForTopic.name} " />
 						<td th:text="${subscriber.amountFinishedTasks} " />
+					    <td th:text="${subscriber.amountUnfinishedTasks} " />
 						
 					</tr>
 				</table>
