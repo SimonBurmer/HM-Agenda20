@@ -161,15 +161,8 @@ public class TopicController extends AbstractController {
 	 */
 	@GetMapping("/topics/{uuid}/subscriberlist")
 	public String createSubscriberlist(Model model, Authentication auth, @PathVariable("uuid") String uuid) {
-		System.out.println("Test--Test");
 		List<SubscriberTopicDto> subscribers = topicService.getSubscribedUsersWithFinishedTasks(uuid, auth.getName());
-		
-		System.out.println("Simon--Simon");
-		
 		model.addAttribute("subscribers", subscribers);
-		System.out.println(subscribers);
-		System.out.println("Ludwig--Ludwig");
-		
 		return "topic-subscriberlist";
 	}
 

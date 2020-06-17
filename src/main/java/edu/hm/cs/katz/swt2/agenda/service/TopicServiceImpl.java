@@ -128,31 +128,24 @@ public class TopicServiceImpl implements TopicService {
 	public List<SubscriberTopicDto> getSubscribedUsersWithFinishedTasks(String topicUuid, String login) {
 		LOG.info("Fordere Abbonenten eines Topics an.");
 		LOG.debug("Fordere Abbonenten {} für Topic \"{}\" an.", topicUuid, login);
-
 		Topic topic = topicRepository.getOne(topicUuid);
 		Collection<User> subscribers = topic.getSubscriber();
-		System.out.println("Test1");
+
 		List<SubscriberTopicDto> subscribersWithFinishedTaks = new ArrayList<>();
-		System.out.println("Test2");
 		for (User u : subscribers) {
-			System.out.println("Test3");
 			SubscriberTopicDto subscriberTopic = mapper.createDto(topic, u.getLogin());
-			System.out.println("Test3.1");
 			subscriberTopic.setSubscriberForTopic(mapper.createDto(u));
-			System.out.println("Test4");
 			subscribersWithFinishedTaks.add(subscriberTopic);
 		}
-		System.out.println("Test5");
+
 		subscribersWithFinishedTaks.sort(new Comparator<SubscriberTopicDto>() {
 			@Override
 			public int compare(SubscriberTopicDto left, SubscriberTopicDto right) {
 				return ((Integer) right.getAmountFinishedTasks()).compareTo(left.getAmountFinishedTasks());
 			}
 		});
-		
 
 		return subscribersWithFinishedTaks;
-
 	}
 
 	@Override
