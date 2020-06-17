@@ -2,10 +2,8 @@ package edu.hm.cs.katz.swt2.agenda.service;
 
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
-import edu.hm.cs.katz.swt2.agenda.service.dto.UserDisplayDto;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Serviceklasse für Verarbeitung von Topics.

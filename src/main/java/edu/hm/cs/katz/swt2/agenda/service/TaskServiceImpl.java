@@ -62,45 +62,20 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-	public Long createTask(String uuid, String titel, String login, String taskShortDescription,
+	public Long createTask(String uuid, String title, String login, String taskShortDescription,
 			String taskLongDescription) {
 		LOG.info("Erstelle einen Task.");
-		LOG.debug("Erstelle Task \"{}\" mit UUID \"{}\" für Anwender \"{}\".", titel, uuid, login);
+		LOG.debug("Erstelle Task \"{}\" mit UUID \"{}\" für Anwender \"{}\".", title, uuid, login);
 
-		if (titel.length() < 8) {
-			LOG.debug("Titel müssen mindestens 8 Zeichen lang sein!");
-			throw new ValidationException("Titel müssen mindestens 8 Zeichen lang sein!");
-		}
-		if (titel.length() > 32) {
-			LOG.debug("Maximale Länge von 32 Zeichen überschritten!");
-			throw new ValidationException("Maximale Länge von 32 Zeichen überschritten!");
-		}
-
-		if (taskShortDescription.length() < 100) {
-			LOG.debug("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
-			throw new ValidationException("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
-		}
-		if (taskShortDescription.length() > 200) {
-			LOG.debug("Maximale Länge von 200 Zeichen überschritten!");
-			throw new ValidationException("Maximale Länge von 200 Zeichen ueberschritten!");
-		}
-
-		if (taskLongDescription.length() < 200) {
-			LOG.debug("Langbeschreibungen müssen mindestens 200 Zeichen lang sein!");
-			throw new ValidationException("Langbeschreibungen müssen mindestens 200 Zeichen lang sein!");
-		}
-		if (taskLongDescription.length() > 2000) {
-			LOG.debug("Maximale Länge von 2000 Zeichen überschritten!");
-			throw new ValidationException("Maximale Länge von 2000 Zeichen überschritten!");
-		}
-
+		ValidationService.topicValidation(title, taskShortDescription, taskLongDescription);
+		
 		User user = anwenderRepository.getOne(login);
 		Topic t = topicRepository.findById(uuid).get();
 		if (!user.equals(t.getCreator())) {
 			LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login, t.getTitle());
 			throw new AccessDeniedException("Kein Zugriff auf das Topic!");
 		}
-		Task task = new Task(t, titel, taskShortDescription, taskLongDescription);
+		Task task = new Task(t, title, taskShortDescription, taskLongDescription);
 		taskRepository.save(task);
 		return task.getId();
 	}
@@ -110,24 +85,8 @@ public class TaskServiceImpl implements TaskService {
 	public void updateTask(Long id, String login, String taskShortDescription, String taskLongDescription) {
 		LOG.info("Aktualisiere einen Task.");
 		LOG.debug("Aktualisiere Task \"{}\" für Anwender \"{}\".", id, login);
-
-		if (taskShortDescription.length() < 100) {
-			LOG.debug("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
-			throw new ValidationException("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
-		}
-		if (taskShortDescription.length() > 200) {
-			LOG.debug("Maximale Länge von 200 Zeichen überschritten!");
-			throw new ValidationException("Maximale Länge von 200 Zeichen ueberschritten!");
-		}
-
-		if (taskLongDescription.length() < 200) {
-			LOG.debug("Langbeschreibungen müssen mindestens 200 Zeichen lang sein!");
-			throw new ValidationException("Langbeschreibungen müssen mindestens 200 Zeichen lang sein!");
-		}
-		if (taskLongDescription.length() > 2000) {
-			LOG.debug("Maximale Länge von 2000 Zeichen überschritten!");
-			throw new ValidationException("Maximale Länge von 2000 Zeichen überschritten!");
-		}
+		
+		ValidationService.topicValidation(taskShortDescription, taskLongDescription);
 
 		Task taskToUpdate = taskRepository.getOne(id);
 		User changingUser = anwenderRepository.getOne(login);

@@ -7,15 +7,12 @@ import edu.hm.cs.katz.swt2.agenda.persistence.User;
 import edu.hm.cs.katz.swt2.agenda.persistence.UserRepository;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
-import edu.hm.cs.katz.swt2.agenda.service.dto.UserDisplayDto;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.ValidationException;
 import org.slf4j.Logger;
@@ -51,35 +48,7 @@ public class TopicServiceImpl implements TopicService {
 		LOG.info("Erstelle ein Topic.");
 		LOG.debug("Erstelle Topic \"{}\".", title);
 
-		// Check title, shortDescription, longDescription requirements
-		if (title.length() < 10) {
-			LOG.debug("Titel müssen mindestens 10 Zeichen lang sein!");
-			throw new ValidationException("Titel müssen mindestens 10 Zeichen lang sein!");
-		}
-
-		if (title.length() > 60) {
-			LOG.debug("Maximale Länge von 60 Zeichen überschritten!");
-			throw new ValidationException("Maximale Länge von 60 Zeichen überschritten!");
-		}
-
-		if (shortDescription.length() < 100) {
-			LOG.debug("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
-			throw new ValidationException("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
-		}
-
-		if (shortDescription.length() > 200) {
-			LOG.debug("Maximale Länge von 200 Zeichen überschritten!");
-			throw new ValidationException("Maximale Länge von 200 Zeichen überschritten!");
-		}
-
-		if (longDescription.length() < 200) {
-			LOG.debug("Kurzbeschreibungen müssen mindestens 200 Zeichen lang sein!");
-			throw new ValidationException("Kurzbeschreibungen müssen mindestens 200 Zeichen lang sein!");
-		}
-		if (longDescription.length() > 2000) {
-			LOG.debug("Maximale Länge von 2000 Zeichen überschritten!");
-			throw new ValidationException("Maximale Länge von 2000 Zeichen überschritten!");
-		}
+		ValidationService.topicValidation(title, shortDescription, longDescription);
 
 		String uuid = uuidProvider.getRandomUuid();
 		User creator = anwenderRepository.findById(login).get();
@@ -210,28 +179,13 @@ public class TopicServiceImpl implements TopicService {
 		LOG.debug("Update Topic {} von Anwender \"{}\".", topicUuid, login);
 		Topic topic = topicRepository.getOne(topicUuid);
 		User creator = anwenderRepository.getOne(login);
+		
 		if (!topic.getCreator().equals(creator)) {
 			throw new AccessDeniedException("Kein Zugriff auf das Topic!");
 		}
-		if (shortDescription.length() < 100) {
-			LOG.debug("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
-			throw new ValidationException("Kurzbeschreibungen müssen mindestens 100 Zeichen lang sein!");
-		}
 
-		if (shortDescription.length() > 200) {
-			LOG.debug("Maximale Länge von 200 Zeichen überschritten!");
-			throw new ValidationException("Maximale Länge von 200 Zeichen überschritten!");
-		}
-
-		if (longDescription.length() < 200) {
-			LOG.debug("Kurzbeschreibungen müssen mindestens 200 Zeichen lang sein!");
-			throw new ValidationException("Kurzbeschreibungen müssen mindestens 200 Zeichen lang sein!");
-		}
-		if (longDescription.length() > 2000) {
-			LOG.debug("Maximale Länge von 2000 Zeichen überschritten!");
-			throw new ValidationException("Maximale Länge von 2000 Zeichen überschritten!");
-		}
-
+		ValidationService.topicValidation(shortDescription, longDescription);
+		
 		topic.setShortDescription(shortDescription);
 		topic.setLongDescription(longDescription);
 	}
@@ -251,6 +205,6 @@ public class TopicServiceImpl implements TopicService {
 		if (topic == null) {
 			throw new ValidationException("Zu diesem Kurzschlüssel gibt es kein Topic!");
 		}
-		return topic.getUuid();
-	}
+        return topic.getUuid();
+      }
 }
