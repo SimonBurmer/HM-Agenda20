@@ -6,7 +6,7 @@
 	<nav th:replace="fragments :: navigation"></nav>
 
 	<div class="container-fluid">
-		<div class="row justify-content-center bg-light">
+		<div class="row justify-content-center bg-dark text-white">
 			<div class="col-12">
 				<h4 class="display-4">
 					Task <i th:text="${task.title}">Titel</i> ändern
@@ -32,8 +32,28 @@
 
 					<button type="submit" class="btn btn-primary">Speichern</button>
 					<a th:href="'/topics/'+${task.topic.uuid}+'/manage'"
-					   class="btn btn-danger">Zurück zum Topic</a>
+					   class="btn btn-secondary">Zurück zum Topic</a>
 				</form>
+
+				<div>
+					<h4 class="display-4"> Kommentare</h4>
+					<div class="row row-cols-1">
+						<div class="col mb-4" th:each="status : ${statuses}">
+							<div class="card bg-dark" th:classappend="${status.status.toString()=='FERTIG'} ? border-success : border-warning">
+								<div class="card-body">
+									<h5 class="card-title" th:text="${status.userName}"></h5>
+									<div th:unless="${status.comment.isEmpty()}">
+										<p class="card-text" th:text="${status.comment}">.</p>
+									</div>
+									<div th:if="${status.comment.isEmpty()}">
+										<p class="card-text font-italic">hat bisher keinen Kommentar abgegeben.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
 			</div>
 		</div>
 	</div>

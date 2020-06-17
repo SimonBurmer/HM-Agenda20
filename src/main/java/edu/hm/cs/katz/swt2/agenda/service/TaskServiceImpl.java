@@ -11,8 +11,8 @@ import edu.hm.cs.katz.swt2.agenda.persistence.TopicRepository;
 import edu.hm.cs.katz.swt2.agenda.persistence.User;
 import edu.hm.cs.katz.swt2.agenda.persistence.UserRepository;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.StatusDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -249,6 +249,31 @@ public class TaskServiceImpl implements TaskService {
 	}
 
 	@Override
+	public List<StatusDto> getTaskStatuses(Long taskId, String login) {
+		LOG.info("Fordere alle Status der Abonennten eines Tasks an.");
+		LOG.debug("\ttaskId={} login=\"{}\"", taskId, login);
+
+		List<StatusDto> statuses = new ArrayList<>();
+		Task task = taskRepository.getOne(taskId);
+		Topic topic = task.getTopic();
+		Collection<User> users = topic.getSubscriber();
+
+		if (!login.equals(topic.getCreator().getLogin())) {
+			LOG.warn("Login \"{}\" ist nicht berechtigt Verwaltungsinformationen zu Task {} einzusehen.",
+				login, taskId);
+			throw new AccessDeniedException("Zugriff verweigert.");
+		}
+
+		for (User user : users) {
+			Status statusForUser = getOrCreateStatus(taskId, user.getLogin());
+			StatusDto statusDtoForUser = new StatusDto(statusForUser.getStatus(), statusForUser.getComment());
+			statusDtoForUser.setUserName(user.getName());
+			statuses.add(statusDtoForUser);
+		}
+		return statuses;
+	}
+
+	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public void checkTask(Long taskId, String login) {
 		LOG.info("Setze Status von Task auf FERTIG.");
@@ -257,6 +282,25 @@ public class TaskServiceImpl implements TaskService {
 		status.setStatus(StatusEnum.FERTIG);
 		LOG.debug("Status von {} und Anwender {} gesetzt auf {}.", status.getTask(), status.getUser(),
 				status.getStatus());
+	}
+
+	@Override
+	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+	public void updateComment(Long taskId, String login, String comment) {
+		LOG.info("Aktualisiere den Kommentar zu einem Task eines Anwenders.");
+		String commentLogString = comment;
+		if (comment.length() > 10) {
+			commentLogString = comment.substring(0, 9);
+		}
+		LOG.debug("\t taskId={} login={} comment:{}...", taskId, login, commentLogString);
+
+		// Input Validation
+		if (comment.length() > 500) {
+			LOG.debug("Kommentare dürfen maximal 500 Zeichen lang sein!");
+			throw new ValidationException("Kommentare dürfen maximal 500 Zeichen lang sein!");
+		}
+		Status statusToUpdate = getOrCreateStatus(taskId, login);
+		statusToUpdate.setComment(comment);
 	}
 
 	@Override

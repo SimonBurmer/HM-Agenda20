@@ -13,6 +13,21 @@
 				<h5 class="card-title" th:text="${task.title}">Card title</h5>
 				<p class="card-text" th:text="${task.taskShortDescription}"></p>
 				<p class="card-text" th:text="${task.taskLongDescription}"></p>
+
+				<form id="commentForm"
+					  th:action="@{/tasks/{id}/comment(id=${task.id})}"
+					  th:object="${status}" method="post">
+
+					<div class="form-group">
+						<textarea th:field="*{comment}" class="form-control" rows="4"
+								  placeholder="Kommentar" maxlength="500">th:text="${status.comment}</textarea>
+						<small class="form-text text-muted"> Kommentar mit bis zu 500 Zeichen! </small>
+					</div>
+
+					<button type="submit" class="btn btn-sm btn-primary">Kommentar speichern</button>
+					<a th:href="'/tasks/'"
+					   class="btn btn-sm btn-danger">Abbrechen</a>
+				</form>
 			</div>
 		</div>
 	</div>

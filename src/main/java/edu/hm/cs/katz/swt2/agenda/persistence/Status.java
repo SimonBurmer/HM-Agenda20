@@ -2,6 +2,7 @@ package edu.hm.cs.katz.swt2.agenda.persistence;
 
 import edu.hm.cs.katz.swt2.agenda.common.StatusEnum;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * Modellklasse für die Speicherung der Beziehung zwischen Anwender und einem konkreten Task.
@@ -38,6 +40,11 @@ public class Status {
   @Enumerated(EnumType.STRING)
   @NotNull
   private StatusEnum status = StatusEnum.NEU;
+
+  @Length(min = 0, max = 500)
+  @Column(length = 500)
+  @NotNull
+  private String comment = "";
 
   /**
    * JPA-kompatibler Kostruktor. Wird nur von JPA verwendet und darf private sein.
@@ -82,6 +89,14 @@ public class Status {
     return task;
   }
 
+  public String getComment() {
+    return comment;
+  }
+
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
+
   /*
    * Standard-Methoden. Es ist sinnvoll, hier auf die Auswertung der Assoziationen zu verzichten,
    * nur die Primärschlüssel zu vergleichen und insbesonderen Getter zu verwenden, um auch mit den
@@ -104,5 +119,4 @@ public class Status {
     Status other = (Status) obj;
     return Objects.equals(getId(), other.getId());
   }
-
 }
