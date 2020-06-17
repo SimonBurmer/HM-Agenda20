@@ -1,5 +1,7 @@
 package edu.hm.cs.katz.swt2.agenda.service.dto;
 
+import java.util.List;
+
 /**
  * Transferobjekt für Tasks mit Metadaten, die nur für Verwalter eines Tasks (d.h. Eigentümer des
  * Topics) sichtbar sind. Transferobjekte sind Schnittstellenobjekte der Geschäftslogik; Sie sind
@@ -13,16 +15,26 @@ package edu.hm.cs.katz.swt2.agenda.service.dto;
 public class OwnerTaskDto extends TaskDto {
 
   private int amountFinished;
+  private List<StatusDto> statuses;
 
   public OwnerTaskDto(Long id, String title, String taskShortDescription,
-      String taskLongDescription, SubscriberTopicDto topicDto, int amountCheckt) {
+      String taskLongDescription, SubscriberTopicDto topicDto, int amountCheckt,
+      List<StatusDto> statuses) {
     super(id, title, taskShortDescription, taskLongDescription, topicDto);
-    
     this.amountFinished = amountCheckt;
+    this.statuses = statuses;
   }
 
   public int getAmountFinished() {
     return amountFinished;
+  }
+
+  public List<StatusDto> getStatuses() {
+    return statuses;
+  }
+
+  public void setStatuses(List<StatusDto> statuses) {
+    this.statuses = statuses;
   }
 }
 

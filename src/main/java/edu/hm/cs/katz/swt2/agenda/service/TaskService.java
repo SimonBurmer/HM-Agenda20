@@ -2,6 +2,7 @@ package edu.hm.cs.katz.swt2.agenda.service;
 
 import edu.hm.cs.katz.swt2.agenda.mvc.Search;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
+import edu.hm.cs.katz.swt2.agenda.service.dto.StatusDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface TaskService {
 	/**
 	 * Lösche einen Task.
 	 */
-	public void deleteTask(Long id, String login);
+	void deleteTask(Long id, String login);
 
 	/**
 	 * Erstellt einen neuen Task.
@@ -55,9 +56,19 @@ public interface TaskService {
 	List<SubscriberTaskDto> getTasksForTopic(String topicUuid, String login);
 
 	/**
+	 * Zugriff auf alle Status eines verwalteten Tasks.
+	 */
+	List<StatusDto> getTaskStatuses(Long taskId, String login);
+
+	/**
 	 * Markiert einen Task für einen Abonnenten als "done".
 	 */
 	void checkTask(Long taskId, String login);
+
+	/**
+	 * Aktualisiere den Kommentar zu einem Task.
+	 */
+	void updateComment(Long taskId, String login, String comment);
 
 	/**
 	 * Setzt den Status eines Tasks für einen Abonnenten zurück auf NEU.
