@@ -80,21 +80,21 @@ public class DtoMapper {
 
 		Collection<Task> tasks = topic.getTasks();
 		
-		Optional<User> optUser = userRepository.findById(login);
-		optUser.orElseThrow(() -> {
-		    LOG.debug("User by Id {} Unavailable" , login);
-		    return new RuntimeException("User by given Id Unavailable");
-		});
-		
-		 User user = optUser.get(); 
-		 for (Task task : tasks) {
-		         Status statusForTask = statusRepository.findByUserAndTask(user, task);
-		             if (statusForTask != null) {
-		                 if (statusForTask.getStatus() == StatusEnum.FERTIG) {
-		                     amountFinishedTasks++;
-		             }
-		         }
-	      }
+		Optional<User> optUser = userRepository.findById(login);		
+		if (optUser.isPresent()) {
+	        User user = optUser.get(); 
+	         for (Task task : tasks) {
+	                 Status statusForTask = statusRepository.findByUserAndTask(user, task);
+	                     if (statusForTask != null) {
+	                         if (statusForTask.getStatus() == StatusEnum.FERTIG) {
+	                             amountFinishedTasks++;
+	                     }
+	                 }
+	          }
+	    }else {
+	      LOG.debug("User by Id {} Unavailable" , login);
+	      throw new RuntimeException("User by given Id Unavailable");
+	    }
 		
 		amountTasks = tasks.size();
 		amountUnfinishedTasks = amountTasks - amountFinishedTasks;

@@ -72,20 +72,20 @@ public class TaskServiceImpl implements TaskService {
 		
 		User user = anwenderRepository.getOne(login);
 		
-	    Optional<Topic> optTopic = topicRepository.findById(uuid);
-	    optTopic.orElseThrow(() -> {
-	            LOG.debug("User by Id {} Unavailable" , login);
-	            return new RuntimeException("User by given Id Unavailable");
-	        });
-	    
-	    Topic t = optTopic.get();	
-		if (!user.equals(t.getCreator())) {
-			LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login, t.getTitle());
-			throw new AccessDeniedException("Kein Zugriff auf das Topic!");
-		}
-		Task task = new Task(t, title, taskShortDescription, taskLongDescription);
-		taskRepository.save(task);
-		return task.getId();
+	    Optional<Topic> optTopic = topicRepository.findById(uuid);     
+        if (optTopic.isPresent()) {
+            Topic t = optTopic.get();
+            if (!user.equals(t.getCreator())) {
+              LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login, t.getTitle());
+              throw new AccessDeniedException("Kein Zugriff auf das Topic!");
+            }
+            Task task = new Task(t, title, taskShortDescription, taskLongDescription);
+            taskRepository.save(task);
+            return task.getId();
+        }else {
+            LOG.debug("Topic by Id {} unavailable" , login);
+            throw new RuntimeException("Topic by given Id unavailable");
+        }
 	}
 
 	@Override
