@@ -1,19 +1,12 @@
 <!DOCTYPE html>
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments :: head" />
-<body class="p-3 mb-2 bg-dark text-white">
+<body class= "bg-dark text-white">
 	<nav th:replace="fragments :: navigation"></nav>
+	
+	<div class="container-fluid p-3 mb-2">
 
-
-	<!-- Gesamter Seiteninhalt (ausgenommen Header) ist in einem container-fluid containter!-->
-	<div class="container-fluid p-3 mb-2 bg-dark text-white">
-
-		<!--Container class="row" spiegelt einen Reihe in dem container-fluid wieder -->
 		<div class="row justify-content-center">
-			<!--Container class="col" spiegelt einen Spalte in dem Reihen-Container wieder.
-			    da wir nur eine Spalte haben ist das eig. nicht nötig.
-			    Eine Spalte kann max in 12 Zeilen/Teile verlegt werden, wir wollen hier die 
-			    volle Splatenbreite nutzen, daher col-12.-->
 			<div class="col-12">
 				<h4 class="display-4">
 					Anwender <a href="/users/create" class="btn btn-primary">Anwender
@@ -21,13 +14,12 @@
 				</h4>
 			</div>
 		</div>
-		<!--Hier beginnt eine neue Spalte-->
+		
 		<div class="row justify-content-center">
 			<div class="col-9">
 				<table class="table table-dark">
 					<thead>
 						<tr>
-							<!-- tr: Diese Ausgabe wird für jedes Element einer Collection einmal erstellt. -->
 							<th scope="col">Login</th>
 							<th scope="col">Name</th>
 							<th scope="col">Topics</th>
@@ -43,6 +35,7 @@
 				</table>
 			</div>
 		</div>
+		
 	</div>
 
 	<th:block th:replace="fragments :: scripts">
