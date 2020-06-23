@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.validation.ValidationException;
 import org.apache.commons.collections4.SetUtils;
 import org.slf4j.Logger;
@@ -70,7 +71,14 @@ public class TaskServiceImpl implements TaskService {
 		ValidationService.topicValidation(title, taskShortDescription, taskLongDescription);
 		
 		User user = anwenderRepository.getOne(login);
-		Topic t = topicRepository.findById(uuid).get();
+		
+	    Optional<Topic> optTopic = topicRepository.findById(uuid);
+	    optTopic.orElseThrow(() -> {
+	            LOG.debug("User by Id {} Unavailable" , login);
+	            return new RuntimeException("User by given Id Unavailable");
+	        });
+	    
+	    Topic t = optTopic.get();	
 		if (!user.equals(t.getCreator())) {
 			LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login, t.getTitle());
 			throw new AccessDeniedException("Kein Zugriff auf das Topic!");
@@ -319,5 +327,4 @@ public class TaskServiceImpl implements TaskService {
 		}
 		LOG.debug("{} Status gelöscht", numberOfDeletedStatuses);
 	}
-
 }

@@ -17,8 +17,10 @@ import edu.hm.cs.katz.swt2.agenda.service.dto.UserDisplayDto;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import org.modelmapper.ModelMapper;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,13 +42,12 @@ public class DtoMapper {
 	private TopicRepository topicRepository;
 
 	@Autowired
-	private TaskService taskService;
-
-	@Autowired
 	private StatusRepository statusRepository;
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	private static final Logger LOG = LoggerFactory.getLogger(TaskServiceImpl.class);
 
 	/**
 	 * Erstellt ein {@link UserDisplayDto} aus einem {@link User}.
@@ -78,16 +79,23 @@ public class DtoMapper {
 		int amountTasks = 0;
 
 		Collection<Task> tasks = topic.getTasks();
-		User user = userRepository.findById(login).get();
-		for (Task task : tasks) {
-			Status statusForTask = statusRepository.findByUserAndTask(user, task);
-			if (statusForTask != null) {
-				if (statusForTask.getStatus() == StatusEnum.FERTIG) {
-					amountFinishedTasks++;
-				}
-			}
-		}
-
+		
+		Optional<User> optUser = userRepository.findById(login);
+		optUser.orElseThrow(() -> {
+		    LOG.debug("User by Id {} Unavailable" , login);
+		    return new RuntimeException("User by given Id Unavailable");
+		});
+		
+		 User user = optUser.get(); 
+		 for (Task task : tasks) {
+		         Status statusForTask = statusRepository.findByUserAndTask(user, task);
+		             if (statusForTask != null) {
+		                 if (statusForTask.getStatus() == StatusEnum.FERTIG) {
+		                     amountFinishedTasks++;
+		             }
+		         }
+	      }
+		
 		amountTasks = tasks.size();
 		amountUnfinishedTasks = amountTasks - amountFinishedTasks;
 
@@ -100,7 +108,6 @@ public class DtoMapper {
 		subscriberTopicDto.setAmountFinishedTasks(amountFinishedTasks);
 		subscriberTopicDto.setAmountTasks(amountTasks);
 
-		
 		return subscriberTopicDto;
 	}
 
@@ -152,5 +159,4 @@ public class DtoMapper {
 		return new OwnerTaskDto(task.getId(), task.getTitle(), task.getTaskShortDescription(),
 				task.getTaskLongDescription(), createDto(task.getTopic()), amountFinished, statusDtos);
 	}
-
 }

@@ -145,7 +145,5 @@ public class ValidationService {
       LOG.debug("Das Passwort eines Users muss mindestens eines dieser Sonderzeichen beinhalten: *?$%&.!");
       throw new ValidationException("Das Passwort muss mindestens eines dieser Sonderzeichen beinhalten: *?$%&.!" + EINGABEHINWEIS);
     }
-  }
-  
-  
+  } 
 }
