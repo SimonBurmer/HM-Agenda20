@@ -152,7 +152,7 @@ public class TaskServiceImpl implements TaskService {
 			LOG.debug("\tsearch={} isOnlyNewTasks={}", search.getSearch(), search.isOnlyNewTasks());
 			for (Iterator<SubscriberTaskDto> it = result.iterator(); it.hasNext();) {
 				SubscriberTaskDto next = it.next();
-				if (!next.getTitle().contains(search.getSearch())) {
+				if (!next.getTitle().toLowerCase().contains(search.getSearch().toLowerCase())) {
 					it.remove();
 					continue;
 				}
