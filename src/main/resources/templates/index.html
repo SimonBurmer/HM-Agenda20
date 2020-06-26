@@ -72,7 +72,7 @@ body {
 				<h1 class="display-4">
 					Hallo <i th:text="${user.name}"></i>!
 				</h1>
-				<p class="lead">Deine Topics:</p>
+				<h3>Deine Topics:</h3>
 				<div style="height: 52vh;" class="overflow-auto">
 					<div class="col mb-4 border border-secondary"
 						th:each="t : ${topics}">
@@ -99,7 +99,7 @@ body {
 				<div class="container">
 					<form th:object="${registration}" th:action="@{/register}"
 						method="post">
-						<h2 class="form-signin-heading">Topic-Suche:</h2>
+						<h3 class="form-signin-heading">Direkteinstieg zum Topic:</h3>
 						<div class="form-row">
 							<div class="form-group col-9">
 								<input th:field="*{key}" class="form-control"
