@@ -1,5 +1,4 @@
 package edu.hm.cs.katz.swt2.agenda.persistence;
-
 import java.util.Collection;
 import java.util.Objects;
 
@@ -15,117 +14,116 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 /**
- * Modellklasse für die Speicherung der Aufgaben. Enthält die Abbildung auf eine
- * Datenbanktabelle in Form von JPA-Annotation.
+ * Modellklasse für die Speicherung der Aufgaben. Enthält die Abbildung auf eine Datenbanktabelle in
+ * Form von JPA-Annotation.
  * 
  * @author Bastian Katz (mailto: bastian.katz@hm.edu)
  */
 @Entity
 public class Task {
 
-	@Id
-	@NotNull
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long id;
+  @Id
+  @NotNull
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  private Long id;
 
-	@NotNull
-	@Length(min = 8, max = 32)
-	@Column(length = 32)
-	private String title;
+  @NotNull
+  @Length(min = 8, max = 32)
+  @Column(length = 32)
+  private String title;
 
-	@NotNull
-	@Column(length = 200)
-	@Length(min = 100, max = 200)
-	private String taskShortDescription;
+  @NotNull
+  @Column(length = 200)
+  @Length(min = 100, max = 200)
+  private String taskShortDescription;
 
-	@NotNull
-	@Column(length = 2000)
-	@Length(min = 200, max = 2000)
-	private String taskLongDescription;
+  @NotNull
+  @Column(length = 2000)
+  @Length(min = 200, max = 2000)
+  private String taskLongDescription;
 
-	@NotNull
-	@ManyToOne
-	private Topic topic;
-	
-	@OneToMany(mappedBy="task", cascade = CascadeType.ALL)
-	private Collection<Status> status;
-	
+  @NotNull
+  @ManyToOne
+  private Topic topic;
 
-	/**
-	 * JPA-kompatibler Kostruktor. Wird nur von JPA verwendet und darf private sein.
-	 */
-	public Task() {
-		// JPA benötigt einen Default-Konstruktor!
-	}
+  @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+  private Collection<Status> status;
 
-	/**
-	 * Konstruktor zum Erstellen eines neuen Tasks.
-	 * 
-	 * @param topic Topic, darf nicht null sein.
-	 * @param title Titel, darf nicht null sein.
-	 */
-	public Task(final Topic topic, final String title, final String taskShortDescription,
-			final String taskLongDescription) {
-		this.topic = topic;
-		topic.addTask(this);
-		this.title = title;
-		this.taskShortDescription = taskShortDescription;
-		this.taskLongDescription = taskLongDescription;
-	}
 
-	@Override
-	public String toString() {
-		return "Task \"" + title + "\"";
-	}
+  /**
+   * JPA-kompatibler Kostruktor. Wird nur von JPA verwendet und darf private sein.
+   */
+  public Task() {
+    // JPA benötigt einen Default-Konstruktor!
+  }
 
-	public Long getId() {
-		return id;
-	}
+  /**
+   * Konstruktor zum Erstellen eines neuen Tasks.
+   * 
+   * @param topic Topic, darf nicht null sein.
+   * @param title Titel, darf nicht null sein.
+   */
+  public Task(final Topic topic, final String title, final String taskShortDescription,
+      final String taskLongDescription) {
+    this.topic = topic;
+    topic.addTask(this);
+    this.title = title;
+    this.taskShortDescription = taskShortDescription;
+    this.taskLongDescription = taskLongDescription;
+  }
 
-	public String getTitle() {
-		return title;
-	}
+  @Override
+  public String toString() {
+    return "Task \"" + title + "\"";
+  }
 
-	public String getTaskShortDescription() {
-		return taskShortDescription;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public String getTaskLongDescription() {
-		return taskLongDescription;
-	}
+  public String getTitle() {
+    return title;
+  }
 
-	public Topic getTopic() {
-		return topic;
-	}
+  public String getTaskShortDescription() {
+    return taskShortDescription;
+  }
 
-	public void setTaskShortDescription(String taskShortDescription) {
-		this.taskShortDescription = taskShortDescription;
-	}
+  public String getTaskLongDescription() {
+    return taskLongDescription;
+  }
 
-	public void setTaskLongDescription(String taskLongDescription) {
-		this.taskLongDescription = taskLongDescription;
-	}
-	/*
-	 * Standard-Methoden. Es ist sinnvoll, hier auf die Auswertung der Assoziationen
-	 * zu verzichten, nur die Primärschlüssel zu vergleichen und insbesonderen
-	 * Getter zu verwenden, um auch mit den generierten Hibernate-Proxys kompatibel
-	 * zu bleiben.
-	 */
+  public Topic getTopic() {
+    return topic;
+  }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, topic);
-	}
+  public void setTaskShortDescription(String taskShortDescription) {
+    this.taskShortDescription = taskShortDescription;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Task)) {
-			return false;
-		}
-		Task other = (Task) obj;
-		return Objects.equals(getId(), other.getId());
-	}
+  public void setTaskLongDescription(String taskLongDescription) {
+    this.taskLongDescription = taskLongDescription;
+  }
+  /*
+   * Standard-Methoden. Es ist sinnvoll, hier auf die Auswertung der Assoziationen zu verzichten,
+   * nur die Primärschlüssel zu vergleichen und insbesonderen Getter zu verwenden, um auch mit den
+   * generierten Hibernate-Proxys kompatibel zu bleiben.
+   */
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, topic);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (!(obj instanceof Task)) {
+      return false;
+    }
+    Task other = (Task) obj;
+    return Objects.equals(getId(), other.getId());
+  }
 }

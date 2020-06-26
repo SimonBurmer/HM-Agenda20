@@ -21,38 +21,38 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @WebMvcTest
 public class TopicControllerTest {
 
-    @Autowired
-    MockMvc mvc;
+  @Autowired
+  MockMvc mvc;
 
-    // Zugriff auf den TopicController durch die MockBean Objekte (simulierter HTTP Zugriff)
-    @MockBean
-    TopicService topicService;
+  // Zugriff auf den TopicController durch die MockBean Objekte (simulierter HTTP Zugriff)
+  @MockBean
+  TopicService topicService;
 
-    @MockBean
-    TaskService taskService;
+  @MockBean
+  TaskService taskService;
 
-    @MockBean
-    UserService userService;
+  @MockBean
+  UserService userService;
 
-    @Test
-    public void testGetIndex() throws Exception {
-        MvcResult indexPage = mvc.perform(MockMvcRequestBuilders.get("/"))
-                .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-        assertTrue(indexPage.getResponse().getContentAsString().contains("Agenda"));
-    }
+  @Test
+  public void testGetIndex() throws Exception {
+    MvcResult indexPage = mvc.perform(MockMvcRequestBuilders.get("/"))
+        .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+    assertTrue(indexPage.getResponse().getContentAsString().contains("Agenda"));
+  }
 
-    @Test
-    @WithMockUser(username = "testuser", password = "testpassword", roles = "USER")
-    public void testGetTopics() throws Exception {
+  @Test
+  @WithMockUser(username = "testuser", password = "testpassword", roles = "USER")
+  public void testGetTopics() throws Exception {
 
-        UserDisplayDto testuserMock = new UserDisplayDto();
-        testuserMock.setLogin("testuser");
-        Mockito.when(userService.getUserInfo("testuser")).thenReturn(testuserMock);
+    UserDisplayDto testuserMock = new UserDisplayDto();
+    testuserMock.setLogin("testuser");
+    Mockito.when(userService.getUserInfo("testuser")).thenReturn(testuserMock);
 
-        MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/topics"))
-                .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+    MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/topics"))
+        .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
-        UserDisplayDto user = (UserDisplayDto) result.getModelAndView().getModel().get("user");
-        assertEquals(testuserMock.getLogin(), user.getLogin());
-    }
+    UserDisplayDto user = (UserDisplayDto) result.getModelAndView().getModel().get("user");
+    assertEquals(testuserMock.getLogin(), user.getLogin());
+  }
 }

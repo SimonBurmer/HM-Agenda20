@@ -54,6 +54,7 @@ public class TopicController extends AbstractController {
 		model.addAttribute("managedTopics", topicService.getManagedTopics(auth.getName(), search));
 		model.addAttribute("search", new Search());
 		model.addAttribute("topics", topicService.getSubscriptions(auth.getName(), search));
+		model.addAttribute("registration", new Registration());
 		return "topic-listview";
 	}
 

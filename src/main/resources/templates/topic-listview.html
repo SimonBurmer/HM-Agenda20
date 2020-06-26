@@ -72,9 +72,31 @@
 				</div>
 			</div>
 		</div>
+		<div class="row row-cols-1 row-cols-md-3 bg-dark">
+			<div class="col mb-4">
+				<div class="card bg-dark border-secondary">
+					<div class="card-body">
+						<h5 class="card-title">Registrieren</h5>
+						<form th:object="${registration}" th:action="@{/register}"
+							method="post">
+							<h2 class="form-signin-heading">Topic-Suche:</h2>
+							<div class="form-row">
+								<div class="form-group col-9">
+									<input th:field="*{key}" class="form-control"
+										placeholder="Kurzschlüssel" />
+								</div>
+								<div class="col-3">
+									<button type="submit" class="btn btn-primary">Suchen</button>
+								</div>
+							</div>
+						</form>
+						<small th:if="${user}" class="form-text text-muted">Den
+							Kurzschlüssel erhalten Sie bei Ihrem Kursleiter!</small>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-
-
 	<th:block th:replace="fragments :: scripts">
 </body>
 </html>
