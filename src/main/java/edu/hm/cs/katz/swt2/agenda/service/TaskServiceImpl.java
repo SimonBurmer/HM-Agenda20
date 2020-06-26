@@ -64,28 +64,28 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public Long createTask(String uuid, String title, String login, String taskShortDescription,
-			String taskLongDescription) {
+		String taskLongDescription) {
 		LOG.info("Erstelle einen Task.");
 		LOG.debug("Erstelle Task \"{}\" mit UUID \"{}\" für Anwender \"{}\".", title, uuid, login);
 
 		ValidationService.topicValidation(title, taskShortDescription, taskLongDescription);
-		
+
 		User user = anwenderRepository.getOne(login);
-		
-	    Optional<Topic> optTopic = topicRepository.findById(uuid);     
-        if (optTopic.isPresent()) {
-            Topic t = optTopic.get();
-            if (!user.equals(t.getCreator())) {
-              LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login, t.getTitle());
-              throw new AccessDeniedException("Kein Zugriff auf das Topic!");
-            }
-            Task task = new Task(t, title, taskShortDescription, taskLongDescription);
-            taskRepository.save(task);
-            return task.getId();
-        }else {
-            LOG.debug("Topic by Id {} unavailable" , login);
-            throw new RuntimeException("Topic by given Id unavailable");
-        }
+
+		Optional<Topic> optTopic = topicRepository.findById(uuid);
+		if (optTopic.isPresent()) {
+			Topic t = optTopic.get();
+			if (!user.equals(t.getCreator())) {
+				LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login, t.getTitle());
+				throw new AccessDeniedException("Kein Zugriff auf das Topic!");
+			}
+			Task task = new Task(t, title, taskShortDescription, taskLongDescription);
+			taskRepository.save(task);
+			return task.getId();
+		}else {
+			LOG.debug("Topic by Id {} unavailable" , login);
+			throw new RuntimeException("Topic by given Id unavailable");
+		}
 	}
 
 	@Override
@@ -93,14 +93,14 @@ public class TaskServiceImpl implements TaskService {
 	public void updateTask(Long id, String login, String taskShortDescription, String taskLongDescription) {
 		LOG.info("Aktualisiere einen Task.");
 		LOG.debug("Aktualisiere Task \"{}\" für Anwender \"{}\".", id, login);
-		
+
 		ValidationService.topicValidation(taskShortDescription, taskLongDescription);
 
 		Task taskToUpdate = taskRepository.getOne(id);
 		User changingUser = anwenderRepository.getOne(login);
 		if (!changingUser.equals(taskToUpdate.getTopic().getCreator())) {
 			LOG.warn("Anwender {} ist nicht berechtigt, einen Task im Topic {} zu ändern.", login,
-					taskToUpdate.getTitle());
+				taskToUpdate.getTitle());
 			throw new AccessDeniedException("Kein Zugriff auf das Topic!");
 		}
 
@@ -142,15 +142,14 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public List<SubscriberTaskDto> getSubscribedTasks(String login, Search search) {
-
 		LOG.info("Fordere Liste zugeordneter Tasks für einen Anwender an.");
 		LOG.debug("Fordere Liste zugeordneter Tasks für Anwender \"{}\" an.", login);
 		User user = anwenderRepository.getOne(login);
-		Collection<Topic> topics = user.getSubscriptions();
-		List<SubscriberTaskDto> result = extracted(user, topics);
+		Collection<Topic> subscriptions = user.getSubscriptions();
+		List<SubscriberTaskDto> tasks = getAllTasksWithStatuses(user, subscriptions);
 		if (search.hasParameters()) {
 			LOG.debug("\tsearch={} isOnlyNewTasks={}", search.getSearch(), search.isOnlyNewTasks());
-			for (Iterator<SubscriberTaskDto> it = result.iterator(); it.hasNext();) {
+			for (Iterator<SubscriberTaskDto> it = tasks.iterator(); it.hasNext();) {
 				SubscriberTaskDto next = it.next();
 				if (!next.getTitle().toLowerCase().contains(search.getSearch().toLowerCase())) {
 					it.remove();
@@ -162,30 +161,27 @@ public class TaskServiceImpl implements TaskService {
 
 			}
 		}
-		return result;
+		return tasks;
 	}
 
-	private List<SubscriberTaskDto> extracted(User user, Collection<Topic> topics) {
+	private List<SubscriberTaskDto> getAllTasksWithStatuses(User user, Collection<Topic> topics) {
 		Collection<Status> status = user.getStatus();
 		Map<Task, Status> statusForTask = new HashMap<>();
 		for (Status currentStatus : status) {
 			statusForTask.put(currentStatus.getTask(), currentStatus);
 		}
-
-		List<SubscriberTaskDto> result = new ArrayList<>();
-
+		List<SubscriberTaskDto> taskDtoList = new ArrayList<>();
 		for (Topic t : topics) {
 			for (Task task : t.getTasks()) {
 				if (statusForTask.get(task) == null) {
 					Status createdStatus = getOrCreateStatus(task.getId(), user.getLogin());
 					statusForTask.put(task, createdStatus);
 				}
-				result.add(mapper.createReadDto(task, statusForTask.get(task)));
+				taskDtoList.add(mapper.createReadDto(task, statusForTask.get(task)));
 			}
 		}
-
 		// Sortiere das Ergebnis erst nach Titel
-		result.sort(new Comparator<SubscriberTaskDto>() {
+		taskDtoList.sort(new Comparator<SubscriberTaskDto>() {
 			@Override
 			public int compare(SubscriberTaskDto o1, SubscriberTaskDto o2) {
 				// Vergleichskriterium ist der Titel
@@ -193,15 +189,14 @@ public class TaskServiceImpl implements TaskService {
 			}
 		});
 		// und dann nach Status (benötigt stabilen Sortieralgorithmus)
-		result.sort(new Comparator<SubscriberTaskDto>() {
+		taskDtoList.sort(new Comparator<SubscriberTaskDto>() {
 			@Override
 			public int compare(SubscriberTaskDto o1, SubscriberTaskDto o2) {
 				// Vergleichskriterium ist der StatusEnum nach Definitionsreihenfolge
 				return o1.getStatus().getStatus().compareTo(o2.getStatus().getStatus());
 			}
 		});
-
-		return result;
+		return taskDtoList;
 	}
 
 	@Override
@@ -212,7 +207,7 @@ public class TaskServiceImpl implements TaskService {
 		User user = anwenderRepository.getOne(login);
 		Topic topic = topicRepository.getOne(uuid);
 
-		return extracted(user, SetUtils.hashSet(topic));
+		return getAllTasksWithStatuses(user, SetUtils.hashSet(topic));
 	}
 
 	@Override
@@ -248,7 +243,7 @@ public class TaskServiceImpl implements TaskService {
 		Status status = getOrCreateStatus(taskId, login);
 		status.setStatus(StatusEnum.FERTIG);
 		LOG.debug("Status von {} und Anwender {} gesetzt auf {}.", status.getTask(), status.getUser(),
-				status.getStatus());
+			status.getStatus());
 	}
 
 	@Override
@@ -278,7 +273,7 @@ public class TaskServiceImpl implements TaskService {
 		Status status = getOrCreateStatus(taskId, login);
 		status.setStatus(StatusEnum.NEU);
 		LOG.debug("Status von {} und Anwender {} gesetzt auf {}.", status.getTask(), status.getUser(),
-				status.getStatus());
+			status.getStatus());
 	}
 
 	@Override
