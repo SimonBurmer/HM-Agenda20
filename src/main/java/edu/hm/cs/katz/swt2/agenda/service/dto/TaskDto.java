@@ -1,5 +1,6 @@
 package edu.hm.cs.katz.swt2.agenda.service.dto;
 
+
 /**
  * Transferobjekt für einfache Anzeigeinformationen von Tasks. Transferobjekte
  * sind Schnittstellenobjekte der Geschäftslogik; Sie sind nicht Teil des
@@ -17,17 +18,19 @@ public class TaskDto {
 	String taskShortDescription;
 	String taskLongDescription;
 	SubscriberTopicDto topic;
+	String base64Image;
 
-	/**
-	 * Konstruktor.
-	 */
+    /*
+	* Konstruktor.
+	*/
 	public TaskDto(Long id, String title, String taskShortDescription, String taskLongDescription,
-			SubscriberTopicDto topicDto) {
+			SubscriberTopicDto topicDto, String base64Image) {
 		this.id = id;
 		this.title = title;
 		this.topic = topicDto;
 		this.taskShortDescription = taskShortDescription;
 		this.taskLongDescription = taskLongDescription;
+		this.base64Image = base64Image;
 	}
 
 	public Long getId() {
@@ -65,5 +68,8 @@ public class TaskDto {
 	public void setTopic(SubscriberTopicDto topic) {
 		this.topic = topic;
 	}
-
+	
+	public String getBase64Image() {
+	    return base64Image;
+	}
 }

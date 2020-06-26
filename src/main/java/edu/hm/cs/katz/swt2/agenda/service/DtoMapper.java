@@ -15,6 +15,7 @@ import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.UserDisplayDto;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +47,7 @@ public class DtoMapper {
 
 	@Autowired
 	private UserRepository userRepository;
+	
 	
 	private static final Logger LOG = LoggerFactory.getLogger(TaskServiceImpl.class);
 
@@ -92,8 +94,8 @@ public class DtoMapper {
 	                 }
 	          }
 	    }else {
-	      LOG.debug("User by Id {} Unavailable" , login);
-	      throw new RuntimeException("User by given Id Unavailable");
+	      LOG.debug("User mit gegebener Id {} ist nicht verfügbar!" , login);
+	      throw new RuntimeException("User mit gegebener Id ist nicht verfügbar!");
 	    }
 		
 		amountTasks = tasks.size();
@@ -125,8 +127,9 @@ public class DtoMapper {
 	public SubscriberTaskDto createReadDto(Task task, Status status) {
 		Topic topic = task.getTopic();
 		SubscriberTopicDto topicDto = createDto(topic);
+		String base64Image = Base64.getEncoder().encodeToString(task.getImage());
 		return new SubscriberTaskDto(task.getId(), task.getTitle(), task.getTaskShortDescription(),
-				task.getTaskLongDescription(), topicDto, createDto(status, status.getComment()));
+				task.getTaskLongDescription(), topicDto, createDto(status, status.getComment()),base64Image);
 	}
 
 	/**
@@ -149,14 +152,17 @@ public class DtoMapper {
 	public OwnerTaskDto createManagedDto(Task task) {
 		int amountFinished = 0;
 		List<Status> status = statusRepository.findByTask(task);
-    List<StatusDto> statusDtos = new ArrayList<>();
+		List<StatusDto> statusDtos = new ArrayList<>();
 		for (Status s : status) {
-      statusDtos.add(new StatusDto(s.getStatus(), s.getComment()));
+		    statusDtos.add(new StatusDto(s.getStatus(), s.getComment()));
 			if (s.getStatus().equals(StatusEnum.FERTIG)) {
 				++amountFinished;
 			}
 		}
+		String base64Image = Base64.getEncoder().encodeToString(task.getImage());
 		return new OwnerTaskDto(task.getId(), task.getTitle(), task.getTaskShortDescription(),
-				task.getTaskLongDescription(), createDto(task.getTopic()), amountFinished, statusDtos);
+				task.getTaskLongDescription(), createDto(task.getTopic()), amountFinished, statusDtos,base64Image);
 	}
 }
+	
+       

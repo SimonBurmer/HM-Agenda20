@@ -13,6 +13,9 @@ import edu.hm.cs.katz.swt2.agenda.persistence.UserRepository;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.StatusDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -26,10 +29,13 @@ import org.apache.commons.collections4.SetUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 
 @Component
 @Transactional(rollbackFor = Exception.class)
@@ -64,7 +70,7 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public Long createTask(String uuid, String title, String login, String taskShortDescription,
-			String taskLongDescription) {
+			String taskLongDescription, MultipartFile imageFile ) {
 		LOG.info("Erstelle einen Task.");
 		LOG.debug("Erstelle Task \"{}\" mit UUID \"{}\" für Anwender \"{}\".", title, uuid, login);
 
@@ -74,17 +80,38 @@ public class TaskServiceImpl implements TaskService {
 		
 	    Optional<Topic> optTopic = topicRepository.findById(uuid);     
         if (optTopic.isPresent()) {
+          
             Topic t = optTopic.get();
             if (!user.equals(t.getCreator())) {
               LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login, t.getTitle());
               throw new AccessDeniedException("Kein Zugriff auf das Topic!");
             }
-            Task task = new Task(t, title, taskShortDescription, taskLongDescription);
-            taskRepository.save(task);
-            return task.getId();
+            
+            if(imageFile == null || imageFile.isEmpty()) {
+              try {
+                File file = new ClassPathResource("static/assets/DefaultImage.jpg").getFile();
+                byte[] fileContent = Files.readAllBytes(file.toPath());
+                Task task = new Task(t, title, taskShortDescription, taskLongDescription, fileContent);
+                taskRepository.save(task);
+                return task.getId();
+                
+              } catch (IOException e) {
+                  LOG.error("DefaultImage konnten nicht geladen werden!");
+                  throw new RuntimeException("Fehler beim laden des DefaultImage!");
+              }       
+            }else {
+              try {
+                Task task = new Task(t, title, taskShortDescription, taskLongDescription, imageFile.getBytes());
+                taskRepository.save(task);
+                return task.getId();   
+              } catch (IOException e) {
+                LOG.error("Bild konnte nicht in ein byte[] umgewandelt werden!");
+                throw new RuntimeException("Bild konnte nicht gespeichert werden!");
+              } 
+            }
         }else {
-            LOG.debug("Topic by Id {} unavailable" , login);
-            throw new RuntimeException("Topic by given Id unavailable");
+            LOG.debug("Topic mit der Id {} ist nicht verfügbar!" , login);
+            throw new RuntimeException("Topic mit gegebener Id ist nicht verfügbar!");
         }
 	}
 
@@ -108,6 +135,46 @@ public class TaskServiceImpl implements TaskService {
 		taskToUpdate.setTaskLongDescription(taskLongDescription);
 	}
 
+	@Override
+	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+	public void saveImageFile(Long id, String login, MultipartFile imageFile) throws Exception{
+	    LOG.info("Speichert das Bild zu einem Task.");
+	    LOG.debug("Speichert das Bild des Tasks \"{}\" für Anwender \"{}\".", id, login);
+	    
+	    Task taskToSave = taskRepository.getOne(id);
+        User changingUser = anwenderRepository.getOne(login);
+	    
+	    if (!changingUser.equals(taskToSave.getTopic().getCreator())) {
+          LOG.warn("Anwender {} ist nicht berechtigt, eine Bild für den Task {} zu speichern.", login,
+                  taskToSave.getTitle());
+          throw new AccessDeniedException("Kein Zugriff auf das Topic!");
+        }
+	    
+        if(imageFile.isEmpty()) {
+          LOG.debug("Die übergebene Datei \"{}\" ist leer!", imageFile.getOriginalFilename());
+          throw new ValidationException("Es wurde keine Datei ausgewählt!");
+        }
+        
+        String mimetype = imageFile.getContentType();
+        String type = mimetype.split("/")[0];
+        if(!type.equals("image")) {
+          LOG.debug("Die übergebene Datei \"{}\" ist nicht in einem Bildformat!", imageFile.getOriginalFilename());
+          throw new ValidationException("Es dürfen nur Bilder der hochgeladen werden!");
+        }
+
+        long size = imageFile.getSize();
+        if(size > 10000000) {
+          LOG.debug("Die übergebene Datei \"{}\" ist größer als 10MB!", imageFile.getOriginalFilename());
+          throw new ValidationException("Dein Bild " + imageFile.getOriginalFilename() + "konnte nicht Hochgeladen werden, da es größer als 10MB ist!");
+        }
+	    try {
+        taskToSave.setImage(imageFile.getBytes());
+      } catch (IOException e) {
+        LOG.error("Bild konnte nicht in ein byte[] umgewandelt werden!");
+        throw new IOException("Bild konnte nicht gespeichert werden!");
+      }   
+	}
+	
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public SubscriberTaskDto getTask(Long taskId, String login) {
@@ -269,7 +336,7 @@ public class TaskServiceImpl implements TaskService {
 		Status statusToUpdate = getOrCreateStatus(taskId, login);
 		statusToUpdate.setComment(comment);
 	}
-
+	
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public void resetTask(Long taskId, String login) {

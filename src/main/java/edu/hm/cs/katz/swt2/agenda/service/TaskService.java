@@ -5,6 +5,7 @@ import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.StatusDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Serviceklasse für Verarbeitung von Tasks.
@@ -22,7 +23,7 @@ public interface TaskService {
 	 * Erstellt einen neuen Task.
 	 */
 	Long createTask(String topicUuid, String title, String login, String taskShortDescription,
-			String taskLongDescription);
+			String taskLongDescription,  MultipartFile imageFile);
 
 	/**
 	 * Aktualisiert die Beschreibung eines Tasks.
@@ -79,4 +80,10 @@ public interface TaskService {
 	 * Löscht für einen Abonnenten alle Status für Tasks eines Topics.
 	 */
 	void deleteTaskStatusesforTopic(String topicUuid, String login);
+	
+    /**
+     * Speichert ein ImageFile als byte[] in einem Task.
+     * @throws Exception 
+     */
+    void saveImageFile(Long id, String login, MultipartFile imageFile) throws Exception;  
 }

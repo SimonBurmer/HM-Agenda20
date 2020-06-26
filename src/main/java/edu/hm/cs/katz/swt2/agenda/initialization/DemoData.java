@@ -94,9 +94,9 @@ public class DemoData {
     String htmlKursUuid =
         topicService.createTopic("HTML für Anfänger", LOGIN_FINE, TOPIC_HTML_KURZ, TOPIC_HTML_LANG);
     Long linkErstellenTask = taskService.createTask(htmlKursUuid, "Link erstellen", LOGIN_FINE,
-        TASK_LINK_ERSTELLEN_KURZ, TASK_LINK_ERSTELLEN_LANG);
+        TASK_LINK_ERSTELLEN_KURZ, TASK_LINK_ERSTELLEN_LANG, null);
     taskService.createTask(htmlKursUuid, "Leeres HTML-Template erstellen", LOGIN_FINE,
-        TASK_HTML_TEMPLATE_ERSTELLEN_KURZ, TASK_HTML_TEMPLATE_ERSTELLEN_LANG);
+        TASK_HTML_TEMPLATE_ERSTELLEN_KURZ, TASK_HTML_TEMPLATE_ERSTELLEN_LANG,null);
     topicService.subscribe(htmlKursUuid, LOGIN_ERNIE);
     topicService.subscribe(htmlKursUuid, LOGIN_BERT);
     taskService.checkTask(linkErstellenTask, LOGIN_ERNIE);
@@ -111,9 +111,9 @@ public class DemoData {
     String erniesKursUuid = topicService.createTopic("Ernies Backkurs", LOGIN_ERNIE,
         TOPIC_BACKKURS_KURZ, TOPIC_BACKKURS_LANG);
     taskService.createTask(erniesKursUuid, "Googlehupf backen", LOGIN_ERNIE,
-        TASK_GOOGLEHUPF_BACKEN_KURZ, TASK_GOOGLEHUPF_BACKEN_LANG);
+        TASK_GOOGLEHUPF_BACKEN_KURZ, TASK_GOOGLEHUPF_BACKEN_LANG, null);
     Long affenMuffinTask = taskService.createTask(erniesKursUuid, "Affenmuffins backen",
-        LOGIN_ERNIE, TASK_AFFENMUFFINS_BACKEN_KURZ, TASK_AFFENMUFFINS_BACKEN_LANG);
+        LOGIN_ERNIE, TASK_AFFENMUFFINS_BACKEN_KURZ, TASK_AFFENMUFFINS_BACKEN_LANG, null);
     topicService.subscribe(erniesKursUuid, LOGIN_BERT);
     taskService.checkTask(affenMuffinTask, LOGIN_BERT);
     topicService.subscribe(erniesKursUuid, LOGIN_FINE);

@@ -1,7 +1,5 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
-import edu.hm.cs.katz.swt2.agenda.common.StatusEnum;
-import edu.hm.cs.katz.swt2.agenda.persistence.TaskRepository;
 import edu.hm.cs.katz.swt2.agenda.service.TaskService;
 import edu.hm.cs.katz.swt2.agenda.service.TopicService;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -39,7 +38,7 @@ public class TaskController extends AbstractController {
 	public String getTaskCreationView(Model model, Authentication auth, @PathVariable("uuid") String uuid) {
 		OwnerTopicDto topic = topicService.getManagedTopic(uuid, auth.getName());
 		model.addAttribute("topic", topic);
-		model.addAttribute("newTask", new TaskDto(null, "", "", "", topic));
+		model.addAttribute("newTask", new TaskDto(null, "", "", "", topic,""));
 		return "task-creation";
 	}
 
@@ -47,11 +46,11 @@ public class TaskController extends AbstractController {
 	 * Verarbeitet die Erstellung eines Tasks.
 	 */
 	@PostMapping("/topics/{uuid}/createTask")
-	public String handleTaskCreation(Model model, Authentication auth, @PathVariable("uuid") String uuid,
+	public String handleTaskCreation(Model model, Authentication auth, @PathVariable("uuid") String uuid, @RequestParam("imageFile") MultipartFile imageFile,
 			@ModelAttribute("newTask") TaskDto newTask, RedirectAttributes redirectAttributes) {
 		try {
 			taskService.createTask(uuid, newTask.getTitle(), auth.getName(), newTask.getTaskShortDescription(),
-					newTask.getTaskLongDescription());
+					newTask.getTaskLongDescription(), imageFile);
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("error", e.getMessage());
 			return "redirect:/topics/" + uuid + "/createTask";
@@ -60,13 +59,29 @@ public class TaskController extends AbstractController {
 		return "redirect:/topics/" + uuid + "/manage";
 	}
 
+	
+	 /**
+     * Verarbeitet das Speichern eines Bildes.
+     */
+    @PostMapping("/imageUpload/{id}")
+    public String handelImageUpload(Authentication auth, @PathVariable("id") Long id, @ModelAttribute("task") TaskDto task, @RequestParam("imageFile") MultipartFile imageFile , @RequestHeader(value = "referer", required = true) String referer, RedirectAttributes redirectAttributes) {
+        try {
+            taskService.saveImageFile(id, auth.getName(),imageFile);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:" + referer;
+        }        
+        redirectAttributes.addFlashAttribute("success", "Bild wurde erfolgreich hochgeladen!");
+        return "redirect:" + referer;
+    }
+        	
 	/**
 	 * Erstellt die Taskansicht für Abonnenten.
 	 */
 	@GetMapping("tasks/{id}")
 	public String getSubscriberTaskView(Model model, Authentication auth, @PathVariable("id") Long id) {
 		SubscriberTaskDto task = taskService.getTask(id, auth.getName());
-		model.addAttribute("task", task);
+	    model.addAttribute("task", task);
 		model.addAttribute("status", task.getStatus());
 		return "task";
 	}
@@ -112,11 +127,9 @@ public class TaskController extends AbstractController {
 		try {
 			taskService.updateTask(id, auth.getName(), task.getTaskShortDescription(), task.getTaskLongDescription());
 		} catch (Exception e) {
-			// Zeige die Fehlermeldung der Exception als Flash Attribut an.
 			redirectAttributes.addFlashAttribute("error", e.getMessage());
 			return "redirect:" + referer;
 		}
-		// Zeige die erfolgreiche Aktualisierung als Flash Attribut an.
 		redirectAttributes.addFlashAttribute("success", "Task aktualisiert!");
 		return "redirect:" + referer;
 	}

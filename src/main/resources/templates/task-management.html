@@ -9,55 +9,71 @@
 		<div class="row justify-content-center bg-dark text-white">
 			<div class="col-12">
 				<h4 class="display-4">
-					Task <i th:text="${task.title}">Titel</i> ändern
+					Task <i th:text="${task.title}">Titel</i> verwalten:
 				</h4>
-
-				<form id="formName"
-					  th:action="@{/tasks/{id}/manage(id=${task.id})}"
-					  th:object="${task}" method="post">
-
-					<div class="form-group">
-						<textarea th:field="*{taskShortDescription}" class="form-control"
-								  placeholder="Kurzbeschreibung" minlength="100" maxlength="200"></textarea>
-						<small class="form-text text-muted"> Verwenden Sie eine
-							aussagekräftige Kurzbeschreibung mit 100 bis 200 Zeichen! </small>
+				<div class="row">
+					<div class="col-4 text-center">
+						<img th:src="'data:image/png;base64,'+${task.base64Image}"
+							style="width: 100%; height: 100%;" />
 					</div>
+					<div class="col-8">
+						<form id="formName"
+							th:action="@{/tasks/{id}/manage(id=${task.id})}"
+							th:object="${task}" method="post">
 
-					<div class="form-group">
-						<textarea th:field="*{taskLongDescription}" class="form-control"
-								  placeholder="Langbeschreibung" minlength="200" maxlength="2000"></textarea>
-						<small class="form-text text-muted"> Verwenden Sie eine
-							aussagekräftige Langbeschreibung mit 200 bis 2000 Zeichen! </small>
+							<div class="form-group">
+								<textarea th:field="*{taskShortDescription}"
+									class="form-control" placeholder="Kurzbeschreibung"
+									minlength="100" maxlength="200"></textarea>
+								<small class="form-text text-muted"> Verwenden Sie eine
+									aussagekräftige Kurzbeschreibung mit 100 bis 200 Zeichen! </small>
+							</div>
+
+							<div class="form-group">
+								<textarea th:field="*{taskLongDescription}" class="form-control"
+									placeholder="Langbeschreibung" minlength="200" maxlength="2000"></textarea>
+								<small class="form-text text-muted"> Verwenden Sie eine
+									aussagekräftige Langbeschreibung mit 200 bis 2000 Zeichen! </small>
+							</div>
+
+							<button type="submit" class="btn btn-primary">Speichern</button>
+							<a th:href="'/topics/'+${task.topic.uuid}+'/manage'"
+								class="btn btn-secondary">Zurück zum Topic</a>
+						</form>
+
+						<h4 class="mt-4">Bild ändern:</h4>
+						<form method="post" enctype="multipart/form-data"
+							th:action="@{/imageUpload/{id}(id=${task.id})}">
+							<input type="submit" name="Upload" class="btn btn-primary" /> <input
+								type="file" name="imageFile"> 
+								<small class="form-text text-muted"> Bilddatei darf nicht
+								größer als 10MB sein!</small>
+						</form>
 					</div>
+				</div>
 
-					<button type="submit" class="btn btn-primary">Speichern</button>
-					<a th:href="'/topics/'+${task.topic.uuid}+'/manage'"
-					   class="btn btn-secondary">Zurück zum Topic</a>
-				</form>
-
-				<div>
-					<h4 class="display-4"> Kommentare</h4>
-					<div class="row row-cols-1">
-						<div class="col mb-4" th:each="status : ${statuses}">
-							<div class="card bg-dark" th:classappend="${status.status.toString()=='FERTIG'} ? border-success : border-warning">
-								<div class="card-body">
-									<h5 class="card-title" th:text="${status.userName}"></h5>
-									<div th:unless="${status.comment.isEmpty()}">
-										<p class="card-text" th:text="${status.comment}">.</p>
-									</div>
-									<div th:if="${status.comment.isEmpty()}">
-										<p class="card-text font-italic">hat bisher keinen Kommentar abgegeben.</p>
-									</div>
+				<h4 class="display-4 mt-4">Kommentare</h4>
+				<div class="row row-cols-1">
+					<div class="col mb-4" th:each="status : ${statuses}">
+						<div class="card bg-dark"
+							th:classappend="${status.status.toString()=='FERTIG'} ? border-success : border-warning">
+							<div class="card-body">
+								<h5 class="card-title" th:text="${status.userName}"></h5>
+								<div th:unless="${status.comment.isEmpty()}">
+									<p class="card-text" th:text="${status.comment}">.</p>
+								</div>
+								<div th:if="${status.comment.isEmpty()}">
+									<p class="card-text font-italic">hat bisher keinen
+										Kommentar abgegeben.</p>
 								</div>
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</div>
+
 		</div>
 	</div>
-
 	<th:block th:replace="fragments :: scripts">
 </body>
 </html>

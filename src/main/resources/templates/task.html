@@ -5,33 +5,44 @@
 <body>
 	<nav th:replace="fragments :: navigation"></nav>
 
-	<h2 class="bg-dark text-white">Abonnenten-Ansicht für Task <i th:text="${task.title}"></i></h2>
+	<h2 class="bg-dark text-white">
+		Abonnenten-Ansicht für Task <i th:text="${task.title}"></i>
+	</h2>
 
 	<div class="row row-cols-1 bg-dark text-white">
 		<div class="card">
 			<div class="card-body bg-dark">
-				<h5 class="card-title" th:text="${task.title}">Card title</h5>
-				<p class="card-text" th:text="${task.taskShortDescription}"></p>
-				<p class="card-text" th:text="${task.taskLongDescription}"></p>
-
-				<form id="commentForm"
-					  th:action="@{/tasks/{id}/comment(id=${task.id})}"
-					  th:object="${status}" method="post">
-
-					<div class="form-group">
-						<textarea th:field="*{comment}" class="form-control" rows="4"
-								  placeholder="Kommentar" maxlength="500">th:text="${status.comment}</textarea>
-						<small class="form-text text-muted"> Kommentar mit bis zu 500 Zeichen! </small>
+				<div class="row">
+					<div class="col-4 text-center">
+						<img th:src="'data:image/png;base64,'+${task.base64Image}"
+							style="width: 100%; height: 100%;" />
 					</div>
 
-					<button type="submit" class="btn btn-sm btn-success">Kommentar speichern</button>
-					<a th:href="'/tasks/'"
-					   class="btn btn-sm btn-outline-secondary">Zurück</a>
+					<div class="col-8">
+						<h5 class="card-title" th:text="${task.title}">Card title</h5>
+						<p class="card-text" th:text="${task.taskShortDescription}"></p>
+						<p class="card-text" th:text="${task.taskLongDescription}"></p>
+					</div>
+				</div>
+				<form id="commentForm"
+					th:action="@{/tasks/{id}/comment(id=${task.id})}"
+					th:object="${status}" method="post">
+
+					<div class="form-group mt-3">
+						<textarea th:field="*{comment}" class="form-control" rows="4"
+							placeholder="Kommentar" maxlength="500">th:text="${status.comment}</textarea>
+						<small class="form-text text-muted"> Kommentar mit bis zu
+							500 Zeichen! </small>
+					</div>
+
+					<button type="submit" class="btn btn-sm btn-success">Kommentar
+						speichern</button>
+					<a th:href="'/tasks/'" class="btn btn-sm btn-outline-secondary">Zurück</a>
 				</form>
 			</div>
 		</div>
 	</div>
-	
+
 	<th:block th:replace="fragments :: scripts">
 </body>
 </html>

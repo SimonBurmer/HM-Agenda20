@@ -14,7 +14,7 @@
 
 				<form id="formName"
 					th:action="@{/topics/{uuid}/createTask(uuid=${topic.uuid})}"
-					th:object="${newTask}" method="post">
+					th:object="${newTask}" method="post" enctype="multipart/form-data">
 
 					<div class="form-group">
 						<input th:field="*{title}" class="form-control"
@@ -35,6 +35,12 @@
 							placeholder="Langbeschreibung" minlength="200" maxlength="2000"></textarea>
 						<small class="form-text text-muted"> Verwenden Sie eine
 							aussagekräftige Langbeschreibung mit 200 bis 2000 Zeichen! </small>
+					</div>
+
+					<div class="form-group">
+							<input type="file" name="imageFile">
+							<small
+							class="form-text text-muted"> Bilddatei darf nicht größer als 10MB sein!</small>
 					</div>
 
 					<button type="submit" class="btn btn-primary">Erstellen!</button>
