@@ -68,7 +68,7 @@ public class TopicServiceImpl implements TopicService {
       result.add(mapper.createManagedDto(topic));
     }
 
-    result.removeIf(t -> !t.getTitle().contains(search));
+    result.removeIf(t -> !t.getTitle().toLowerCase().contains(search.toLowerCase()));
 
     return result;
   }
