@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,8 @@ public class TopicServiceImpl implements TopicService {
     ValidationService.topicValidation(title, shortDescription, longDescription);
 
     String uuid = uuidProvider.getRandomUuid();
-    User creator = anwenderRepository.findById(login).get();
+    Optional<User> userOptional = anwenderRepository.findById(login);
+    User creator = userOptional.orElseThrow();
     Topic topic = new Topic(uuid, title, creator, shortDescription, longDescription);
     topicRepository.save(topic);
     return uuid;
@@ -61,7 +63,8 @@ public class TopicServiceImpl implements TopicService {
   public List<OwnerTopicDto> getManagedTopics(String login, String search) {
     LOG.info("Fordere Liste aller verwalteten Topics eines Anwenders an.");
     LOG.debug("Fordere Liste aller verwalteten Topics für Anwender \"{}\" an.", login);
-    User creator = anwenderRepository.findById(login).get();
+    Optional<User> creatorOptional = anwenderRepository.findById(login);
+    User creator = creatorOptional.orElseThrow();
     List<Topic> managedTopics = topicRepository.findByCreatorOrderByTitleAsc(creator);
     List<OwnerTopicDto> result = new ArrayList<>();
     for (Topic topic : managedTopics) {
@@ -142,7 +145,8 @@ public class TopicServiceImpl implements TopicService {
   public List<SubscriberTopicDto> getSubscriptions(String login, String search) {
     LOG.info("Fordere Liste aller abonnierten Topics eines Anwender an.");
     LOG.debug("Fordere Liste aller abonnierten Topics für Anwender \"{}\" an.", login);
-    User creator = anwenderRepository.findById(login).get();
+    Optional<User> creatorOptional = anwenderRepository.findById(login);
+    User creator = creatorOptional.orElseThrow();
     Collection<Topic> subscriptions = creator.getSubscriptions();
 
     TopicComparator tpComp = new TopicComparator();
