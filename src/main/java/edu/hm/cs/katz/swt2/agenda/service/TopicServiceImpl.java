@@ -46,7 +46,7 @@ public class TopicServiceImpl implements TopicService {
       String longDescription) {
 
     LOG.info("Erstelle ein Topic.");
-    LOG.debug("Erstelle Topic \"{}\".", title);
+    LOG.debug("\ttitle=\"{}\" login=\"{}\"", title, login);
 
     ValidationService.topicValidation(title, shortDescription, longDescription);
 
@@ -62,7 +62,7 @@ public class TopicServiceImpl implements TopicService {
   @PreAuthorize("#login==authentication.name")
   public List<OwnerTopicDto> getManagedTopics(String login, String search) {
     LOG.info("Fordere Liste aller verwalteten Topics eines Anwenders an.");
-    LOG.debug("Fordere Liste aller verwalteten Topics für Anwender \"{}\" an.", login);
+    LOG.debug("\tlogin=\"{}\" search=\"{}\"", login);
     Optional<User> creatorOptional = anwenderRepository.findById(login);
     User creator = creatorOptional.orElseThrow();
     List<Topic> managedTopics = topicRepository.findByCreatorOrderByTitleAsc(creator);
@@ -80,7 +80,7 @@ public class TopicServiceImpl implements TopicService {
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public OwnerTopicDto getManagedTopic(String topicUuid, String login) {
     LOG.info("Fordere ein verwaltetes Topic eines Anwenders an.");
-    LOG.debug("Fordere ein verwaltetes Topic {} für Anwender \"{}\" an.", topicUuid, login);
+    LOG.debug("\ttopicUuid={} login=\"{}\"", topicUuid, login);
     Topic topic = topicRepository.getOne(topicUuid);
     return mapper.createManagedDto(topic);
   }
@@ -89,7 +89,7 @@ public class TopicServiceImpl implements TopicService {
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public SubscriberTopicDto getTopic(String topicUuid, String login) {
     LOG.info("Fordere Topic mit UUID für einen Anwender an.");
-    LOG.debug("Fordere Topic {} für Anwender \"{}\" an.", topicUuid, login);
+    LOG.debug("\ttopicUuid={} login=\"{}\"", topicUuid, login);
     Topic topic = topicRepository.getOne(topicUuid);
     return mapper.createDto(topic, login);
   }
@@ -99,7 +99,7 @@ public class TopicServiceImpl implements TopicService {
   public List<SubscriberTopicDto> getSubscribedUsersWithFinishedTasks(String topicUuid,
       String login) {
     LOG.info("Fordere Abbonenten eines Topics an.");
-    LOG.debug("Fordere Abbonenten {} für Topic \"{}\" an.", topicUuid, login);
+    LOG.debug("\ttopicUuid={} login=\"{}\"", topicUuid, login);
     Topic topic = topicRepository.getOne(topicUuid);
     Collection<User> subscribers = topic.getSubscriber();
 
@@ -124,7 +124,7 @@ public class TopicServiceImpl implements TopicService {
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public void subscribe(String topicUuid, String login) {
     LOG.info("Abonniere ein Topic für einen Anwender.");
-    LOG.debug("Abonniere Topic {} für Anwender \"{}\".", topicUuid, login);
+    LOG.debug("\ttopicUuid={} login=\"{}\"", topicUuid, login);
     Topic topic = topicRepository.getOne(topicUuid);
     User anwender = anwenderRepository.getOne(login);
     topic.register(anwender);
@@ -134,7 +134,7 @@ public class TopicServiceImpl implements TopicService {
   @Override
   public void unsubscribe(String topicUuid, String login) {
     LOG.info("De-Abonniere ein Topic für einen Anwender.");
-    LOG.debug("De-Abonniere Topic {} für Anwender \"{}\".", topicUuid, login);
+    LOG.debug("\ttopicUuid={} login=\"{}\"", topicUuid, login);
     Topic topic = topicRepository.getOne(topicUuid);
     User anwender = anwenderRepository.getOne(login);
     topic.unregister(anwender);
@@ -144,7 +144,7 @@ public class TopicServiceImpl implements TopicService {
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public List<SubscriberTopicDto> getSubscriptions(String login, String search) {
     LOG.info("Fordere Liste aller abonnierten Topics eines Anwender an.");
-    LOG.debug("Fordere Liste aller abonnierten Topics für Anwender \"{}\" an.", login);
+    LOG.debug("\tlogin=\"{}\" search=\"{}\"", login, search);
     Optional<User> creatorOptional = anwenderRepository.findById(login);
     User creator = creatorOptional.orElseThrow();
     Collection<Topic> subscriptions = creator.getSubscriptions();
@@ -167,7 +167,7 @@ public class TopicServiceImpl implements TopicService {
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public void deleteTopic(String topicUuid, String login) {
     LOG.info("Löschen eins Topics von einem Anwender.");
-    LOG.debug("Lösche Topic {} von Anwender \"{}\".", topicUuid, login);
+    LOG.debug("\ttopicUuid={} login=\"{}\"", topicUuid, login);
     Topic topic = topicRepository.getOne(topicUuid);
     User creator = anwenderRepository.getOne(login);
     if (!topic.getCreator().equals(creator)) {
@@ -180,8 +180,8 @@ public class TopicServiceImpl implements TopicService {
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public void updateTopic(String topicUuid, String login, String shortDescription,
       String longDescription) {
-    LOG.info("Update eine Topic von einem Anwender.");
-    LOG.debug("Update Topic {} von Anwender \"{}\".", topicUuid, login);
+    LOG.info("Update ein Topic eines Anwenders.");
+    LOG.debug("\ttopicUuid={} login=\"{}\"", topicUuid, login);
     Topic topic = topicRepository.getOne(topicUuid);
     User creator = anwenderRepository.getOne(login);
 

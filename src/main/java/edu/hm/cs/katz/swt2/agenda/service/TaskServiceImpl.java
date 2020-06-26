@@ -55,8 +55,8 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public void deleteTask(Long id, String login) {
-		LOG.info("Löschen eins Task von einem Anwender.");
-		LOG.debug("Lösche Task {} von Anwender \"{}\".", id, login);
+		LOG.info("Lösche Task eines Anwenders.");
+		LOG.debug("\tid={} login=\"{}\"", id, login);
 		Task task = taskRepository.getOne(id);
 		taskRepository.delete(task);
 	}
@@ -66,7 +66,7 @@ public class TaskServiceImpl implements TaskService {
 	public Long createTask(String uuid, String title, String login, String taskShortDescription,
 		String taskLongDescription) {
 		LOG.info("Erstelle einen Task.");
-		LOG.debug("Erstelle Task \"{}\" mit UUID \"{}\" für Anwender \"{}\".", title, uuid, login);
+		LOG.debug("\ttitle=\"{}\" uuid=\"{}\" login=\"{}\".", title, uuid, login);
 
 		ValidationService.topicValidation(title, taskShortDescription, taskLongDescription);
 
@@ -92,7 +92,7 @@ public class TaskServiceImpl implements TaskService {
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public void updateTask(Long id, String login, String taskShortDescription, String taskLongDescription) {
 		LOG.info("Aktualisiere einen Task.");
-		LOG.debug("Aktualisiere Task \"{}\" für Anwender \"{}\".", id, login);
+		LOG.debug("\tid=\"{}\" login=\"{}\"", id, login);
 
 		ValidationService.topicValidation(taskShortDescription, taskLongDescription);
 
@@ -112,7 +112,7 @@ public class TaskServiceImpl implements TaskService {
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public SubscriberTaskDto getTask(Long taskId, String login) {
 		LOG.info("Sehe einen Task für einen Subscriber ein.");
-		LOG.debug("Sehe Task {} für Subscriber \"{}\" ein.", taskId, login);
+		LOG.debug("\ttaskId={} login=\"{}\" ein.", taskId, login);
 		Task task = taskRepository.getOne(taskId);
 		Topic topic = task.getTopic();
 		User user = anwenderRepository.getOne(login);
@@ -128,7 +128,7 @@ public class TaskServiceImpl implements TaskService {
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public OwnerTaskDto getManagedTask(Long taskId, String login) {
 		LOG.info("Sehe einen Task für den Owner ein.");
-		LOG.debug("Sehe Task {} für Owner \"{}\" ein.", taskId, login);
+		LOG.debug("\ttaskId={} login=\"{}\"", taskId, login);
 		Task task = taskRepository.getOne(taskId);
 		Topic topic = task.getTopic();
 		User createdBy = topic.getCreator();
@@ -143,7 +143,7 @@ public class TaskServiceImpl implements TaskService {
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public List<SubscriberTaskDto> getSubscribedTasks(String login, Search search) {
 		LOG.info("Fordere Liste zugeordneter Tasks für einen Anwender an.");
-		LOG.debug("Fordere Liste zugeordneter Tasks für Anwender \"{}\" an.", login);
+		LOG.debug("\tlogin=\"{}\"", login);
 		User user = anwenderRepository.getOne(login);
 		Collection<Topic> subscriptions = user.getSubscriptions();
 		List<SubscriberTaskDto> tasks = getAllTasksWithStatuses(user, subscriptions);
@@ -203,7 +203,7 @@ public class TaskServiceImpl implements TaskService {
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public List<SubscriberTaskDto> getTasksForTopic(String uuid, String login) {
 		LOG.info("Fordere Liste aller Tasks für Topic eines Anwenders an.");
-		LOG.debug("Fordere Liste aller Tasks für Topic mit UUID {} und Anwender \"{}\" an.", uuid, login);
+		LOG.debug("\tuuid={} login=\"{}\"", uuid, login);
 		User user = anwenderRepository.getOne(login);
 		Topic topic = topicRepository.getOne(uuid);
 
@@ -239,10 +239,10 @@ public class TaskServiceImpl implements TaskService {
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public void checkTask(Long taskId, String login) {
 		LOG.info("Setze Status von Task auf FERTIG.");
-		LOG.debug("Setze Status von Task {} für Login \"{}\" auf FERTIG.", taskId, login);
+		LOG.debug("\ttaskID={} login=\"{}\"", taskId, login);
 		Status status = getOrCreateStatus(taskId, login);
 		status.setStatus(StatusEnum.FERTIG);
-		LOG.debug("Status von {} und Anwender {} gesetzt auf {}.", status.getTask(), status.getUser(),
+		LOG.debug("Status von {} für Anwender {} gesetzt auf {}.", status.getTask(), status.getUser(),
 			status.getStatus());
 	}
 
@@ -269,10 +269,10 @@ public class TaskServiceImpl implements TaskService {
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public void resetTask(Long taskId, String login) {
 		LOG.info("Setze Status von Task auf NEU.");
-		LOG.debug("Setze Status von Task {} für Login \"{}\" auf NEU.", taskId, login);
+		LOG.debug("\ttaskId={} login=\"{}\"", taskId, login);
 		Status status = getOrCreateStatus(taskId, login);
 		status.setStatus(StatusEnum.NEU);
-		LOG.debug("Status von {} und Anwender {} gesetzt auf {}.", status.getTask(), status.getUser(),
+		LOG.debug("Status von {} für Anwender {} gesetzt auf {}.", status.getTask(), status.getUser(),
 			status.getStatus());
 	}
 
@@ -280,13 +280,12 @@ public class TaskServiceImpl implements TaskService {
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public List<OwnerTaskDto> getManagedTasks(String uuid, String login) {
 		LOG.info("Fordere verwaltete Tasks Liste für ein Topic eines Anwenders an.");
-		LOG.debug("Fordere verwaltete Tasks Liste für Topic {} und Anwender \"{}\" an.", uuid, login);
+		LOG.debug("\tuuid={} login=\"{}\"", uuid, login);
 		List<OwnerTaskDto> result = new ArrayList<>();
 		Topic topic = topicRepository.getOne(uuid);
 		for (Task task : topic.getTasks()) {
 			result.add(mapper.createManagedDto(task));
 		}
-
 		// Sortiere das Ergebnis nach Titel
 		result.sort(new Comparator<OwnerTaskDto>() {
 			@Override
@@ -295,7 +294,6 @@ public class TaskServiceImpl implements TaskService {
 				return o1.getTitle().compareTo(o2.getTitle());
 			}
 		});
-
 		return result;
 	}
 

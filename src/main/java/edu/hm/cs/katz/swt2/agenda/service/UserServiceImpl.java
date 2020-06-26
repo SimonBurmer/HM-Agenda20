@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
     LOG.info("Fordere Details für einen Anwender an.");
-    LOG.debug("Fordere Details für Anwender \"{}\" an.", username);
+    LOG.debug("\tusername=\"{}\"", username);
 
     Optional<User> findeMitspieler = anwenderRepository.findById(username);
     if (findeMitspieler.isPresent()) {
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public UserDisplayDto getUserInfo(String login) {
     LOG.info("Lese Daten eines Anwenders.");
-    LOG.debug("Lese Daten des Anwenders \"{}\".", login);
+    LOG.debug("\tlogin=\"{}\"", login);
     User anwender = anwenderRepository.getOne(login);
     return mapper.createDto(anwender);
   }
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
   public void legeAn(String login, String name, String password, boolean isAdministrator) {
     
     LOG.info("Erstelle einen Anwender.");
-    LOG.debug("Erstelle Anwender \"{}\" mit Passwort ***, isAdmin: {}.", login, isAdministrator);
+    LOG.debug("\tlogin=\"{}\" name=\"{}\" password=\"{}\" isAdministrator={}", login, name, password, isAdministrator);
     
     if (anwenderRepository.existsById(login)) {
       LOG.debug("Name des Anwenders ist bereits vergeben. Bitte passen Sie Ihre Eingabe an!");
