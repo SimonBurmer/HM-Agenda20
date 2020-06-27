@@ -42,11 +42,18 @@
 
 					<button type="submit" class="btn btn-primary">Speichern</button>
 					<a th:href="'/topics/'+${task.topic.uuid}+'/manage'"
-					   class="btn btn-secondary">Zurück zum Topic</a>
+					   class="btn btn-outline-secondary">zurück zum Topic</a>
 				</form>
 
 				<div>
 					<h4 class="display-4"> Kommentare</h4>
+
+					<div class="row row-cols-1">
+						<div class="col mb-4">
+							<b>Bedeutung der farblichen Umrandung:</b> <span class="text-warning">Aufgabe muss noch bearbeitet werden</span> <span class="text-success">Aufgabe wurde bereits erledigt</span>
+						</div>
+					</div>
+
 					<div class="row row-cols-1">
 						<div class="col mb-4" th:each="status : ${statuses}">
 							<div class="card bg-dark" th:classappend="${status.status.toString()=='FERTIG'} ? border-success : border-warning">
