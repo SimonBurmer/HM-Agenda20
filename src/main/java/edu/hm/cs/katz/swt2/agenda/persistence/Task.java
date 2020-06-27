@@ -5,12 +5,15 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import edu.hm.cs.katz.swt2.agenda.common.TaskTypeEnum;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -42,6 +45,10 @@ public class Task {
   @Length(min = 200, max = 2000)
   private String taskLongDescription;
 
+  @Enumerated(EnumType.STRING)
+  @NotNull
+  private TaskTypeEnum taskType = TaskTypeEnum.INFO;
+
   @NotNull
   @ManyToOne
   private Topic topic;
@@ -64,12 +71,13 @@ public class Task {
    * @param title Titel, darf nicht null sein.
    */
   public Task(final Topic topic, final String title, final String taskShortDescription,
-      final String taskLongDescription) {
+      final String taskLongDescription, TaskTypeEnum taskType) {
     this.topic = topic;
     topic.addTask(this);
     this.title = title;
     this.taskShortDescription = taskShortDescription;
     this.taskLongDescription = taskLongDescription;
+    this.taskType = taskType;
   }
 
   @Override
@@ -103,6 +111,14 @@ public class Task {
 
   public void setTaskLongDescription(String taskLongDescription) {
     this.taskLongDescription = taskLongDescription;
+  }
+
+  public TaskTypeEnum getTaskType() {
+    return taskType;
+  }
+
+  public void setTaskType(TaskTypeEnum taskType) {
+    this.taskType = taskType;
   }
   /*
    * Standard-Methoden. Es ist sinnvoll, hier auf die Auswertung der Assoziationen zu verzichten,

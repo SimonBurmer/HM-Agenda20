@@ -1,5 +1,6 @@
 package edu.hm.cs.katz.swt2.agenda.service;
 
+import edu.hm.cs.katz.swt2.agenda.common.TaskTypeEnum;
 import edu.hm.cs.katz.swt2.agenda.mvc.Search;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.StatusDto;
@@ -22,12 +23,13 @@ public interface TaskService {
 	 * Erstellt einen neuen Task.
 	 */
 	Long createTask(String topicUuid, String title, String login, String taskShortDescription,
-			String taskLongDescription);
+			String taskLongDescription, TaskTypeEnum taskType);
 
 	/**
 	 * Aktualisiert die Beschreibung eines Tasks.
 	 */
-	void updateTask(Long id, String login, String taskShortDescription, String taskLongDescription);
+	void updateTask(Long id, String login, String taskShortDescription, String taskLongDescription,
+		TaskTypeEnum taskType);
 
 	/**
 	 * Zugriff auf einen Task (priviligierte Sicht für Ersteller des Topics).

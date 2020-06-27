@@ -30,6 +30,16 @@
 							aussagekräftige Langbeschreibung mit 200 bis 2000 Zeichen! </small>
 					</div>
 
+					<div class="form-group">
+						<label for="selectTaskType">Typ auswählen</label>
+						<select th:field="*{taskType}" class="form-control" id="selectTaskType">
+							<option value="DEFAULT">Ohne Typ</option>
+							<option value="MANDATORY">Pflichtaufgabe</option>
+							<option value="OPTIONAL">Optionale Aufgabe</option>
+							<option value="INFO">Nur zur Info</option>
+						</select>
+					</div>
+
 					<button type="submit" class="btn btn-primary">Speichern</button>
 					<a th:href="'/topics/'+${task.topic.uuid}+'/manage'"
 					   class="btn btn-secondary">Zurück zum Topic</a>

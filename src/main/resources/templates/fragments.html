@@ -90,6 +90,11 @@
 		</div>
 	</div>
 
+	<div th:fragment="showTaskType">
+		<h6 th:if="${task.taskType.toString()=='MANDATORY'}" class="card-subtitle mb-2 text-primary">Pflichtaufgabe</h6>
+		<h6 th:if="${task.taskType.toString()=='OPTIONAL'}" class="card-subtitle mb-2 text-secondary">Optionale Aufgabe</h6>
+		<h6 th:if="${task.taskType.toString()=='INFO'}" class="card-subtitle mb-2 text-info">Nur zur Info</h6>
+	</div>
 
 	<th:block th:fragment="scripts">
 		<!-- Optional JavaScript -->

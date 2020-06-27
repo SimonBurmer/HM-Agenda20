@@ -126,7 +126,7 @@ public class DtoMapper {
 		Topic topic = task.getTopic();
 		SubscriberTopicDto topicDto = createDto(topic);
 		return new SubscriberTaskDto(task.getId(), task.getTitle(), task.getTaskShortDescription(),
-				task.getTaskLongDescription(), topicDto, createDto(status, status.getComment()));
+				task.getTaskLongDescription(), task.getTaskType(), topicDto, createDto(status, status.getComment()));
 	}
 
 	/**
@@ -157,6 +157,6 @@ public class DtoMapper {
 			}
 		}
 		return new OwnerTaskDto(task.getId(), task.getTitle(), task.getTaskShortDescription(),
-				task.getTaskLongDescription(), createDto(task.getTopic()), amountFinished, statusDtos);
+				task.getTaskLongDescription(), task.getTaskType(), createDto(task.getTopic()), amountFinished, statusDtos);
 	}
 }

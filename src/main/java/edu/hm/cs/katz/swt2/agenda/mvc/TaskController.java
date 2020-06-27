@@ -1,6 +1,7 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
 import edu.hm.cs.katz.swt2.agenda.common.StatusEnum;
+import edu.hm.cs.katz.swt2.agenda.common.TaskTypeEnum;
 import edu.hm.cs.katz.swt2.agenda.persistence.TaskRepository;
 import edu.hm.cs.katz.swt2.agenda.service.TaskService;
 import edu.hm.cs.katz.swt2.agenda.service.TopicService;
@@ -39,7 +40,7 @@ public class TaskController extends AbstractController {
 	public String getTaskCreationView(Model model, Authentication auth, @PathVariable("uuid") String uuid) {
 		OwnerTopicDto topic = topicService.getManagedTopic(uuid, auth.getName());
 		model.addAttribute("topic", topic);
-		model.addAttribute("newTask", new TaskDto(null, "", "", "", topic));
+		model.addAttribute("newTask", new TaskDto(null, "", "", "", TaskTypeEnum.DEFAULT, topic));
 		return "task-creation";
 	}
 
@@ -51,7 +52,7 @@ public class TaskController extends AbstractController {
 			@ModelAttribute("newTask") TaskDto newTask, RedirectAttributes redirectAttributes) {
 		try {
 			taskService.createTask(uuid, newTask.getTitle(), auth.getName(), newTask.getTaskShortDescription(),
-					newTask.getTaskLongDescription());
+					newTask.getTaskLongDescription(), newTask.getTaskType());
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("error", e.getMessage());
 			return "redirect:/topics/" + uuid + "/createTask";
@@ -110,7 +111,8 @@ public class TaskController extends AbstractController {
 	public String handleUpdate(@ModelAttribute("task") TaskDto task, Authentication auth, @PathVariable("id") Long id,
 			@RequestHeader(value = "referer", required = true) String referer, RedirectAttributes redirectAttributes) {
 		try {
-			taskService.updateTask(id, auth.getName(), task.getTaskShortDescription(), task.getTaskLongDescription());
+			taskService.updateTask(id, auth.getName(), task.getTaskShortDescription(),
+				task.getTaskLongDescription(), task.getTaskType());
 		} catch (Exception e) {
 			// Zeige die Fehlermeldung der Exception als Flash Attribut an.
 			redirectAttributes.addFlashAttribute("error", e.getMessage());

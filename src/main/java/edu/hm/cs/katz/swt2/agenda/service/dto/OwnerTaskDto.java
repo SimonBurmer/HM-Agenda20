@@ -1,5 +1,7 @@
 package edu.hm.cs.katz.swt2.agenda.service.dto;
 
+import edu.hm.cs.katz.swt2.agenda.common.TaskTypeEnum;
+
 import java.util.List;
 
 /**
@@ -18,9 +20,9 @@ public class OwnerTaskDto extends TaskDto {
   private List<StatusDto> statuses;
 
   public OwnerTaskDto(Long id, String title, String taskShortDescription,
-      String taskLongDescription, SubscriberTopicDto topicDto, int amountCheckt,
-      List<StatusDto> statuses) {
-    super(id, title, taskShortDescription, taskLongDescription, topicDto);
+      String taskLongDescription, TaskTypeEnum taskType, SubscriberTopicDto topicDto,
+      int amountCheckt, List<StatusDto> statuses) {
+    super(id, title, taskShortDescription, taskLongDescription, taskType, topicDto);
     this.amountFinished = amountCheckt;
     this.statuses = statuses;
   }

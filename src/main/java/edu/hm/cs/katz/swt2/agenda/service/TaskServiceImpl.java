@@ -1,6 +1,7 @@
 package edu.hm.cs.katz.swt2.agenda.service;
 
 import edu.hm.cs.katz.swt2.agenda.common.StatusEnum;
+import edu.hm.cs.katz.swt2.agenda.common.TaskTypeEnum;
 import edu.hm.cs.katz.swt2.agenda.mvc.Search;
 import edu.hm.cs.katz.swt2.agenda.persistence.Status;
 import edu.hm.cs.katz.swt2.agenda.persistence.StatusRepository;
@@ -64,9 +65,9 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public Long createTask(String uuid, String title, String login, String taskShortDescription,
-		String taskLongDescription) {
+		String taskLongDescription, TaskTypeEnum taskType) {
 		LOG.info("Erstelle einen Task.");
-		LOG.debug("\ttitle=\"{}\" uuid=\"{}\" login=\"{}\".", title, uuid, login);
+		LOG.debug("\ttitle=\"{}\" uuid=\"{}\" login=\"{}\" taskType={}", title, uuid, login, taskType);
 
 		ValidationService.topicValidation(title, taskShortDescription, taskLongDescription);
 
@@ -79,7 +80,7 @@ public class TaskServiceImpl implements TaskService {
 				LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login, t.getTitle());
 				throw new AccessDeniedException("Kein Zugriff auf das Topic!");
 			}
-			Task task = new Task(t, title, taskShortDescription, taskLongDescription);
+			Task task = new Task(t, title, taskShortDescription, taskLongDescription, taskType);
 			taskRepository.save(task);
 			return task.getId();
 		}else {
@@ -90,9 +91,9 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-	public void updateTask(Long id, String login, String taskShortDescription, String taskLongDescription) {
+	public void updateTask(Long id, String login, String taskShortDescription, String taskLongDescription ,TaskTypeEnum taskType) {
 		LOG.info("Aktualisiere einen Task.");
-		LOG.debug("\tid=\"{}\" login=\"{}\"", id, login);
+		LOG.debug("\tid=\"{}\" login=\"{}\" taskType={}", id, login, taskType);
 
 		ValidationService.topicValidation(taskShortDescription, taskLongDescription);
 
@@ -106,6 +107,7 @@ public class TaskServiceImpl implements TaskService {
 
 		taskToUpdate.setTaskShortDescription(taskShortDescription);
 		taskToUpdate.setTaskLongDescription(taskLongDescription);
+		taskToUpdate.setTaskType(taskType);
 	}
 
 	@Override

@@ -22,21 +22,12 @@
 							class="form-check-label" for="onlyNewTasksID">nur offene
 							Tasks&nbsp;</label>
 					</div>
-					
 					<div class="form-group bg-dark">
 						<input th:field="*{search}" class="form-control"
 							placeholder="Suchen" />
 					</div>
 					<button type="submit" class="btn btn-primary">Suchen</button>
-					
-				
-					
-
-
 				</form>
-
-
-
 			</div>
 		</div>
 		<div class="row row-cols-1 bg-dark">
@@ -45,6 +36,7 @@
 					th:classappend="${task.status.status.toString()=='FERTIG'} ? border-secondary : border-primary">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${task.title}">Card title</h5>
+						<div th:replace="fragments :: showTaskType"></div>
 						<p class="card-text" th:text="${task.taskShortDescription}"></p>
 
 						<form th:unless="${task.status.status.toString()=='FERTIG'}"
@@ -63,13 +55,11 @@
 							<button type="submit"
 								class="btn btn-sm btn-outline-secondary mr-2">Zurücksetzen</button>
 						</form>
-
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
 
 	<th:block th:replace="fragments :: scripts">
 </body>

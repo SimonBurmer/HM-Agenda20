@@ -50,6 +50,7 @@
 				<div class="card bg-dark border-primary">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${task.title}">Card title</h5>
+						<div th:replace="fragments :: showTaskType"></div>
 						<p class="card-text" th:text="${task.taskShortDescription}"></p>
 						<form th:action="'/tasks/'+${task.id}+'/delete'" method="post">
 							<a th:href="'/tasks/'+${task.id}+'/manage'" class="btn btn-sm btn-primary mr-2">Verwalten</a>

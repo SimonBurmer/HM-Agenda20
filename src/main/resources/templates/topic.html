@@ -24,6 +24,7 @@
 				<div class="card bg-dark" th:classappend="${task.status.status.toString()=='FERTIG'} ? border-secondary : border-primary">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${task.title}">Card title</h5>
+						<div th:replace="fragments :: showTaskType"></div>
 						<p class="card-text" th:text="${task.taskShortDescription}"></p>
 
 						<form th:unless="${task.status.status.toString()=='FERTIG'}"

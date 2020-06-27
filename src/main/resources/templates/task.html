@@ -11,6 +11,7 @@
 		<div class="card">
 			<div class="card-body bg-dark">
 				<h5 class="card-title" th:text="${task.title}">Card title</h5>
+				<div th:replace="fragments :: showTaskType"></div>
 				<p class="card-text" th:text="${task.taskShortDescription}"></p>
 				<p class="card-text" th:text="${task.taskLongDescription}"></p>
 

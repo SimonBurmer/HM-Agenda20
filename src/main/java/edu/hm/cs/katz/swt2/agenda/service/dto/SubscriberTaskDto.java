@@ -1,5 +1,7 @@
 package edu.hm.cs.katz.swt2.agenda.service.dto;
 
+import edu.hm.cs.katz.swt2.agenda.common.TaskTypeEnum;
+
 /**
  * Transferobjekt für Tasks mit StatusInformationen, die spezifisch für
  * Abonnenten des Topics sindsind. Transferobjekte sind Schnittstellenobjekte
@@ -15,9 +17,10 @@ public class SubscriberTaskDto extends TaskDto {
 
 	private StatusDto status;
 
-	public SubscriberTaskDto(Long taskId, String title, String taskShortDescription, String taskLongDescription,
-							 SubscriberTopicDto topicDto, StatusDto status) {
-		super(taskId, title, taskShortDescription, taskLongDescription, topicDto);
+	public SubscriberTaskDto(Long taskId, String title, String taskShortDescription,
+		String taskLongDescription, TaskTypeEnum taskType, SubscriberTopicDto topicDto,
+		StatusDto status) {
+		super(taskId, title, taskShortDescription, taskLongDescription, taskType, topicDto);
 		this.status = status;
 	}
 
