@@ -18,6 +18,9 @@ public class StatusDto {
   private String comment;
   private String userName;
 
+  /**
+   * Status Parameter im StatusDTO.
+   */
   public StatusDto(StatusEnum status, String comment) {
     this.status = status;
     this.comment = comment;

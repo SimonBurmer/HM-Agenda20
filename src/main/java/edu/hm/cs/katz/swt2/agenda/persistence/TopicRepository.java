@@ -41,6 +41,6 @@ public interface TopicRepository extends JpaRepository<Topic, String> {
   int countByCreator(User user);
 
 
-Topic findByUuidEndingWith(String key);
+  Topic findByUuidEndingWith(String key);
 
 }

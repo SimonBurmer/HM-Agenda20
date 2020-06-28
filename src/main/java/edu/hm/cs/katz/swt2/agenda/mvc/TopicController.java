@@ -160,7 +160,7 @@ public class TopicController extends AbstractController {
   }
 
   /**
-   * Erstellt die Liste der Teilnehmenden eines Topics
+   * Erstellt die Liste der Teilnehmenden eines Topics.
    */
   @GetMapping("/topics/{uuid}/subscriberlist")
   public String createSubscriberlist(Model model, Authentication auth,

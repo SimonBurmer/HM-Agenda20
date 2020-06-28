@@ -19,32 +19,32 @@ import edu.hm.cs.katz.swt2.agenda.service.UserService;
 
 public class UserCreationIT {
 
-	@Autowired
-	UserService userService;
+  @Autowired
+  UserService userService;
 
-	@Test
-	@WithUserDetails("admin")
-	public void createdUserContainsAllInformation() {
+  @Test
+  @WithUserDetails("admin")
+  public void createdUserContainsAllInformation() {
 
-		userService.legeAn("tiffy", "Tiffy", "Tiffy123*", false);
+    userService.legeAn("tiffy", "Tiffy", "Tiffy123*", false);
 
-		var createdUser = userService.getUserInfo("tiffy");
+    var createdUser = userService.getUserInfo("tiffy");
 
-		assertEquals("tiffy", createdUser.getLogin());
-		assertEquals("Tiffy", createdUser.getName());
-		assertEquals("Tiffy", createdUser.getDisplayName());
-	}
+    assertEquals("tiffy", createdUser.getLogin());
+    assertEquals("Tiffy", createdUser.getName());
+    assertEquals("Tiffy", createdUser.getDisplayName());
+  }
 
-	@Test
-	@WithUserDetails("admin")
-	public void cannotCreateExistingUser() {
-		
-		userService.legeAn("tiffy", "Tiffy", "Tiffy123*", false);
+  @Test
+  @WithUserDetails("admin")
+  public void cannotCreateExistingUser() {
 
-		assertThrows(ValidationException.class, () -> {
-			userService.legeAn("tiffy", "Tiffy", "Tiffy123*", false);
-		});
+    userService.legeAn("tiffy", "Tiffy", "Tiffy123*", false);
 
-	}
+    assertThrows(ValidationException.class, () -> {
+      userService.legeAn("tiffy", "Tiffy", "Tiffy123*", false);
+    });
+
+  }
 
 }

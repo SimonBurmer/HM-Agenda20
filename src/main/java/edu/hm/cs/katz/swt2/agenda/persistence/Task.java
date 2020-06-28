@@ -1,4 +1,5 @@
 package edu.hm.cs.katz.swt2.agenda.persistence;
+
 import java.util.Collection;
 import java.util.Objects;
 

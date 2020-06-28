@@ -21,7 +21,7 @@ public class SubscriberTopicDto {
   private int amountTasks;
 
   /**
-   * Konstruktor mit amountUnfinishedTasks
+   * Konstruktor mit amountUnfinishedTasks.
    */
   public SubscriberTopicDto(String uuid, UserDisplayDto creator, String title,
       String shortDescription, String longDescription) {
@@ -31,7 +31,7 @@ public class SubscriberTopicDto {
     this.shortDescription = shortDescription;
     this.longDescription = longDescription;
   }
-  
+
   public String getUuid() {
     return uuid;
   }
@@ -67,32 +67,33 @@ public class SubscriberTopicDto {
   public int getAmountUnfinishedTasks() {
     return amountUnfinishedTasks;
   }
+
   public void setAmountUnfinishedTasks(int amountUnfinishedTasks) {
     this.amountUnfinishedTasks = amountUnfinishedTasks;
   }
 
-public int getAmountTasks() {
-	return amountTasks;
-}
+  public int getAmountTasks() {
+    return amountTasks;
+  }
 
-public void setAmountTasks(int amountTasks) {
-	this.amountTasks = amountTasks;
-}
+  public void setAmountTasks(int amountTasks) {
+    this.amountTasks = amountTasks;
+  }
 
-public int getAmountFinishedTasks() {
-	return amountFinishedTasks;
-}
+  public int getAmountFinishedTasks() {
+    return amountFinishedTasks;
+  }
 
-public void setAmountFinishedTasks(int amountFinishedTasks) {
-	this.amountFinishedTasks = amountFinishedTasks;
-}
+  public void setAmountFinishedTasks(int amountFinishedTasks) {
+    this.amountFinishedTasks = amountFinishedTasks;
+  }
 
-public UserDisplayDto getSubscriberForTopic() {
-	return subscriberForTopic;
-}
+  public UserDisplayDto getSubscriberForTopic() {
+    return subscriberForTopic;
+  }
 
-public void setSubscriberForTopic(UserDisplayDto subscriberForTopic) {
-	this.subscriberForTopic = subscriberForTopic;
-}
+  public void setSubscriberForTopic(UserDisplayDto subscriberForTopic) {
+    this.subscriberForTopic = subscriberForTopic;
+  }
 
 }

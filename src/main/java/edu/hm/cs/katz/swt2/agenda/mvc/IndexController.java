@@ -39,20 +39,22 @@ public class IndexController extends AbstractController {
 
 
   /**
-	 * Erstellt aus dem Key die komplette Uuid und gibt den Aufruf zum registrieren zurück.
-	 */
-	@PostMapping("/register")
-	public String handleRegistrationKey(@ModelAttribute("registration") Registration registration,  @RequestHeader(value = "referer", required = true) String referer, RedirectAttributes redirectAttributes) {
-		String uuid = "";
-		String key = registration.getKey();
-		try {
-			uuid = topicService.getTopicUuid(key);
-			redirectAttributes.addFlashAttribute("sucsess", "Topic gefunden!");
-		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("error", e.getMessage());
-			return "redirect:" + referer;
-		}
+   * Erstellt aus dem Key die komplette Uuid und gibt den Aufruf zum registrieren zurück.
+   */
+  @PostMapping("/register")
+  public String handleRegistrationKey(@ModelAttribute("registration") Registration registration,
+      @RequestHeader(value = "referer", required = true) String referer,
+      RedirectAttributes redirectAttributes) {
+    String uuid = "";
+    String key = registration.getKey();
+    try {
+      uuid = topicService.getTopicUuid(key);
+      redirectAttributes.addFlashAttribute("sucsess", "Topic gefunden!");
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("error", e.getMessage());
+      return "redirect:" + referer;
+    }
 
-		return "redirect:/topics/" + uuid + "/register";
-	}
+    return "redirect:/topics/" + uuid + "/register";
+  }
 }

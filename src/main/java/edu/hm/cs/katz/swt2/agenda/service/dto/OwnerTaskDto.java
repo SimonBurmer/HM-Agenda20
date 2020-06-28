@@ -19,6 +19,9 @@ public class OwnerTaskDto extends TaskDto {
   private int amountFinished;
   private List<StatusDto> statuses;
 
+  /**
+   * Transfer DTO.
+   */
   public OwnerTaskDto(Long id, String title, String taskShortDescription,
       String taskLongDescription, TaskTypeEnum taskType, SubscriberTopicDto topicDto,
       int amountCheckt, List<StatusDto> statuses) {
