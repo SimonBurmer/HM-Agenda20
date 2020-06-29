@@ -1,5 +1,6 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
+import edu.hm.cs.katz.swt2.agenda.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import edu.hm.cs.katz.swt2.agenda.service.TopicService;
 
 /**
  * Controller-Klasse für die Landing-Page. Controller reagieren auf Aufrufe von URLs. Sie benennen
@@ -32,8 +32,9 @@ public class IndexController extends AbstractController {
   @GetMapping("/")
   public String getIndexView(Model model, Authentication auth) {
     model.addAttribute("registration", new Registration());
-    if (auth != null)
+    if (auth != null) {
       model.addAttribute("topics", topicService.getSubscriptions(auth.getName(), ""));
+    }
     return "index";
   }
 

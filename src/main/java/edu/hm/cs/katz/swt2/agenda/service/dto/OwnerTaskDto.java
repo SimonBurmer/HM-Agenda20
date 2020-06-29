@@ -1,7 +1,6 @@
 package edu.hm.cs.katz.swt2.agenda.service.dto;
 
 import edu.hm.cs.katz.swt2.agenda.common.TaskTypeEnum;
-
 import java.util.List;
 
 /**

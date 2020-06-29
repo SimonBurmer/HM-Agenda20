@@ -2,6 +2,7 @@ package edu.hm.cs.katz.swt2.agenda.service;
 
 import static edu.hm.cs.katz.swt2.agenda.common.SecurityHelper.ADMIN_ROLES;
 import static edu.hm.cs.katz.swt2.agenda.common.SecurityHelper.STANDARD_ROLES;
+
 import edu.hm.cs.katz.swt2.agenda.persistence.User;
 import edu.hm.cs.katz.swt2.agenda.persistence.UserRepository;
 import edu.hm.cs.katz.swt2.agenda.service.dto.UserDisplayDto;
@@ -97,16 +98,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
   @Override
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public void legeAn(String login, String name, String password, boolean isAdministrator) {
-    
+
     LOG.info("Erstelle einen Anwender.");
-    LOG.debug("\tlogin=\"{}\" name=\"{}\" password=\"{}\" isAdministrator={}", login, name, password, isAdministrator);
-    
+    LOG.debug("\tlogin=\"{}\" name=\"{}\" password=\"{}\" isAdministrator={}", login, name,
+        password, isAdministrator);
+
     if (anwenderRepository.existsById(login)) {
       LOG.debug("Name des Anwenders ist bereits vergeben. Bitte passen Sie Ihre Eingabe an!");
       throw new ValidationException(
           "Name des Anwenders ist bereits vergeben. Bitte passen Sie Ihre Eingabe an!");
     }
-    
+
     ValidationService.userValidation(login, name, password);
 
     // Passwörter müssen Hashverfahren benennen.

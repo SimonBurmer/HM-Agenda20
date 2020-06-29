@@ -1,8 +1,6 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
-import edu.hm.cs.katz.swt2.agenda.common.StatusEnum;
 import edu.hm.cs.katz.swt2.agenda.common.TaskTypeEnum;
-import edu.hm.cs.katz.swt2.agenda.persistence.TaskRepository;
 import edu.hm.cs.katz.swt2.agenda.service.TaskService;
 import edu.hm.cs.katz.swt2.agenda.service.TopicService;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;

@@ -1,7 +1,8 @@
 package edu.hm.cs.katz.swt2.agenda.service;
 
+import edu.hm.cs.katz.swt2.agenda.persistence.Topic;
 import java.util.Comparator;
-import edu.hm.cs.katz.swt2.agenda.persistence.*;
+
 
 public class TopicComparator implements Comparator<Topic> {
   /**
