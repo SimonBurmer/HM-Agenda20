@@ -70,17 +70,14 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
 	public Long createTask(String uuid, String title, String login, String taskShortDescription,
-			String taskLongDescription, MultipartFile imageFile ) {
+			String taskLongDescription, MultipartFile imageFile) {
 		LOG.info("Erstelle einen Task.");
 		LOG.debug("Erstelle Task \"{}\" mit UUID \"{}\" für Anwender \"{}\".", title, uuid, login);
 
 		ValidationService.topicValidation(title, taskShortDescription, taskLongDescription);
-		
 		User user = anwenderRepository.getOne(login);
-		
 	    Optional<Topic> optTopic = topicRepository.findById(uuid);     
-        if (optTopic.isPresent()) {
-          
+        if (optTopic.isPresent()) {         
             Topic t = optTopic.get();
             if (!user.equals(t.getCreator())) {
               LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login, t.getTitle());
@@ -89,7 +86,7 @@ public class TaskServiceImpl implements TaskService {
             
             if(imageFile == null || imageFile.isEmpty()) {
               try {
-                File file = new ClassPathResource("static/assets/DefaultImage.jpg").getFile();
+                File file = new ClassPathResource("static/assets/defaultImage.jpg").getFile();
                 byte[] fileContent = Files.readAllBytes(file.toPath());
                 Task task = new Task(t, title, taskShortDescription, taskLongDescription, fileContent);
                 taskRepository.save(task);
@@ -99,7 +96,8 @@ public class TaskServiceImpl implements TaskService {
                   LOG.error("DefaultImage konnten nicht geladen werden!");
                   throw new RuntimeException("Fehler beim laden des DefaultImage!");
               }       
-            }else {
+            }else {           
+              ValidationService.ImageValidation(imageFile);          
               try {
                 Task task = new Task(t, title, taskShortDescription, taskLongDescription, imageFile.getBytes());
                 taskRepository.save(task);
@@ -114,6 +112,45 @@ public class TaskServiceImpl implements TaskService {
             throw new RuntimeException("Topic mit gegebener Id ist nicht verfügbar!");
         }
 	}
+	
+    /**
+     * Zur Taskerstellung der Demodaten.
+     */
+    @Override
+    @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+    public Long createTask(String uuid, String title, String login, String taskShortDescription,
+            String taskLongDescription, String fileName) {
+        LOG.info("Erstelle einen Task.");
+        LOG.debug("Erstelle Task \"{}\" mit UUID \"{}\" für Anwender \"{}\".", title, uuid, login);
+
+        ValidationService.topicValidation(title, taskShortDescription, taskLongDescription);  
+        User user = anwenderRepository.getOne(login);
+        Optional<Topic> optTopic = topicRepository.findById(uuid);     
+        if (optTopic.isPresent()) {         
+            Topic t = optTopic.get();
+            if (!user.equals(t.getCreator())) {
+              LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login, t.getTitle());
+              throw new AccessDeniedException("Kein Zugriff auf das Topic!");
+            }
+            try {
+              LOG.info("Erstelle efsjklhjfghjafdksjkfhldshljfkadshjlkadfshljkdfask.");
+              LOG.debug("static/assets/"+ fileName);
+                File file = new ClassPathResource("static/assets/"+ fileName).getFile();
+                LOG.info("Erstelle efsjklhjfghjafdksjkfhldshljfkadshjlkadfshljkdfask.");
+                LOG.debug("static/assets/"+ fileName);
+                byte[] fileContent = Files.readAllBytes(file.toPath());
+                Task task = new Task(t, title, taskShortDescription, taskLongDescription, fileContent);
+                taskRepository.save(task);
+                return task.getId();
+            } catch (IOException e) {
+                  LOG.error("Image konnten nicht geladen werden!");
+                  throw new RuntimeException("Fehler beim laden des Image!");
+            }       
+        }else {
+            LOG.debug("Topic mit der Id {} ist nicht verfügbar!" , login);
+            throw new RuntimeException("Topic mit gegebener Id ist nicht verfügbar!");
+        }
+    }
 
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
@@ -137,42 +174,27 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	@PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
-	public void saveImageFile(Long id, String login, MultipartFile imageFile) throws Exception{
+	public void updateImage(Long id, String login, MultipartFile imageFile) throws Exception{
 	    LOG.info("Speichert das Bild zu einem Task.");
 	    LOG.debug("Speichert das Bild des Tasks \"{}\" für Anwender \"{}\".", id, login);
 	    
 	    Task taskToSave = taskRepository.getOne(id);
         User changingUser = anwenderRepository.getOne(login);
-	    
+        
 	    if (!changingUser.equals(taskToSave.getTopic().getCreator())) {
           LOG.warn("Anwender {} ist nicht berechtigt, eine Bild für den Task {} zu speichern.", login,
                   taskToSave.getTitle());
           throw new AccessDeniedException("Kein Zugriff auf das Topic!");
         }
 	    
-        if(imageFile.isEmpty()) {
-          LOG.debug("Die übergebene Datei \"{}\" ist leer!", imageFile.getOriginalFilename());
-          throw new ValidationException("Es wurde keine Datei ausgewählt!");
-        }
+	    ValidationService.ImageValidation(imageFile);
         
-        String mimetype = imageFile.getContentType();
-        String type = mimetype.split("/")[0];
-        if(!type.equals("image")) {
-          LOG.debug("Die übergebene Datei \"{}\" ist nicht in einem Bildformat!", imageFile.getOriginalFilename());
-          throw new ValidationException("Es dürfen nur Bilder der hochgeladen werden!");
-        }
-
-        long size = imageFile.getSize();
-        if(size > 10000000) {
-          LOG.debug("Die übergebene Datei \"{}\" ist größer als 10MB!", imageFile.getOriginalFilename());
-          throw new ValidationException("Dein Bild " + imageFile.getOriginalFilename() + "konnte nicht Hochgeladen werden, da es größer als 10MB ist!");
-        }
 	    try {
-        taskToSave.setImage(imageFile.getBytes());
-      } catch (IOException e) {
-        LOG.error("Bild konnte nicht in ein byte[] umgewandelt werden!");
-        throw new IOException("Bild konnte nicht gespeichert werden!");
-      }   
+          taskToSave.setImage(imageFile.getBytes());
+        } catch (IOException e) {
+          LOG.error("Bild konnte nicht in ein byte[] umgewandelt werden!");
+          throw new IOException("Bild konnte nicht gespeichert werden!");
+        }   
 	}
 	
 	@Override

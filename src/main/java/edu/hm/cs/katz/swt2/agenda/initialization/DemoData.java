@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+
+
 /**
  * Initialisierung von Demo-Daten. Diese Komponente erstellt beim Systemstart Anwender, Topics,
  * Abonnements usw., damit man die Anwendung mit allen Features vorführen kann.
@@ -44,6 +46,8 @@ public class DemoData {
       "Vor der Entwicklung des World Wide Web und dessen Bestandteilen, zu denen auch HTML gehört, war es nicht möglich, Dokumente auf elektronischem Weg einfach, schnell und strukturiert zwischen mehreren Personen auszutauschen und miteinander effizient zu verknüpfen. Man benötigte neben Übertragungsprotokollen auch eine einfach zu verstehende Textauszeichnungssprache. Genau hier lag der Ansatzpunkt von HTML. Um Forschungsergebnisse mit anderen Mitarbeitern der Europäischen Organisation für Kernforschung (CERN) zu teilen und von den beiden Standorten in Frankreich und in der Schweiz aus zugänglich zu machen, entstand 1989 am CERN ein Projekt, welches sich mit der Lösung dieser Aufgabe beschäftigte. Am 3. November 1992 erschien die erste Version der HTML-Spezifikation.";
   private static final String TASK_HTML_TEMPLATE_ERSTELLEN_LANG =
       "Das template-Element ermöglicht es, Template-Vorlagen als Inhaltsfragmente im HTML-Dokument anzugeben, die zwar auf ihre Richtigkeit geparst, aber nicht gerendert werden. Erst wenn sie benötigt werden, können sie mit appendChild() in den Elementenbaum eingehängt werden. Sie sind eine gute Alternative zum zeitaufwendigen Nachladen von Inhalten mit Ajax oder dem dynamischen Erzeugen mit createElement, das bei komplexeren HTML-Strukturen schnell unbequem und unübersichtlich wird. Eric Bidelman stellt in diesem Artikel die Vorgängervorgehensweisen „Offscreen DOM“ und „Overloading Script“ und ihre Nachteile vor.";
+  private static final String TASK_WAS_IST_CSS_LANG =
+      "CSS ist die Abkürzung für Cascading Style Sheet, was übersetzt geschachtelte Gestaltung bedeutet. Außerdem spricht man hier bewusst von einem „Sheet“, denn das Trennen von HTML, also des strukturellen Aufbaus, und CSS macht das Erstellen und Pflegen der Website wesentlich einfacher. Es ist sogar möglich, CSS in extra dafür vorgesehenen Dateien abzulegen und auf diese zentral zuzugreifen. Besonders für umfangreichere Internetseiten ist es nun möglich, das Design zu zentralisieren. Verändert man zum Beispiel die Schriftart im Style Sheet, so ändert sich diese im gesamten System. Entwickler sparen sich den Aufwand, jedes HTML-Dokument einzeln anfassen zu müssen und Änderungswünsche nach Fertigstellung können günstiger und schneller realisiert werden.";
   private static final String TASK_GOOGLEHUPF_BACKEN_LANG =
       "Der Kuchenteig besteht je nach Rezept aus Mehl, Zucker, Bindemittel (z. B. Ei) sowie Fett (Butter oder Margarine), einer Flüssigkeit (Milch, Wasser oder Fruchtsaft), Aromen (z. B. Backaroma) und einem Triebmittel (Backpulver oder Hefe), die miteinander vermengt werden. Wichtige Teigarten sind Hefeteig, Mürbeteig (Knetteig) und Rührteig. Bäckereien und Konditoreien bieten Kuchen stückweise oder als Backblecheinheiten an. In Supermärkten gibt es von Großbäckereien hergestellte Kuchen. Das Backen von Kuchen ist vor allem in Europa und Nordamerika traditionell verbreitet, während es auf anderen Kontinenten nur eine untergeordnete Rolle spielt; in Asien sind fast ausschließlich Reiskuchen bekannt. In China haben außerdem die Mondkuchen eine besondere Bedeutung.";
   private static final String TASK_AFFENMUFFINS_BACKEN_LANG =
@@ -52,11 +56,13 @@ public class DemoData {
       "Die Hypertext Markup Language ist eine textbasierte Auszeichnungssprache zur Strukturierung elektronischer Dokumente wie Texte mit Hyperlinks, Bildern und anderen Inhalten.";
   private static final String TASK_HTML_TEMPLATE_ERSTELLEN_KURZ =
       "Das template-Element ermöglicht es, Template-Vorlagen als Inhaltsfragmente im HTML-Dokument anzugeben, die zwar auf ihre Richtigkeit geparst, aber nicht gerendert werden.";
+  private static final String TASK_WAS_IST_CSS_KURZ =
+      "Sicherlich hat jeder, der nur im Entferntesten mit der digitalen Welt in Berührung kommt, schon einmal von der Abkürzung CSS gehört. Doch was bedeutet sie eigentlich?";
   private static final String TASK_GOOGLEHUPF_BACKEN_KURZ =
       "Der Kuchen gehört zu den feinen Backwaren. Es handelt sich um ein zumeist süßes Backwerk. Man unterscheidet vor allem nach der Art der Herstellung Blechkuchen.";
   private static final String TASK_AFFENMUFFINS_BACKEN_KURZ =
       "Diese Muffins passen perfekt zu einem tollen Kindergeburtstag. Wie man sie zubereitet und anschließend noch in lustige Affen verwandelt, verrät dieses Rezept";
-
+  
 
   private static final String LOGIN_FINE = "fine";
 
@@ -94,9 +100,9 @@ public class DemoData {
     String htmlKursUuid =
         topicService.createTopic("HTML für Anfänger", LOGIN_FINE, TOPIC_HTML_KURZ, TOPIC_HTML_LANG);
     Long linkErstellenTask = taskService.createTask(htmlKursUuid, "Link erstellen", LOGIN_FINE,
-        TASK_LINK_ERSTELLEN_KURZ, TASK_LINK_ERSTELLEN_LANG, null);
+        TASK_LINK_ERSTELLEN_KURZ, TASK_LINK_ERSTELLEN_LANG,"defaultImage.jpg");
     taskService.createTask(htmlKursUuid, "Leeres HTML-Template erstellen", LOGIN_FINE,
-        TASK_HTML_TEMPLATE_ERSTELLEN_KURZ, TASK_HTML_TEMPLATE_ERSTELLEN_LANG,null);
+        TASK_HTML_TEMPLATE_ERSTELLEN_KURZ, TASK_HTML_TEMPLATE_ERSTELLEN_LANG,"HTML-Template.jpg");
     topicService.subscribe(htmlKursUuid, LOGIN_ERNIE);
     topicService.subscribe(htmlKursUuid, LOGIN_BERT);
     taskService.checkTask(linkErstellenTask, LOGIN_ERNIE);
@@ -104,6 +110,8 @@ public class DemoData {
     //Topic: CSS für Fortgeschrittene
     String cssKursUuid = topicService.createTopic("CSS für Fortgeschrittene", LOGIN_FINE,
         TOPIC_CSS_KURZ, TOPIC_CSS_LANG);
+    taskService.createTask(cssKursUuid, "CSS: Was ist das eigentlich?", LOGIN_FINE,
+        TASK_WAS_IST_CSS_KURZ, TASK_WAS_IST_CSS_LANG,"was-ist-CSS.jpg");
     topicService.subscribe(cssKursUuid, LOGIN_ERNIE);
     topicService.subscribe(cssKursUuid, LOGIN_BERT);
 
@@ -111,12 +119,11 @@ public class DemoData {
     String erniesKursUuid = topicService.createTopic("Ernies Backkurs", LOGIN_ERNIE,
         TOPIC_BACKKURS_KURZ, TOPIC_BACKKURS_LANG);
     taskService.createTask(erniesKursUuid, "Googlehupf backen", LOGIN_ERNIE,
-        TASK_GOOGLEHUPF_BACKEN_KURZ, TASK_GOOGLEHUPF_BACKEN_LANG, null);
+        TASK_GOOGLEHUPF_BACKEN_KURZ, TASK_GOOGLEHUPF_BACKEN_LANG,"gugelhupf.jpg");
     Long affenMuffinTask = taskService.createTask(erniesKursUuid, "Affenmuffins backen",
-        LOGIN_ERNIE, TASK_AFFENMUFFINS_BACKEN_KURZ, TASK_AFFENMUFFINS_BACKEN_LANG, null);
+        LOGIN_ERNIE, TASK_AFFENMUFFINS_BACKEN_KURZ, TASK_AFFENMUFFINS_BACKEN_LANG,"affenmuffins.jpg");
     topicService.subscribe(erniesKursUuid, LOGIN_BERT);
     taskService.checkTask(affenMuffinTask, LOGIN_BERT);
     topicService.subscribe(erniesKursUuid, LOGIN_FINE);
   }
-
 }

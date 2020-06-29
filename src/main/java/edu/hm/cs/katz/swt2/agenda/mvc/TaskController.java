@@ -61,12 +61,12 @@ public class TaskController extends AbstractController {
 
 	
 	 /**
-     * Verarbeitet das Speichern eines Bildes.
+     * Verarbeitet die Aktualisierung eines Bildes.
      */
     @PostMapping("/imageUpload/{id}")
     public String handelImageUpload(Authentication auth, @PathVariable("id") Long id, @ModelAttribute("task") TaskDto task, @RequestParam("imageFile") MultipartFile imageFile , @RequestHeader(value = "referer", required = true) String referer, RedirectAttributes redirectAttributes) {
         try {
-            taskService.saveImageFile(id, auth.getName(),imageFile);
+            taskService.updateImage(id, auth.getName(),imageFile);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:" + referer;

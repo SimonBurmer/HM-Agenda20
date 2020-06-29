@@ -23,8 +23,14 @@ public interface TaskService {
 	 * Erstellt einen neuen Task.
 	 */
 	Long createTask(String topicUuid, String title, String login, String taskShortDescription,
-			String taskLongDescription,  MultipartFile imageFile);
-
+			String taskLongDescription, MultipartFile imageFile);
+	
+	 /**
+     * Erstellt einen neuen Task (Nur zur erstellung der Demodaten).
+     */
+	Long createTask(String topicUuid, String title, String login, String taskShortDescription,
+        String taskLongDescription, String FileName);
+	
 	/**
 	 * Aktualisiert die Beschreibung eines Tasks.
 	 */
@@ -85,5 +91,5 @@ public interface TaskService {
      * Speichert ein ImageFile als byte[] in einem Task.
      * @throws Exception 
      */
-    void saveImageFile(Long id, String login, MultipartFile imageFile) throws Exception;  
+    void updateImage(Long id, String login, MultipartFile imageFile) throws Exception;  
 }

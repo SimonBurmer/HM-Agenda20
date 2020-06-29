@@ -1,9 +1,16 @@
 package edu.hm.cs.katz.swt2.agenda.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.regex.Pattern;
 import javax.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.web.multipart.MultipartFile;
+import edu.hm.cs.katz.swt2.agenda.persistence.Task;
+
 
 public class ValidationService {
 
@@ -146,4 +153,26 @@ public class ValidationService {
       throw new ValidationException("Das Passwort muss mindestens eines dieser Sonderzeichen beinhalten: *?$%&.!" + EINGABEHINWEIS);
     }
   } 
+  
+  // Check image requirements
+  public static void ImageValidation(MultipartFile imageFile){
+        
+    if(imageFile.isEmpty()) {
+      LOG.debug("Die übergebene Datei \"{}\" ist leer!", imageFile.getOriginalFilename());
+      throw new ValidationException("Es wurde keine Datei ausgewählt!");
+    }
+    
+    String mimetype = imageFile.getContentType();
+    String type = mimetype.split("/")[0];
+    if(!type.equals("image")) {
+      LOG.debug("Die übergebene Datei \"{}\" ist nicht in einem Bildformat!", imageFile.getOriginalFilename());
+      throw new ValidationException("Es dürfen nur Bilder der hochgeladen werden!");
+    }
+
+    long size = imageFile.getSize();
+    if(size > 10000000) {
+      LOG.debug("Die übergebene Datei \"{}\" ist größer als 10MB!", imageFile.getOriginalFilename());
+      throw new ValidationException("Dein Bild " + imageFile.getOriginalFilename() + "konnte nicht Hochgeladen werden, da es größer als 10MB ist!");
+    }  
+  }
 }
