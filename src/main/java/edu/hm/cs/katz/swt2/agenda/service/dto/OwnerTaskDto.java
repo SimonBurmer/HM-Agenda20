@@ -24,8 +24,8 @@ public class OwnerTaskDto extends TaskDto {
    */
   public OwnerTaskDto(Long id, String title, String taskShortDescription,
       String taskLongDescription, TaskTypeEnum taskType, SubscriberTopicDto topicDto,
-      int amountCheckt, List<StatusDto> statuses) {
-    super(id, title, taskShortDescription, taskLongDescription, taskType, topicDto);
+      int amountCheckt, List<StatusDto> statuses,  String base64Image) {
+    super(id, title, taskShortDescription, taskLongDescription, taskType, topicDto, base64Image);
     this.amountFinished = amountCheckt;
     this.statuses = statuses;
   }

@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 import javax.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 
 public class ValidationService {
 
@@ -11,9 +12,6 @@ public class ValidationService {
   private static String EINGABEHINWEIS = " Bitte passen Sie Ihre Eingabe an!";
 
   // Check Topic title, shortDescription, longDescription requirements
-  /**
-   * Überprüfung der Beschreibung.
-   */
   public static void topicValidation(String title, String shortDescription,
       String longDescription) {
 
@@ -33,9 +31,6 @@ public class ValidationService {
   }
 
   // Check Topic shortDescription and longDescription requirements
-  /**
-   * Überprüfung der Beschreibung.
-   */
   public static void topicValidation(String shortDescription, String longDescription) {
 
     if (shortDescription.length() < 100) {
@@ -63,9 +58,6 @@ public class ValidationService {
   }
 
   // Check task title, taskshortDescription, tasklongDescription requirements
-  /**
-   * Überprüfung der Beschreibung.
-   */
   public static void taskValidation(String titel, String taskShortDescription,
       String taskLongDescription) {
 
@@ -84,9 +76,6 @@ public class ValidationService {
   }
 
   // Check Task taskshortDescription and tasklongDescription requirements
-  /**
-   * Überprüfung der Beschreibung.
-   */
   public static void taskValidation(String taskShortDescription, String taskLongDescription) {
 
     if (taskShortDescription.length() < 100) {
@@ -113,9 +102,6 @@ public class ValidationService {
   }
 
   // Check User login, name and password requirements
-  /**
-   * Überprüfung.
-   */
   public static void userValidation(String login, String name, String password) {
 
     if (!login.equals(login.toLowerCase())) {
@@ -177,11 +163,36 @@ public class ValidationService {
     Pattern pruefenAufSonderzeichen = Pattern.compile("[*?!$%&]");
 
     if (!pruefenAufSonderzeichen.matcher(password).find()) {
-      LOG.debug("Das Passwort eines Users muss mindestens eines dieser Sonderzeichen "
-          + "beinhalten: *?$%&.!");
+      LOG.debug(
+          "Das Passwort eines Users muss mindestens eines dieser Sonderzeichen beinhalten: *?$%&.!");
       throw new ValidationException(
           "Das Passwort muss mindestens eines dieser Sonderzeichen beinhalten: *?$%&.!"
               + EINGABEHINWEIS);
+    }
+  }
+
+  // Check image requirements
+  public static void ImageValidation(MultipartFile imageFile) {
+    
+    //if (imageFile.isEmpty()) {
+    //  LOG.debug("Die übergebene Datei \"{}\" ist leer!", imageFile.getOriginalFilename());
+    //  throw new ValidationException("Es wurde keine Datei ausgewählt!");
+    //}
+
+    String mimetype = imageFile.getContentType();
+    String type = mimetype.split("/")[0];
+    if (!type.equals("image")) {
+      LOG.debug("Die übergebene Datei \"{}\" ist nicht in einem Bildformat!",
+          imageFile.getOriginalFilename());
+      throw new ValidationException("Es dürfen nur Bilder der hochgeladen werden!");
+    }
+
+    long size = imageFile.getSize();
+    if (size > 10000000) {
+      LOG.debug("Die übergebene Datei \"{}\" ist größer als 10MB!",
+          imageFile.getOriginalFilename());
+      throw new ValidationException("Dein Bild " + imageFile.getOriginalFilename()
+          + "konnte nicht Hochgeladen werden, da es größer als 10MB ist!");
     }
   }
 }

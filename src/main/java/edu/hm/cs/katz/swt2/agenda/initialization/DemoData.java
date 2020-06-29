@@ -22,22 +22,9 @@ import org.springframework.stereotype.Component;
 @Profile("demo")
 public class DemoData {
 
+
   private static final String TOPIC_BACKKURS_LANG =
-      "Wir schütten ein Füllhorn mit Glückshormonen & süßen Geschmackserlebnissen"
-          + " für Sie aus! Schmelzen Sie dahin bei einem süßen Backkurs in München"
-          + " - ein Schlaraffenland für alle Naschkatzen! Bei einem Macarons-Backkurs"
-          + " lernen Sie, wie Sie die hauchzarten und bildschönen französischen"
-          + " Leckerbissen perfekt formen und füllen. In einem Tortendeko-Kurs"
-          + " für kreative Tortenbäcker üben Sie zusammen mit einem echten Profi"
-          + "-Pattisier, wie Sie Fondant färben und damit zauberhafte Motivtorten"
-          + " dekorieren. Und für alle Schokoladenfans gibt es natürlich auch "
-          + "unsere verführerisch süßen Pralinenkurse. Auch das Ambiente bei "
-          + "unseren Backkursen in München stimmt: Ob in der wunderschönen "
-          + "Schokoladengalerie Chokoin in Schwabing, in der traditionsreichen"
-          + " Backstube des Café Luitpold mitten in den Münchner Innenstadt oder"
-          + " in der Keks-Backschule der Wiener Keksdesignerin und Autorin Stephanie"
-          + " Juliette Rinner im Westend. Immer backen Sie in von uns mit Sorgfalt"
-          + " und Liebe ausgewählten, charmanten Locations.";
+      "Wir schütten ein Füllhorn mit Glückshormonen & süßen Geschmackserlebnissen für Sie aus! Schmelzen Sie dahin bei einem süßen Backkurs in München - ein Schlaraffenland für alle Naschkatzen! Bei einem Macarons-Backkurs lernen Sie, wie Sie die hauchzarten und bildschönen französischen Leckerbissen perfekt formen und füllen. In einem Tortendeko-Kurs für kreative Tortenbäcker üben Sie zusammen mit einem echten Profi-Pattisier, wie Sie Fondant färben und damit zauberhafte Motivtorten dekorieren. Und für alle Schokoladenfans gibt es natürlich auch unsere verführerisch süßen Pralinenkurse. Auch das Ambiente bei unseren Backkursen in München stimmt: Ob in der wunderschönen Schokoladengalerie Chokoin in Schwabing, in der traditionsreichen Backstube des Café Luitpold mitten in den Münchner Innenstadt oder in der Keks-Backschule der Wiener Keksdesignerin und Autorin Stephanie Juliette Rinner im Westend. Immer backen Sie in von uns mit Sorgfalt und Liebe ausgewählten, charmanten Locations.";
 
   private static final String TOPIC_HTML_LANG =
       "In diesem Tutorial lernen Sie die Grundlagen von HTML kennen."
@@ -110,6 +97,10 @@ public class DemoData {
           + " und unübersichtlich wird. Eric Bidelman stellt in diesem Artikel die"
           + " Vorgängervorgehensweisen „Offscreen DOM“ und „Overloading Script“ "
           + "und ihre Nachteile vor.";
+
+  private static final String TASK_WAS_IST_CSS_LANG =
+      "CSS ist die Abkürzung für Cascading Style Sheet, was übersetzt geschachtelte Gestaltung bedeutet. Außerdem spricht man hier bewusst von einem „Sheet“, denn das Trennen von HTML, also des strukturellen Aufbaus, und CSS macht das Erstellen und Pflegen der Website wesentlich einfacher. Es ist sogar möglich, CSS in extra dafür vorgesehenen Dateien abzulegen und auf diese zentral zuzugreifen. Besonders für umfangreichere Internetseiten ist es nun möglich, das Design zu zentralisieren. Verändert man zum Beispiel die Schriftart im Style Sheet, so ändert sich diese im gesamten System. Entwickler sparen sich den Aufwand, jedes HTML-Dokument einzeln anfassen zu müssen und Änderungswünsche nach Fertigstellung können günstiger und schneller realisiert werden.";
+
   private static final String TASK_GOOGLEHUPF_BACKEN_LANG =
       "Der Kuchenteig besteht je nach Rezept aus Mehl, Zucker, Bindemittel"
           + " (z. B. Ei) sowie Fett (Butter oder Margarine), einer Flüssigkeit"
@@ -146,6 +137,8 @@ public class DemoData {
       "Das template-Element ermöglicht es, Template-Vorlagen als Inhaltsfragmente"
           + " im HTML-Dokument anzugeben, die zwar auf ihre Richtigkeit geparst,"
           + " aber nicht gerendert werden.";
+  private static final String TASK_WAS_IST_CSS_KURZ =
+      "Sicherlich hat jeder, der nur im Entferntesten mit der digitalen Welt in Berührung kommt, schon einmal von der Abkürzung CSS gehört. Doch was bedeutet sie eigentlich?";
   private static final String TASK_GOOGLEHUPF_BACKEN_KURZ =
       "Der Kuchen gehört zu den feinen Backwaren. Es handelt sich um ein "
           + "zumeist süßes Backwerk. Man unterscheidet vor allem nach der Art"
@@ -161,8 +154,6 @@ public class DemoData {
   private static final String LOGIN_ERNIE = "ernie";
 
   private static final String LOGIN_BERT = "bert";
-
-
 
   private static final Logger LOG = LoggerFactory.getLogger(DemoData.class);
 
@@ -192,9 +183,9 @@ public class DemoData {
     String htmlKursUuid =
         topicService.createTopic("HTML für Anfänger", LOGIN_FINE, TOPIC_HTML_KURZ, TOPIC_HTML_LANG);
     Long linkErstellenTask = taskService.createTask(htmlKursUuid, "Link erstellen", LOGIN_FINE,
-        TASK_LINK_ERSTELLEN_KURZ, TASK_LINK_ERSTELLEN_LANG, TaskTypeEnum.DEFAULT);
+        TASK_LINK_ERSTELLEN_KURZ, TASK_LINK_ERSTELLEN_LANG, TaskTypeEnum.DEFAULT,"defaultImage.jpg");
     taskService.createTask(htmlKursUuid, "Leeres HTML-Template erstellen", LOGIN_FINE,
-        TASK_HTML_TEMPLATE_ERSTELLEN_KURZ, TASK_HTML_TEMPLATE_ERSTELLEN_LANG, TaskTypeEnum.INFO);
+        TASK_HTML_TEMPLATE_ERSTELLEN_KURZ, TASK_HTML_TEMPLATE_ERSTELLEN_LANG, TaskTypeEnum.INFO,"HTML-Template.jpg");
     topicService.subscribe(htmlKursUuid, LOGIN_ERNIE);
     topicService.subscribe(htmlKursUuid, LOGIN_BERT);
     taskService.checkTask(linkErstellenTask, LOGIN_ERNIE);
@@ -202,6 +193,8 @@ public class DemoData {
     // Topic: CSS für Fortgeschrittene
     String cssKursUuid = topicService.createTopic("CSS für Fortgeschrittene", LOGIN_FINE,
         TOPIC_CSS_KURZ, TOPIC_CSS_LANG);
+    taskService.createTask(cssKursUuid, "CSS: Was ist das eigentlich?", LOGIN_FINE,
+        TASK_WAS_IST_CSS_KURZ, TASK_WAS_IST_CSS_LANG, TaskTypeEnum.DEFAULT, "was-ist-CSS.jpg");
     topicService.subscribe(cssKursUuid, LOGIN_ERNIE);
     topicService.subscribe(cssKursUuid, LOGIN_BERT);
 
@@ -209,13 +202,12 @@ public class DemoData {
     String erniesKursUuid = topicService.createTopic("Ernies Backkurs", LOGIN_ERNIE,
         TOPIC_BACKKURS_KURZ, TOPIC_BACKKURS_LANG);
     taskService.createTask(erniesKursUuid, "Googlehupf backen", LOGIN_ERNIE,
-        TASK_GOOGLEHUPF_BACKEN_KURZ, TASK_GOOGLEHUPF_BACKEN_LANG, TaskTypeEnum.MANDATORY);
+        TASK_GOOGLEHUPF_BACKEN_KURZ, TASK_GOOGLEHUPF_BACKEN_LANG, TaskTypeEnum.MANDATORY,"gugelhupf.jpg");
     Long affenMuffinTask =
         taskService.createTask(erniesKursUuid, "Affenmuffins backen", LOGIN_ERNIE,
-            TASK_AFFENMUFFINS_BACKEN_KURZ, TASK_AFFENMUFFINS_BACKEN_LANG, TaskTypeEnum.OPTIONAL);
+            TASK_AFFENMUFFINS_BACKEN_KURZ, TASK_AFFENMUFFINS_BACKEN_LANG, TaskTypeEnum.OPTIONAL, "affenmuffins.jpg");
     topicService.subscribe(erniesKursUuid, LOGIN_BERT);
     taskService.checkTask(affenMuffinTask, LOGIN_BERT);
     topicService.subscribe(erniesKursUuid, LOGIN_FINE);
   }
-
 }

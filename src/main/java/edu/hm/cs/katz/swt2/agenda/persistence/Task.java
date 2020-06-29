@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
@@ -56,6 +57,10 @@ public class Task {
 
   @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
   private Collection<Status> status;
+  
+  @NotNull
+  @Lob
+  private byte[] image;
 
 
   /**
@@ -72,13 +77,14 @@ public class Task {
    * @param title Titel, darf nicht null sein.
    */
   public Task(final Topic topic, final String title, final String taskShortDescription,
-      final String taskLongDescription, TaskTypeEnum taskType) {
+      final String taskLongDescription, TaskTypeEnum taskType, byte[] image ) {
     this.topic = topic;
     topic.addTask(this);
     this.title = title;
     this.taskShortDescription = taskShortDescription;
     this.taskLongDescription = taskLongDescription;
     this.taskType = taskType;
+    this.image = image;
   }
 
   @Override
@@ -143,4 +149,12 @@ public class Task {
     Task other = (Task) obj;
     return Objects.equals(getId(), other.getId());
   }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 }

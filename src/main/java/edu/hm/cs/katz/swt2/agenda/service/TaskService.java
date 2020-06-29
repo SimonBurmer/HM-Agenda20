@@ -6,6 +6,7 @@ import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.StatusDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Serviceklasse für Verarbeitung von Tasks.
@@ -23,13 +24,19 @@ public interface TaskService {
    * Erstellt einen neuen Task.
    */
   Long createTask(String topicUuid, String title, String login, String taskShortDescription,
-      String taskLongDescription, TaskTypeEnum taskType);
+      String taskLongDescription, TaskTypeEnum taskType, MultipartFile imageFile);
 
   /**
-   * Aktualisiert die Beschreibung eines Tasks.
+   * Erstellt einen neuen Task (Nur zur erstellung der Demodaten).
+   */
+  Long createTask(String topicUuid, String title, String login, String taskShortDescription,
+      String taskLongDescription, TaskTypeEnum taskType, String FileName);
+
+  /**
+   * Aktualisiert einen Task.
    */
   void updateTask(Long id, String login, String taskShortDescription, String taskLongDescription,
-      TaskTypeEnum taskType);
+      TaskTypeEnum taskType, MultipartFile imageFile) throws Exception;
 
   /**
    * Zugriff auf einen Task (priviligierte Sicht für Ersteller des Topics).

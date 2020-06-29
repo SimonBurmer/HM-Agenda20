@@ -14,7 +14,7 @@
 
 				<form id="formName"
 					th:action="@{/topics/{uuid}/createTask(uuid=${topic.uuid})}"
-					th:object="${newTask}" method="post">
+					th:object="${newTask}" method="post" enctype="multipart/form-data">
 
 					<div class="form-group">
 						<input th:field="*{title}" class="form-control"
@@ -38,13 +38,20 @@
 					</div>
 
 					<div class="form-group">
-						<label for="selectTaskType">Typ auswählen</label>
-						<select th:field="*{taskType}" class="form-control" id="selectTaskType">
+						<label for="selectTaskType">Typ auswählen</label> <select
+							th:field="*{taskType}" class="form-control" id="selectTaskType">
 							<option value="DEFAULT">Ohne Typ</option>
 							<option value="MANDATORY">Pflichtaufgabe</option>
 							<option value="OPTIONAL">Optionale Aufgabe</option>
 							<option value="INFO">Nur zur Info</option>
 						</select>
+					</div>
+
+					<label for="selectImage">Bild auswählen</label>
+					<div class="form-group" id="selectImage">
+						<input type="file" name="imageFile"> <small
+							class="form-text text-muted"> Bilddatei darf nicht größer
+							als 10MB sein!</small>
 					</div>
 
 					<button type="submit" class="btn btn-primary">Erstellen!</button>
