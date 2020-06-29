@@ -1,8 +1,8 @@
 package edu.hm.cs.katz.swt2.agenda.persistence;
 
+import edu.hm.cs.katz.swt2.agenda.common.TaskTypeEnum;
 import java.util.Collection;
 import java.util.Objects;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +15,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-import edu.hm.cs.katz.swt2.agenda.common.TaskTypeEnum;
 import org.hibernate.validator.constraints.Length;
 
 /**

@@ -1,18 +1,10 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
-import edu.hm.cs.katz.swt2.agenda.persistence.Topic;
-import edu.hm.cs.katz.swt2.agenda.persistence.User;
 import edu.hm.cs.katz.swt2.agenda.service.TaskService;
 import edu.hm.cs.katz.swt2.agenda.service.TopicService;
-import edu.hm.cs.katz.swt2.agenda.service.TopicServiceImpl;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
-import net.bytebuddy.agent.builder.AgentBuilder.Listener;
-
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

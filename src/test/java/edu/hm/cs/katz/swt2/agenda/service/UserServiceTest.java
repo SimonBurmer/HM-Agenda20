@@ -2,6 +2,9 @@ package edu.hm.cs.katz.swt2.agenda.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import edu.hm.cs.katz.swt2.agenda.persistence.User;
+import edu.hm.cs.katz.swt2.agenda.persistence.UserRepository;
 import javax.validation.ValidationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,8 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import edu.hm.cs.katz.swt2.agenda.persistence.User;
-import edu.hm.cs.katz.swt2.agenda.persistence.UserRepository;
+
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {

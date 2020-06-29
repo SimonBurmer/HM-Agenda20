@@ -182,12 +182,12 @@ public class DemoData {
     // Topic: HTML für Anfänger
     String htmlKursUuid =
         topicService.createTopic("HTML für Anfänger", LOGIN_FINE, TOPIC_HTML_KURZ, TOPIC_HTML_LANG);
-    Long linkErstellenTask = taskService.createTask(htmlKursUuid, "Link erstellen", LOGIN_FINE,
-        TASK_LINK_ERSTELLEN_KURZ, TASK_LINK_ERSTELLEN_LANG, TaskTypeEnum.DEFAULT,"defaultImage.jpg");
     taskService.createTask(htmlKursUuid, "Leeres HTML-Template erstellen", LOGIN_FINE,
         TASK_HTML_TEMPLATE_ERSTELLEN_KURZ, TASK_HTML_TEMPLATE_ERSTELLEN_LANG, TaskTypeEnum.INFO,"HTML-Template.jpg");
     topicService.subscribe(htmlKursUuid, LOGIN_ERNIE);
     topicService.subscribe(htmlKursUuid, LOGIN_BERT);
+    Long linkErstellenTask = taskService.createTask(htmlKursUuid, "Link erstellen", LOGIN_FINE,
+        TASK_LINK_ERSTELLEN_KURZ, TASK_LINK_ERSTELLEN_LANG, TaskTypeEnum.DEFAULT,"defaultImage.jpg");
     taskService.checkTask(linkErstellenTask, LOGIN_ERNIE);
 
     // Topic: CSS für Fortgeschrittene

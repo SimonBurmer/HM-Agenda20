@@ -2,7 +2,6 @@ package edu.hm.cs.katz.swt2.agenda.service;
 
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTopicDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTopicDto;
-
 import java.util.List;
 
 /**

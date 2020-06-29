@@ -1,11 +1,13 @@
 package edu.hm.cs.katz.swt2.agenda.persistence;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 @DataJpaTest
 public class TopicRepositoryTest {
@@ -23,10 +25,11 @@ public class TopicRepositoryTest {
     User testUser = new User("testlogin", "TestUser", "testPassword", false);
     userRepository.save(testUser);
 
-    String shortDescription100 =
-        "Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test ";
-    String longDescription200 =
-        "Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test ";
+    String shortDescription100 = "Test Test Test Test Test Test Test Test Test Test Test Test "
+        + "Test Test Test Test Test Test Test Test ";
+    String longDescription200 = "Test Test Test Test Test Test Test Test Test Test Test Test "
+        + "Test Test Test Test Test Test Test Test Test Test Test Test "
+        + "Test Test Test Test Test Test Test Test Test Test Test Test " + "Test Test Test Test ";
 
     Topic f = new Topic(UUID_PREFIX + "f", "f TopicTitle", testUser, shortDescription100,
         longDescription200);

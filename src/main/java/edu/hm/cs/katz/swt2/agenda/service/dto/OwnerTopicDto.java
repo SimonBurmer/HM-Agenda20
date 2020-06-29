@@ -1,7 +1,7 @@
 package edu.hm.cs.katz.swt2.agenda.service.dto;
 
-import java.util.Collection;
 import edu.hm.cs.katz.swt2.agenda.persistence.User;
+import java.util.Collection;
 
 /**
  * Transferobjekt für Topics mit Metadaten, die nur für Verwalter eines Topics (d.h. Eigentümer des
