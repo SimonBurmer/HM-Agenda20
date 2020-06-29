@@ -11,7 +11,10 @@ public class ValidationService {
   private static final Logger LOG = LoggerFactory.getLogger(ValidationService.class);
   private static String EINGABEHINWEIS = " Bitte passen Sie Ihre Eingabe an!";
 
-  // Check Topic title, shortDescription, longDescription requirements
+
+  /**
+   * Check Topic title, shortDescription, longDescription requirements.
+   */
   public static void topicValidation(String title, String shortDescription,
       String longDescription) {
 
@@ -30,7 +33,10 @@ public class ValidationService {
 
   }
 
-  // Check Topic shortDescription and longDescription requirements
+
+  /**
+   * Check Topic shortDescription and longDescription requirements.
+   */
   public static void topicValidation(String shortDescription, String longDescription) {
 
     if (shortDescription.length() < 100) {
@@ -57,7 +63,10 @@ public class ValidationService {
     }
   }
 
-  // Check task title, taskshortDescription, tasklongDescription requirements
+
+  /**
+   * Check task title, taskshortDescription, tasklongDescription requirements.
+   */
   public static void taskValidation(String titel, String taskShortDescription,
       String taskLongDescription) {
 
@@ -75,7 +84,10 @@ public class ValidationService {
 
   }
 
-  // Check Task taskshortDescription and tasklongDescription requirements
+
+  /**
+   * Check Task taskshortDescription and tasklongDescription requirements.
+   */
   public static void taskValidation(String taskShortDescription, String taskLongDescription) {
 
     if (taskShortDescription.length() < 100) {
@@ -101,7 +113,10 @@ public class ValidationService {
     }
   }
 
-  // Check User login, name and password requirements
+
+  /**
+   * Check User login, name and password requirements.
+   */
   public static void userValidation(String login, String name, String password) {
 
     if (!login.equals(login.toLowerCase())) {
@@ -163,8 +178,8 @@ public class ValidationService {
     Pattern pruefenAufSonderzeichen = Pattern.compile("[*?!$%&]");
 
     if (!pruefenAufSonderzeichen.matcher(password).find()) {
-      LOG.debug(
-          "Das Passwort eines Users muss mindestens eines dieser Sonderzeichen beinhalten: *?$%&.!");
+      LOG.debug("Das Passwort eines Users muss mindestens eines dieser "
+          + "Sonderzeichen beinhalten: *?$%&.!");
       throw new ValidationException(
           "Das Passwort muss mindestens eines dieser Sonderzeichen beinhalten: *?$%&.!"
               + EINGABEHINWEIS);
@@ -173,11 +188,11 @@ public class ValidationService {
 
   // Check image requirements
   public static void ImageValidation(MultipartFile imageFile) {
-    
-    //if (imageFile.isEmpty()) {
-    //  LOG.debug("Die übergebene Datei \"{}\" ist leer!", imageFile.getOriginalFilename());
-    //  throw new ValidationException("Es wurde keine Datei ausgewählt!");
-    //}
+
+    // if (imageFile.isEmpty()) {
+    // LOG.debug("Die übergebene Datei \"{}\" ist leer!", imageFile.getOriginalFilename());
+    // throw new ValidationException("Es wurde keine Datei ausgewählt!");
+    // }
 
     String mimetype = imageFile.getContentType();
     String type = mimetype.split("/")[0];

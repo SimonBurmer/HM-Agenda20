@@ -92,7 +92,7 @@ public class DtoMapper {
         }
       }
     } else {
-      LOG.debug("User mit gegebener Id {} ist nicht verfügbar!" , login);
+      LOG.debug("User mit gegebener Id {} ist nicht verfügbar!", login);
       throw new RuntimeException("User mit gegebener Id ist nicht verfügbar!");
     }
 

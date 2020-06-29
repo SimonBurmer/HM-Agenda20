@@ -12,14 +12,20 @@ import edu.hm.cs.katz.swt2.agenda.common.TaskTypeEnum;
  * 
  * @author Bastian Katz (mailto: bastian.katz@hm.edu)
  */
+
 public class SubscriberTaskDto extends TaskDto {
 
   private StatusDto status;
 
+  /**
+   * Transferobjekt Übgergabe.
+   *
+   */
   public SubscriberTaskDto(Long taskId, String title, String taskShortDescription,
       String taskLongDescription, TaskTypeEnum taskType, SubscriberTopicDto topicDto,
       StatusDto status, String base64Image) {
-    super(taskId, title, taskShortDescription, taskLongDescription, taskType, topicDto, base64Image);
+    super(taskId, title, taskShortDescription, taskLongDescription, taskType, topicDto,
+        base64Image);
     this.status = status;
   }
 
