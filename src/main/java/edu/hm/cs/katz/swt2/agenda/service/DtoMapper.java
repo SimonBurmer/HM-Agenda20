@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public class DtoMapper {
   @Autowired
   private UserRepository userRepository;
 
-  private static final Logger LOG = LoggerFactory.getLogger(TaskServiceImpl.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DtoMapper.class);
 
   /**
    * Erstellt ein {@link UserDisplayDto} aus einem {@link User}.
@@ -79,35 +80,27 @@ public class DtoMapper {
     int amountTasks = 0;
 
     Collection<Task> tasks = topic.getTasks();
-
     Optional<User> optUser = userRepository.findById(login);
-    if (optUser.isPresent()) {
-      User user = optUser.get();
-      for (Task task : tasks) {
-        Status statusForTask = statusRepository.findByUserAndTask(user, task);
-        if (statusForTask != null) {
-          if (statusForTask.getStatus() == StatusEnum.FERTIG) {
-            amountFinishedTasks++;
-          }
-        }
-      }
-    } else {
+    User user = optUser.orElseThrow(() -> {
       LOG.debug("User mit gegebener Id {} ist nicht verfügbar!", login);
-      throw new RuntimeException("User mit gegebener Id ist nicht verfügbar!");
+      throw new NoSuchElementException("User mit gegebener Id ist nicht verfügbar!");
+    });
+    
+    for (Task task : tasks) {
+      Status statusForTask = statusRepository.findByUserAndTask(user, task);
+      if (statusForTask != null && statusForTask.getStatus() == StatusEnum.FERTIG) {
+        amountFinishedTasks++;
+      }
     }
-
+    
     amountTasks = tasks.size();
     amountUnfinishedTasks = amountTasks - amountFinishedTasks;
-
     UserDisplayDto creatorDto = createDto(topic.getCreator());
-
     SubscriberTopicDto subscriberTopicDto = new SubscriberTopicDto(topic.getUuid(), creatorDto,
         topic.getTitle(), topic.getShortDescription(), topic.getLongDescription());
-
     subscriberTopicDto.setAmountUnfinishedTasks(amountUnfinishedTasks);
     subscriberTopicDto.setAmountFinishedTasks(amountFinishedTasks);
     subscriberTopicDto.setAmountTasks(amountTasks);
-
     return subscriberTopicDto;
   }
 
@@ -127,7 +120,7 @@ public class DtoMapper {
     String base64Image = Base64.getEncoder().encodeToString(task.getImage());
     return new SubscriberTaskDto(task.getId(), task.getTitle(), task.getTaskShortDescription(),
         task.getTaskLongDescription(), task.getTaskType(), topicDto,
-        createDto(status, status.getComment()),base64Image);
+        createDto(status, status.getComment()), base64Image);
   }
 
   /**
@@ -161,6 +154,6 @@ public class DtoMapper {
     String base64Image = Base64.getEncoder().encodeToString(task.getImage());
     return new OwnerTaskDto(task.getId(), task.getTitle(), task.getTaskShortDescription(),
         task.getTaskLongDescription(), task.getTaskType(), createDto(task.getTopic()),
-        amountFinished, statusDtos,base64Image);
+        amountFinished, statusDtos, base64Image);
   }
 }

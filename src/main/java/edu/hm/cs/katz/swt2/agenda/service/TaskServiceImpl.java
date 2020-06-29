@@ -1,5 +1,6 @@
 package edu.hm.cs.katz.swt2.agenda.service;
 
+import edu.hm.cs.katz.swt2.agenda.common.ImageException;
 import edu.hm.cs.katz.swt2.agenda.common.StatusEnum;
 import edu.hm.cs.katz.swt2.agenda.common.TaskTypeEnum;
 import edu.hm.cs.katz.swt2.agenda.mvc.Search;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import javax.validation.ValidationException;
 import org.apache.commons.collections4.SetUtils;
@@ -80,40 +82,38 @@ public class TaskServiceImpl implements TaskService {
     User user = anwenderRepository.getOne(login);
 
     Optional<Topic> optTopic = topicRepository.findById(uuid);
-    if (optTopic.isPresent()) {
-      Topic t = optTopic.get();
-      if (!user.equals(t.getCreator())) {
-        LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.",
-            login, t.getTitle());
-        throw new AccessDeniedException("Kein Zugriff auf das Topic!");
-      }
-      if (imageFile == null || imageFile.isEmpty()) {
-        try {
-          File file = new ClassPathResource("static/assets/defaultImage.jpg").getFile();
-          byte[] fileContent = Files.readAllBytes(file.toPath());
-          Task task =
-              new Task(t, title, taskShortDescription, taskLongDescription, taskType, fileContent);
-          taskRepository.save(task);
-          return task.getId();
-        } catch (IOException e) {
-          LOG.error("DefaultImage konnten nicht geladen werden!");
-          throw new RuntimeException("Fehler beim laden des DefaultImage!");
-        }
-      } else {
-        ValidationService.ImageValidation(imageFile);
-        try {
-          Task task = new Task(t, title, taskShortDescription, taskLongDescription, taskType,
-              imageFile.getBytes());
-          taskRepository.save(task);
-          return task.getId();
-        } catch (IOException e) {
-          LOG.error("Bild konnte nicht in ein byte[] umgewandelt werden!");
-          throw new RuntimeException("Bild konnte nicht gespeichert werden!");
-        }
+    Topic t = optTopic.orElseThrow(() -> {
+      LOG.debug("Topic mit der Id {} ist nicht verfügbar!", login);
+      return new NoSuchElementException("Topic mit gegebener Id ist nicht verfügbar!");
+    });
+    if (!user.equals(t.getCreator())) {
+      LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login,
+          t.getTitle());
+      throw new AccessDeniedException("Kein Zugriff auf das Topic!");
+    }
+    if (imageFile == null || imageFile.isEmpty()) {
+      try {
+        File file = new ClassPathResource("static/assets/defaultImage.jpg").getFile();
+        byte[] fileContent = Files.readAllBytes(file.toPath());
+        Task task =
+            new Task(t, title, taskShortDescription, taskLongDescription, taskType, fileContent);
+        taskRepository.save(task);
+        return task.getId();
+      } catch (IOException e) {
+        LOG.error("DefaultImage konnten nicht geladen werden!");
+        throw new ImageException("Fehler beim laden des DefaultImage!");
       }
     } else {
-      LOG.debug("Topic mit der Id {} ist nicht verfügbar!", login);
-      throw new RuntimeException("Topic mit gegebener Id ist nicht verfügbar!");
+      ValidationService.imageValidation(imageFile);
+      try {
+        Task task = new Task(t, title, taskShortDescription, taskLongDescription, taskType,
+            imageFile.getBytes());
+        taskRepository.save(task);
+        return task.getId();
+      } catch (IOException e) {
+        LOG.error("Bild konnte nicht in ein byte[] umgewandelt werden!");
+        throw new ImageException("Bild konnte nicht gespeichert werden!");
+      }
     }
   }
 
@@ -131,35 +131,33 @@ public class TaskServiceImpl implements TaskService {
     ValidationService.topicValidation(title, taskShortDescription, taskLongDescription);
     User user = anwenderRepository.getOne(login);
     Optional<Topic> optTopic = topicRepository.findById(uuid);
-    if (optTopic.isPresent()) {
-      Topic t = optTopic.get();
-      if (!user.equals(t.getCreator())) {
-        LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.",
-            login, t.getTitle());
-        throw new AccessDeniedException("Kein Zugriff auf das Topic!");
-      }
-      try {
-        File file = new ClassPathResource("static/assets/" + fileName).getFile();
-        byte[] fileContent = Files.readAllBytes(file.toPath());
-        Task task =
-            new Task(t, title, taskShortDescription, taskLongDescription, taskType, fileContent);
-        taskRepository.save(task);
-        return task.getId();
-      } catch (IOException e) {
-        LOG.error("Image {} konnten nicht geladen werden!", fileName);
-        throw new RuntimeException("Fehler beim laden des Image!");
-      }
-    } else {
+    Topic t = optTopic.orElseThrow(() -> {
       LOG.debug("Topic mit der Id {} ist nicht verfügbar!", login);
-      throw new RuntimeException("Topic mit gegebener Id ist nicht verfügbar!");
+      return new NoSuchElementException("Topic mit gegebener Id ist nicht verfügbar!");
+    });
+
+    if (!user.equals(t.getCreator())) {
+      LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login,
+          t.getTitle());
+      throw new AccessDeniedException("Kein Zugriff auf das Topic!");
+    }
+    try {
+      File file = new ClassPathResource("static/assets/" + fileName).getFile();
+      byte[] fileContent = Files.readAllBytes(file.toPath());
+      Task task =
+          new Task(t, title, taskShortDescription, taskLongDescription, taskType, fileContent);
+      taskRepository.save(task);
+      return task.getId();
+    } catch (IOException e) {
+      LOG.error("Image {} konnten nicht geladen werden!", fileName);
+      throw new ImageException("Fehler beim laden des Image!");
     }
   }
 
   @Override
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public void updateTask(Long id, String login, String taskShortDescription,
-      String taskLongDescription, TaskTypeEnum taskType, MultipartFile imageFile)
-      throws IOException {
+      String taskLongDescription, TaskTypeEnum taskType, MultipartFile imageFile) {
     LOG.info("Aktualisiere einen Task.");
     LOG.debug("\tid=\"{}\" login=\"{}\" taskType={}", id, login, taskType);
 
@@ -174,12 +172,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     if (!imageFile.isEmpty()) {
-      ValidationService.ImageValidation(imageFile);
+      ValidationService.imageValidation(imageFile);
       try {
         taskToUpdate.setImage(imageFile.getBytes());
       } catch (IOException e) {
         LOG.error("Bild konnte nicht in ein byte[] umgewandelt werden!");
-        throw new IOException("Bild konnte nicht gespeichert werden!");
+        throw new ImageException("Bild konnte nicht gespeichert werden!");
       }
     }
 

@@ -1,5 +1,6 @@
 package edu.hm.cs.katz.swt2.agenda.service;
 
+import edu.hm.cs.katz.swt2.agenda.common.TopicComparator;
 import edu.hm.cs.katz.swt2.agenda.common.UuidProviderImpl;
 import edu.hm.cs.katz.swt2.agenda.persistence.Topic;
 import edu.hm.cs.katz.swt2.agenda.persistence.TopicRepository;

@@ -5,6 +5,7 @@ import edu.hm.cs.katz.swt2.agenda.mvc.Search;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.StatusDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
+import java.io.IOException;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,13 +31,13 @@ public interface TaskService {
    * Erstellt einen neuen Task (Nur zur erstellung der Demodaten).
    */
   Long createTask(String topicUuid, String title, String login, String taskShortDescription,
-      String taskLongDescription, TaskTypeEnum taskType, String FileName);
+      String taskLongDescription, TaskTypeEnum taskType, String fileName);
 
   /**
    * Aktualisiert einen Task.
    */
   void updateTask(Long id, String login, String taskShortDescription, String taskLongDescription,
-      TaskTypeEnum taskType, MultipartFile imageFile) throws Exception;
+      TaskTypeEnum taskType, MultipartFile imageFile) throws IOException;
 
   /**
    * Zugriff auf einen Task (priviligierte Sicht für Ersteller des Topics).

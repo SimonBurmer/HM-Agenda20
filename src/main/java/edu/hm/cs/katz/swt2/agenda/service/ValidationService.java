@@ -186,14 +186,10 @@ public class ValidationService {
     }
   }
 
-  // Check image requirements
-  public static void ImageValidation(MultipartFile imageFile) {
-
-    // if (imageFile.isEmpty()) {
-    // LOG.debug("Die übergebene Datei \"{}\" ist leer!", imageFile.getOriginalFilename());
-    // throw new ValidationException("Es wurde keine Datei ausgewählt!");
-    // }
-
+  /**
+   * Check image requirements.
+   */
+  public static void imageValidation(MultipartFile imageFile) {
     String mimetype = imageFile.getContentType();
     String type = mimetype.split("/")[0];
     if (!type.equals("image")) {

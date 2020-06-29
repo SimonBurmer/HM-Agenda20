@@ -1,4 +1,4 @@
-package edu.hm.cs.katz.swt2.agenda.service;
+package edu.hm.cs.katz.swt2.agenda.common;
 
 import edu.hm.cs.katz.swt2.agenda.persistence.Topic;
 import java.util.Comparator;
