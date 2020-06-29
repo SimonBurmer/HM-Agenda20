@@ -62,7 +62,7 @@ public class TopicServiceImpl implements TopicService {
   @PreAuthorize("#login==authentication.name")
   public List<OwnerTopicDto> getManagedTopics(String login, String search) {
     LOG.info("Fordere Liste aller verwalteten Topics eines Anwenders an.");
-    LOG.debug("\tlogin=\"{}\" search=\"{}\"", login);
+    LOG.debug("\tlogin=\"{}\" search=\"{}\"", login, search);
     Optional<User> creatorOptional = anwenderRepository.findById(login);
     User creator = creatorOptional.orElseThrow();
     List<Topic> managedTopics = topicRepository.findByCreatorOrderByTitleAsc(creator);
