@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-
-
 /**
  * Initialisierung von Demo-Daten. Diese Komponente erstellt beim Systemstart Anwender, Topics,
  * Abonnements usw., damit man die Anwendung mit allen Features vorführen kann.
@@ -22,6 +20,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Profile("demo")
 public class DemoData {
+
+  private static final Logger LOG = LoggerFactory.getLogger(DemoData.class);
 
   private static final String TOPIC_BACKKURS_LANG =
       "Wir schütten ein Füllhorn mit Glückshormonen & süßen Geschmackserlebnissen für Sie aus! Schmelzen Sie dahin bei einem süßen Backkurs in München - ein Schlaraffenland für alle Naschkatzen! Bei einem Macarons-Backkurs lernen Sie, wie Sie die hauchzarten und bildschönen französischen Leckerbissen perfekt formen und füllen. In einem Tortendeko-Kurs für kreative Tortenbäcker üben Sie zusammen mit einem echten Profi-Pattisier, wie Sie Fondant färben und damit zauberhafte Motivtorten dekorieren. Und für alle Schokoladenfans gibt es natürlich auch unsere verführerisch süßen Pralinenkurse. Auch das Ambiente bei unseren Backkursen in München stimmt: Ob in der wunderschönen Schokoladengalerie Chokoin in Schwabing, in der traditionsreichen Backstube des Café Luitpold mitten in den Münchner Innenstadt oder in der Keks-Backschule der Wiener Keksdesignerin und Autorin Stephanie Juliette Rinner im Westend. Immer backen Sie in von uns mit Sorgfalt und Liebe ausgewählten, charmanten Locations.";
@@ -62,7 +62,7 @@ public class DemoData {
       "Der Kuchen gehört zu den feinen Backwaren. Es handelt sich um ein zumeist süßes Backwerk. Man unterscheidet vor allem nach der Art der Herstellung Blechkuchen.";
   private static final String TASK_AFFENMUFFINS_BACKEN_KURZ =
       "Diese Muffins passen perfekt zu einem tollen Kindergeburtstag. Wie man sie zubereitet und anschließend noch in lustige Affen verwandelt, verrät dieses Rezept";
-  
+
 
   private static final String LOGIN_FINE = "fine";
 
@@ -70,9 +70,6 @@ public class DemoData {
 
   private static final String LOGIN_BERT = "bert";
 
-
-
-  private static final Logger LOG = LoggerFactory.getLogger(DemoData.class);
 
   @Autowired
   UserService anwenderService;
@@ -96,32 +93,33 @@ public class DemoData {
     anwenderService.legeAn(LOGIN_ERNIE, "Ernie", "Ernie123*", false);
     anwenderService.legeAn(LOGIN_BERT, "Bert", "Bert123*", false);
 
-    //Topic: HTML für Anfänger
+    // Topic: HTML für Anfänger
     String htmlKursUuid =
         topicService.createTopic("HTML für Anfänger", LOGIN_FINE, TOPIC_HTML_KURZ, TOPIC_HTML_LANG);
     Long linkErstellenTask = taskService.createTask(htmlKursUuid, "Link erstellen", LOGIN_FINE,
-        TASK_LINK_ERSTELLEN_KURZ, TASK_LINK_ERSTELLEN_LANG,"defaultImage.jpg");
+        TASK_LINK_ERSTELLEN_KURZ, TASK_LINK_ERSTELLEN_LANG, "defaultImage.jpg");
     taskService.createTask(htmlKursUuid, "Leeres HTML-Template erstellen", LOGIN_FINE,
-        TASK_HTML_TEMPLATE_ERSTELLEN_KURZ, TASK_HTML_TEMPLATE_ERSTELLEN_LANG,"HTML-Template.jpg");
+        TASK_HTML_TEMPLATE_ERSTELLEN_KURZ, TASK_HTML_TEMPLATE_ERSTELLEN_LANG, "HTML-Template.jpg");
     topicService.subscribe(htmlKursUuid, LOGIN_ERNIE);
     topicService.subscribe(htmlKursUuid, LOGIN_BERT);
     taskService.checkTask(linkErstellenTask, LOGIN_ERNIE);
 
-    //Topic: CSS für Fortgeschrittene
+    // Topic: CSS für Fortgeschrittene
     String cssKursUuid = topicService.createTopic("CSS für Fortgeschrittene", LOGIN_FINE,
         TOPIC_CSS_KURZ, TOPIC_CSS_LANG);
     taskService.createTask(cssKursUuid, "CSS: Was ist das eigentlich?", LOGIN_FINE,
-        TASK_WAS_IST_CSS_KURZ, TASK_WAS_IST_CSS_LANG,"was-ist-CSS.jpg");
+        TASK_WAS_IST_CSS_KURZ, TASK_WAS_IST_CSS_LANG, "was-ist-CSS.jpg");
     topicService.subscribe(cssKursUuid, LOGIN_ERNIE);
     topicService.subscribe(cssKursUuid, LOGIN_BERT);
 
-    //Topic: Ernies Backkurs
+    // Topic: Ernies Backkurs
     String erniesKursUuid = topicService.createTopic("Ernies Backkurs", LOGIN_ERNIE,
         TOPIC_BACKKURS_KURZ, TOPIC_BACKKURS_LANG);
     taskService.createTask(erniesKursUuid, "Googlehupf backen", LOGIN_ERNIE,
-        TASK_GOOGLEHUPF_BACKEN_KURZ, TASK_GOOGLEHUPF_BACKEN_LANG,"gugelhupf.jpg");
-    Long affenMuffinTask = taskService.createTask(erniesKursUuid, "Affenmuffins backen",
-        LOGIN_ERNIE, TASK_AFFENMUFFINS_BACKEN_KURZ, TASK_AFFENMUFFINS_BACKEN_LANG,"affenmuffins.jpg");
+        TASK_GOOGLEHUPF_BACKEN_KURZ, TASK_GOOGLEHUPF_BACKEN_LANG, "gugelhupf.jpg");
+    Long affenMuffinTask =
+        taskService.createTask(erniesKursUuid, "Affenmuffins backen", LOGIN_ERNIE,
+            TASK_AFFENMUFFINS_BACKEN_KURZ, TASK_AFFENMUFFINS_BACKEN_LANG, "affenmuffins.jpg");
     topicService.subscribe(erniesKursUuid, LOGIN_BERT);
     taskService.checkTask(affenMuffinTask, LOGIN_BERT);
     topicService.subscribe(erniesKursUuid, LOGIN_FINE);

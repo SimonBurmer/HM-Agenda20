@@ -14,82 +14,84 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface TaskService {
 
-	/**
-	 * Lösche einen Task.
-	 */
-	void deleteTask(Long id, String login);
+  /**
+   * Lösche einen Task.
+   */
+  void deleteTask(Long id, String login);
 
-	/**
-	 * Erstellt einen neuen Task.
-	 */
-	Long createTask(String topicUuid, String title, String login, String taskShortDescription,
-			String taskLongDescription, MultipartFile imageFile);
-	
-	 /**
-     * Erstellt einen neuen Task (Nur zur erstellung der Demodaten).
-     */
-	Long createTask(String topicUuid, String title, String login, String taskShortDescription,
-        String taskLongDescription, String FileName);
-	
-	/**
-	 * Aktualisiert die Beschreibung eines Tasks.
-	 */
-	void updateTask(Long id, String login, String taskShortDescription, String taskLongDescription);
+  /**
+   * Erstellt einen neuen Task.
+   */
+  Long createTask(String topicUuid, String title, String login, String taskShortDescription,
+      String taskLongDescription, MultipartFile imageFile);
 
-	/**
-	 * Zugriff auf einen Task (priviligierte Sicht für Ersteller des Topics).
-	 */
-	OwnerTaskDto getManagedTask(Long taskId, String login);
+  /**
+   * Erstellt einen neuen Task (Nur zur erstellung der Demodaten).
+   */
+  Long createTask(String topicUuid, String title, String login, String taskShortDescription,
+      String taskLongDescription, String FileName);
 
-	/**
-	 * Zugriff auf alle Tasks eines eigenen Topics.
-	 */
-	List<OwnerTaskDto> getManagedTasks(String topicUuid, String login);
+  /**
+   * Aktualisiert die Beschreibung eines Tasks.
+   */
+  void updateTask(Long id, String login, String taskShortDescription, String taskLongDescription);
 
-	/**
-	 * Zugriff auf einen Task (Abonnentensicht).
-	 */
-	SubscriberTaskDto getTask(Long taskId, String login);
+  /**
+   * Zugriff auf einen Task (priviligierte Sicht für Ersteller des Topics).
+   */
+  OwnerTaskDto getManagedTask(Long taskId, String login);
 
-	/**
-	 * Zugriff auf alle Tasks abonnierter Topics.
-	 * @param search 
-	 */
-	List<SubscriberTaskDto> getSubscribedTasks(String login, Search search);
+  /**
+   * Zugriff auf alle Tasks eines eigenen Topics.
+   */
+  List<OwnerTaskDto> getManagedTasks(String topicUuid, String login);
 
-	/**
-	 * Zugriff auf alle Tasks eines abonnierten Topics.
-	 */
-	List<SubscriberTaskDto> getTasksForTopic(String topicUuid, String login);
+  /**
+   * Zugriff auf einen Task (Abonnentensicht).
+   */
+  SubscriberTaskDto getTask(Long taskId, String login);
 
-	/**
-	 * Zugriff auf alle Status eines verwalteten Tasks.
-	 */
-	List<StatusDto> getTaskStatuses(Long taskId, String login);
+  /**
+   * Zugriff auf alle Tasks abonnierter Topics.
+   * 
+   * @param search
+   */
+  List<SubscriberTaskDto> getSubscribedTasks(String login, Search search);
 
-	/**
-	 * Markiert einen Task für einen Abonnenten als "done".
-	 */
-	void checkTask(Long taskId, String login);
+  /**
+   * Zugriff auf alle Tasks eines abonnierten Topics.
+   */
+  List<SubscriberTaskDto> getTasksForTopic(String topicUuid, String login);
 
-	/**
-	 * Aktualisiere den Kommentar zu einem Task.
-	 */
-	void updateComment(Long taskId, String login, String comment);
+  /**
+   * Zugriff auf alle Status eines verwalteten Tasks.
+   */
+  List<StatusDto> getTaskStatuses(Long taskId, String login);
 
-	/**
-	 * Setzt den Status eines Tasks für einen Abonnenten zurück auf NEU.
-	 */
-	void resetTask(Long taskId, String login);
+  /**
+   * Markiert einen Task für einen Abonnenten als "done".
+   */
+  void checkTask(Long taskId, String login);
 
-	/**
-	 * Löscht für einen Abonnenten alle Status für Tasks eines Topics.
-	 */
-	void deleteTaskStatusesforTopic(String topicUuid, String login);
-	
-    /**
-     * Speichert ein ImageFile als byte[] in einem Task.
-     * @throws Exception 
-     */
-    void updateImage(Long id, String login, MultipartFile imageFile) throws Exception;  
+  /**
+   * Aktualisiere den Kommentar zu einem Task.
+   */
+  void updateComment(Long taskId, String login, String comment);
+
+  /**
+   * Setzt den Status eines Tasks für einen Abonnenten zurück auf NEU.
+   */
+  void resetTask(Long taskId, String login);
+
+  /**
+   * Löscht für einen Abonnenten alle Status für Tasks eines Topics.
+   */
+  void deleteTaskStatusesforTopic(String topicUuid, String login);
+
+  /**
+   * Speichert ein ImageFile als byte[] in einem Task.
+   * 
+   * @throws Exception
+   */
+  void updateImage(Long id, String login, MultipartFile imageFile) throws Exception;
 }
