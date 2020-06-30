@@ -1,6 +1,7 @@
 package edu.hm.cs.katz.swt2.agenda.service;
 
 import edu.hm.cs.katz.swt2.agenda.common.ImageException;
+import edu.hm.cs.katz.swt2.agenda.common.ImageUtilities;
 import edu.hm.cs.katz.swt2.agenda.common.StatusEnum;
 import edu.hm.cs.katz.swt2.agenda.common.TaskTypeEnum;
 import edu.hm.cs.katz.swt2.agenda.mvc.Search;
@@ -15,9 +16,7 @@ import edu.hm.cs.katz.swt2.agenda.persistence.UserRepository;
 import edu.hm.cs.katz.swt2.agenda.service.dto.OwnerTaskDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.StatusDto;
 import edu.hm.cs.katz.swt2.agenda.service.dto.SubscriberTaskDto;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -32,7 +31,6 @@ import org.apache.commons.collections4.SetUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
@@ -80,29 +78,25 @@ public class TaskServiceImpl implements TaskService {
     ValidationService.topicValidation(title, taskShortDescription, taskLongDescription);
 
     User user = anwenderRepository.getOne(login);
-
     Optional<Topic> optTopic = topicRepository.findById(uuid);
+
     Topic t = optTopic.orElseThrow(() -> {
       LOG.debug("Topic mit der Id {} ist nicht verfügbar!", login);
       return new NoSuchElementException("Topic mit gegebener Id ist nicht verfügbar!");
     });
+
     if (!user.equals(t.getCreator())) {
       LOG.warn("Anwender {} ist nicht berechtigt, einen Task in dem Topic {} zu erstellen.", login,
           t.getTitle());
       throw new AccessDeniedException("Kein Zugriff auf das Topic!");
     }
+
     if (imageFile == null || imageFile.isEmpty()) {
-      try {
-        File file = new ClassPathResource("static/assets/defaultImage.jpg").getFile();
-        byte[] fileContent = Files.readAllBytes(file.toPath());
-        Task task =
-            new Task(t, title, taskShortDescription, taskLongDescription, taskType, fileContent);
-        taskRepository.save(task);
-        return task.getId();
-      } catch (IOException e) {
-        LOG.error("DefaultImage konnten nicht geladen werden!");
-        throw new ImageException("Fehler beim laden des DefaultImage!");
-      }
+      byte[] fileContent = ImageUtilities.imageLoader("defaultImage.jpg");
+      Task task =
+          new Task(t, title, taskShortDescription, taskLongDescription, taskType, fileContent);
+      taskRepository.save(task);
+      return task.getId();
     } else {
       ValidationService.imageValidation(imageFile);
       try {
@@ -117,9 +111,6 @@ public class TaskServiceImpl implements TaskService {
     }
   }
 
-  /**
-   * Zur Taskerstellung der Demodaten.
-   */
   @Override
   @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
   public Long createTask(String uuid, String title, String login, String taskShortDescription,
@@ -131,6 +122,7 @@ public class TaskServiceImpl implements TaskService {
     ValidationService.topicValidation(title, taskShortDescription, taskLongDescription);
     User user = anwenderRepository.getOne(login);
     Optional<Topic> optTopic = topicRepository.findById(uuid);
+
     Topic t = optTopic.orElseThrow(() -> {
       LOG.debug("Topic mit der Id {} ist nicht verfügbar!", login);
       return new NoSuchElementException("Topic mit gegebener Id ist nicht verfügbar!");
@@ -141,17 +133,12 @@ public class TaskServiceImpl implements TaskService {
           t.getTitle());
       throw new AccessDeniedException("Kein Zugriff auf das Topic!");
     }
-    try {
-      File file = new ClassPathResource("static/assets/" + fileName).getFile();
-      byte[] fileContent = Files.readAllBytes(file.toPath());
-      Task task =
-          new Task(t, title, taskShortDescription, taskLongDescription, taskType, fileContent);
-      taskRepository.save(task);
-      return task.getId();
-    } catch (IOException e) {
-      LOG.error("Image {} konnten nicht geladen werden!", fileName);
-      throw new ImageException("Fehler beim laden des Image!");
-    }
+    
+    byte[] fileContent = ImageUtilities.imageLoader(fileName);
+    Task task =
+        new Task(t, title, taskShortDescription, taskLongDescription, taskType, fileContent);
+    taskRepository.save(task);
+    return task.getId();
   }
 
   @Override

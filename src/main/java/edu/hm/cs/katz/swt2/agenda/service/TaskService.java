@@ -28,7 +28,7 @@ public interface TaskService {
       String taskLongDescription, TaskTypeEnum taskType, MultipartFile imageFile);
 
   /**
-   * Erstellt einen neuen Task (Nur zur erstellung der Demodaten).
+   * Erstellt einen neuen Demodata-Task (Lädt DemoImages mittels String fileName).
    */
   Long createTask(String topicUuid, String title, String login, String taskShortDescription,
       String taskLongDescription, TaskTypeEnum taskType, String fileName);
