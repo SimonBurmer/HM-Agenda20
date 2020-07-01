@@ -1,6 +1,7 @@
 package edu.hm.cs.katz.swt2.agenda.mvc;
 
 import edu.hm.cs.katz.swt2.agenda.service.TopicService;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,7 @@ public class IndexController extends AbstractController {
    * Erstellt die Landing-Page.
    */
   @GetMapping("/")
-  public String getIndexView(Model model, Authentication auth) {
+  public String getIndexView(Model model, Authentication auth, HttpServletRequest request) {
     model.addAttribute("registration", new Registration());
     if (auth != null) {
       model.addAttribute("topics", topicService.getSubscriptions(auth.getName(), ""));

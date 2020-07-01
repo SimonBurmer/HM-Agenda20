@@ -24,6 +24,21 @@
 			<a class="navbar-brand" href="/"><img src="/assets/logo.png"
 				width="30" height="30" alt="">Agenda</a>
 
+			<div>
+				<div class="dropdown">
+					<button class="btn btn-sm btn-primary-outline text-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Sprache</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" th:href="@{?lang=en }">english</a> <a
+							class="dropdown-item" th:href="@{?lang=de }">deutsch</a>
+
+					</div>
+				</div>
+
+
+			</div>
+
+
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#navbarSupportedContent"
 				aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -40,8 +55,8 @@
 					<li th:if="${user}" class="nav-item"><a class="nav-link"
 						href="/topics">Topics</a></li>
 				</ul>
-				<span th:if="${user}" class="nav-link text-white">Sie sind eingeloggt
-					als <strong th:text=${user.displayName}></strong>
+				<span th:if="${user}" class="nav-link text-white">Sie sind
+					eingeloggt als <strong th:text=${user.displayName}></strong>
 				</span>
 				<form th:if="${user}" th:action="@{/logout}" method="post">
 					<button class="btn btn-secondary" type="submit">Abmelden</button>
@@ -91,9 +106,12 @@
 	</div>
 
 	<div th:fragment="showTaskType">
-		<h6 th:if="${task.taskType.toString()=='MANDATORY'}" class="card-subtitle mb-2 text-primary">Pflichtaufgabe</h6>
-		<h6 th:if="${task.taskType.toString()=='OPTIONAL'}" class="card-subtitle mb-2 text-secondary">Optionale Aufgabe</h6>
-		<h6 th:if="${task.taskType.toString()=='INFO'}" class="card-subtitle mb-2 text-info">Nur zur Info</h6>
+		<h6 th:if="${task.taskType.toString()=='MANDATORY'}"
+			class="card-subtitle mb-2 text-primary">Pflichtaufgabe</h6>
+		<h6 th:if="${task.taskType.toString()=='OPTIONAL'}"
+			class="card-subtitle mb-2 text-secondary">Optionale Aufgabe</h6>
+		<h6 th:if="${task.taskType.toString()=='INFO'}"
+			class="card-subtitle mb-2 text-info">Nur zur Info</h6>
 	</div>
 
 	<th:block th:fragment="scripts">
