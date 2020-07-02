@@ -8,8 +8,7 @@
 	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
 		<div class="row">
 			<div class="col-auto">
-				<h4 class="display-4">
-					Aufgaben-Übersicht für das Topic <i th:text="${topic.title}"></i>
+				<h4 class="display-4" th:text="#{aufgabenUEbersichtTopic.text}+' '+${topic.title}">
 				</h4>
 			</div>
 		</div>
@@ -30,15 +29,15 @@
 						<form th:unless="${task.status.status.toString()=='FERTIG'}"
 							  id="formName" th:action="@{/tasks/{id}/check(id=${task.id})}"
 							  th:object="${task}" method="post">
-							<a th:href="'/tasks/'+${task.id}" class="btn btn-sm btn-primary mr-2">Öffnen</a>
-							<button type="submit" class="btn btn-sm btn-success mr-2">Erledigt</button>
+							<a th:href="'/tasks/'+${task.id}" class="btn btn-sm btn-primary mr-2">[[#{oeffnen.text}]]</a>
+							<button type="submit" class="btn btn-sm btn-success mr-2">[[#{erledigt.text}]]</button>
 						</form>
 
 						<form th:if="${task.status.status.toString()=='FERTIG'}"
 							  id="formName" th:action="@{/tasks/{id}/reset(id=${task.id})}"
 							  th:object="${task}" method="post">
-							<a th:href="'/tasks/'+${task.id}" class="btn btn-sm btn-primary mr-2">Öffnen</a>
-							<button type="submit" class="btn btn-sm btn-outline-secondary mr-2">Zurücksetzen</button>
+							<a th:href="'/tasks/'+${task.id}" class="btn btn-sm btn-primary mr-2">[[#{oeffnen.text}]]</a>
+							<button type="submit" class="btn btn-sm btn-outline-secondary mr-2">[[#{zuruecksetzten.text}]]</button>
 						</form>
 
 					</div>

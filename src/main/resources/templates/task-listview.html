@@ -8,9 +8,8 @@
 	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
 		<div class="row justify-content-between">
 			<div class="col-auto">
-				<h4 class="display-4">Eigene Aufgaben</h4>
-				<span th:if="${#lists.size(tasks)==0}">Sie haben keine
-					Aufgaben!</span>
+				<h4 class="display-4" th:text="#{eigeneAufgaben.text}"></h4>
+				<span th:if="${#lists.size(tasks)==0}">[[#{keineAufgaben.text}]]</span>
 			</div>
 			<div class="row justify-content-between">
 				<form class="form-inline" th:object="${search}"
@@ -19,14 +18,13 @@
 						<input type="checkbox" class="form-check-input"
 							th:checked="*{onlyNewTasks} ? 'checked'" value="yes"
 							name="onlyNewTasks" id="onlyNewTasksID"> <label
-							class="form-check-label" for="onlyNewTasksID">nur offene
-							Tasks&nbsp;</label>
+							class="form-check-label" for="onlyNewTasksID">[[#{nurOffeneTasks.text}]]&nbsp;</label>
 					</div>
 					<div class="form-group bg-dark">
 						<input th:field="*{search}" class="form-control"
-							placeholder="Suchen" />
+							th:placeholder="#{suchen.text}" />
 					</div>
-					<button type="submit" class="btn btn-primary">Suchen</button>
+					<button type="submit" class="btn btn-primary">[[#{suchen}]]</button>
 				</form>
 			</div>
 		</div>
@@ -43,17 +41,17 @@
 							id="formName" th:action="@{/tasks/{id}/check(id=${task.id})}"
 							th:object="${task}" method="post">
 							<a th:href="'/tasks/'+${task.id}"
-								class="btn btn-sm btn-primary mr-2">Öffnen</a>
-							<button type="submit" class="btn btn-sm btn-success mr-2">Erledigt</button>
+								class="btn btn-sm btn-primary mr-2" th:text="#{oeffnen.text}"></a>
+							<button type="submit" class="btn btn-sm btn-success mr-2">[[#{erledigt.text}]]</button>
 						</form>
 
 						<form th:if="${task.status.status.toString()=='FERTIG'}"
 							id="formName" th:action="@{/tasks/{id}/reset(id=${task.id})}"
 							th:object="${task}" method="post">
 							<a th:href="'/tasks/'+${task.id}"
-								class="btn btn-sm btn-primary mr-2">Öffnen</a>
+								class="btn btn-sm btn-primary mr-2" th:text="#{oeffnen.text}"></a>
 							<button type="submit"
-								class="btn btn-sm btn-outline-secondary mr-2">Zurücksetzen</button>
+								class="btn btn-sm btn-outline-secondary mr-2">[[#{zuruecksetzten.text}]]</button>
 						</form>
 					</div>
 				</div>

@@ -8,8 +8,7 @@
 	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
 		<div class="row">
 			<div class="col-auto">
-				<h4 class="display-4">
-					Abo von <i th:text=${topic.title}></i> beenden?
+				<h4 class="display-4" th:text="#{aboVon.text}+' '+${topic.title}+' '+#{beendenFRAGE.text}">
 				</h4>
 
 				<div class="card bg-dark">
@@ -17,13 +16,13 @@
 						<h5 class="card-title" th:text="${topic.title}">Card title</h5>
 						<h6 class="card-subtitle mb-2 text-muted"
 							th:text="'Von '+${topic.creator.displayName}">Card subtitle</h6>
-						<p class="card-text">Keine Beschreibung</p>
+						<p class="card-text">[[#{keineBeschreibung.text}]]</p>
 						<form id="formName"
 							th:action="@{/topics/{uuid}/unregister(uuid=${topic.uuid})}"
 							method="post">
 
-							<button type="submit" class="btn btn-sm btn-warning">Abo beenden</button>
-							<a href="/topics" class="btn btn-sm btn-secondary">Abbrechen</a>
+							<button type="submit" class="btn btn-sm btn-warning">[[#{aboBeenden.text}]]</button>
+							<a href="/topics" class="btn btn-sm btn-secondary">[[#{abbrechen.text}]]</a>
 
 						</form>
 					</div>

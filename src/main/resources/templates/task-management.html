@@ -7,7 +7,7 @@
 
 	<div class="container-fluid justify-content-center bg-dark text-white">
 		<h4 class="display-4">
-			Task <i th:text="${task.title}">Titel</i> verwalten:
+			Task <i th:text="${task.title} + ' ' + #{verwalten.text}"></i> 
 		</h4>
 		<div class="row">
 			<div class="col-lg-4 text-center">
@@ -19,49 +19,46 @@
 					th:object="${task}" method="post" enctype="multipart/form-data">
 					<div class="form-group">
 						<textarea th:field="*{taskShortDescription}" class="form-control"
-							placeholder="Kurzbeschreibung" minlength="100" maxlength="200"></textarea>
-						<small class="form-text text-muted"> Verwenden Sie eine
-							aussagekräftige Kurzbeschreibung mit 100 bis 200 Zeichen! </small>
+							th:placeholder="#{kurzbeschreibung.text}" minlength="100" maxlength="200"></textarea>
+						<small class="form-text text-muted"> [[#{aussagekreaftigeKURZbeschreibung.text}]] </small>
 					</div>
 
 					<div class="form-group">
 						<textarea th:field="*{taskLongDescription}" class="form-control"
-							placeholder="Langbeschreibung" minlength="200" maxlength="2000"></textarea>
-						<small class="form-text text-muted"> Verwenden Sie eine
-							aussagekräftige Langbeschreibung mit 200 bis 2000 Zeichen! </small>
+							th:placeholder="#{langbeschreibung.text}" minlength="200" maxlength="2000"></textarea>
+						<small class="form-text text-muted"> [[#{aussagekreaftigeLANGbeschreibung.text}]] </small>
 					</div>
 
 					<div class="form-group">
-						<label for="selectTaskType">Typ auswählen</label> <select
+						<label for="selectTaskType">[[#{typAuswaehlen.text}]]</label> <select
 							th:field="*{taskType}" class="form-control" id="selectTaskType">
-							<option value="DEFAULT">Ohne Typ</option>
-							<option value="MANDATORY">Pflichtaufgabe</option>
-							<option value="OPTIONAL">Optionale Aufgabe</option>
-							<option value="INFO">Nur zur Info</option>
+							<option value="DEFAULT">[[#{ohneTyp.text}]]</option>
+							<option value="MANDATORY">[[#{pflichtaufgabe.text}]]</option>
+							<option value="OPTIONAL">[[#{optionaleAufgabe.text}]]</option>
+							<option value="INFO">[[#{nurZurInfo.text}]]</option>
 						</select>
 					</div>
 
-					<label for="selectImage">Bild auswählen</label>
+					<label for="selectImage">[[#{bildAuswaehlen.text}]]</label>
 					<div class="form-group" id="selectImage">
 						<input type="file" name="imageFile"> <small
-							class="form-text text-muted"> Bilddatei darf nicht größer
-							als 10MB sein!</small>
+							class="form-text text-muted"> [[#{bildGroeße.text}]]</small>
 					</div>
 
-					<button type="submit" class="btn btn-primary">Speichern</button>
+					<button type="submit" class="btn btn-primary">[[#{speichern.text}]]</button>
 					<a th:href="'/topics/'+${task.topic.uuid}+'/manage'"
-						class="btn btn-secondary">Zurück zum Topic</a>
+						class="btn btn-secondary">[[#{zurueckZumTopic.text}]]</a>
 				</form>
 			</div>
 		</div>
 
-		<h4 class="display-4 mt-4">Kommentare</h4>
+		<h4 class="display-4 mt-4" th:text="#{kommentare.text}"></h4>
 
 		<div class="row row-cols-1">
-			<div class="col">
-				<b>Bedeutung der farblichen Umrandung:</b> <span
-					class="text-warning">Aufgabe muss noch bearbeitet werden</span> <span
-					class="text-success">Aufgabe wurde bereits erledigt</span>
+			<div class="col mb-4">
+				<b>[[#{bedeutungFarbe.text}]]</b> <span
+					class="text-warning">[[#{nochZuBearbeiten.text}]]</span> <span
+					class="text-success">[[#{schonErledigt.text}]]</span>
 			</div>
 		</div>
 
@@ -75,16 +72,13 @@
 							<p class="card-text" th:text="${status.comment}">.</p>
 						</div>
 						<div th:if="${status.comment.isEmpty()}">
-							<p class="card-text font-italic">hat bisher keinen Kommentar
-								abgegeben.</p>
+							<p class="card-text font-italic">[[#{bisherKeinKommentar.text}]]</p>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 
-	</div>
-	</div>
 	</div>
 
 	<th:block th:replace="fragments :: scripts">

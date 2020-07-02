@@ -69,8 +69,7 @@ body {
 			class="row justify-content-center mt-5 align-items-center rgba-gradient"
 			style="height: 80vh;">
 			<div class="col-6">
-				<h1 class="display-4" th:text="#{hallo.text}"> 
-				<i th:text="${user.name}"></i>!
+				<h1 class="display-4" th:text="#{hallo.text}+' '+${user.name}+'!'">
 				</h1>
 				<h3 th:text="#{agenda.text}"></h3>
 				<div style="height: 52vh;" class="overflow-auto">

@@ -8,15 +8,14 @@
 	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
 		<div class="row">
 			<div class="col-auto">
-				<h4 class="display-4">
-					Ihr Topic <i th:text="${topic.title}"></i>
+				<h4 class="display-4" th:text="#{ihrTopic.text} +' ' +${topic.title}">
 				</h4>
 			</div>
 			<div class="col-auto justify-content-center">
-				<a th:href="'/topics/'+${topic.uuid}+'/createTask'" class="btn btn-primary mb-1">Task erstellen</a>
+				<a th:href="'/topics/'+${topic.uuid}+'/createTask'" class="btn btn-primary mb-1">[[#{taskErstellen.text}]]</a>
 				<form th:action="'/topics/'+${topic.uuid}+'/delete'" method=post
 					th:if="${topic.subscriber.isEmpty()}">
-					<button class="btn btn-danger" type=submit>Topic löschen</button>
+					<button class="btn btn-danger" type=submit>[[#{topicLoeschen.text}]]</button>
 				</form>
 			</div>
 		</div>
@@ -28,19 +27,18 @@
 
 					<div class="form-group">
 						<textarea th:field="*{shortDescription}" class="form-control"
-							placeholder="Kurzbeschreibung" minlength="100" maxlength="200"></textarea>
-						<small class="form-text text-muted"> Verwenden Sie eine
-							aussagekräftige Kurzbeschreibung mit 100 bis 200 Zeichen! </small>
+							th:placeholder="#{kurzbeschreibung.text}" minlength="100" maxlength="200"></textarea>
+						<small class="form-text text-muted"> [[#{aussagekreaftigeKURZbeschreibung.text}]] </small>
 					</div>
 
 					<div class="form-group">
 						<textarea th:field="*{longDescription}" class="form-control"
-							rows="9" placeholder="Langbeschreibung" minlength="200"
+							rows="9" th:placeholder="#{langbeschreibung.text}" minlength="200"
 							maxlength="2000"></textarea>
-						<small class="form-text text-muted"> Verwenden Sie eine aussagekräftige Langbeschreibung mit 200 bis 2000 Zeichen! </small>
+						<small class="form-text text-muted"> [[#{aussagekreaftigeLANGbeschreibung.text}]] </small>
 					</div>
 
-					<button type="submit" class="btn btn-primary">Speichern</button>
+					<button type="submit" class="btn btn-primary">[[#{speichern.text}]]</button>
 				</form>
 			</div>
 		</div>
@@ -53,9 +51,9 @@
 						<div th:replace="fragments :: showTaskType"></div>
 						<p class="card-text" th:text="${task.taskShortDescription}"></p>
 						<form th:action="'/tasks/'+${task.id}+'/delete'" method="post">
-							<a th:href="'/tasks/'+${task.id}+'/manage'" class="btn btn-sm btn-primary mr-2">Verwalten</a>
-							<button class="btn btn-sm btn-danger mr-2" type="submit">Löschen</button>
-							<small>Subscriber haben diesen Task abgeschlossen: <i th:text="${task.amountFinished}"></i></small>
+							<a th:href="'/tasks/'+${task.id}+'/manage'" class="btn btn-sm btn-primary mr-2">[[#{verwaltung.text}]]</a>
+							<button class="btn btn-sm btn-danger mr-2" type="submit">[[#{loeschen.text}]]</button>
+							<small>[[#{anzahlSubscriberAbgeschlossen.text}]] <i th:text="${task.amountFinished}"></i></small>
 						</form>
 					</div>
 				</div>

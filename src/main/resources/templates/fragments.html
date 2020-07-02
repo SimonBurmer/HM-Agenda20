@@ -27,7 +27,7 @@
 			<div>
 				<div class="dropdown">
 					<button class="btn btn-sm btn-primary-outline text-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Sprache</button>
+						[[#{sprache.text}]]</button>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 						<a class="dropdown-item" th:href="@{?lang=en }">english</a> <a
 							class="dropdown-item" th:href="@{?lang=de }">deutsch</a>
@@ -49,17 +49,16 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li th:if="${administration}" class="nav-item"><a
-						class="nav-link" href="/users">Anwenderverwaltung</a></li>
+						class="nav-link" href="/users" th:text="#{anwenderverwaltung.text}"></a></li>
 					<li th:if="${user}" class="nav-item"><a class="nav-link"
 						href="/tasks">Tasks</a></li>
 					<li th:if="${user}" class="nav-item"><a class="nav-link"
 						href="/topics">Topics</a></li>
 				</ul>
-				<span th:if="${user}" class="nav-link text-white">Sie sind
-					eingeloggt als <strong th:text=${user.displayName}></strong>
-				</span>
+				<span th:if="${user}" class="nav-link text-white">[[#{sieSindEingeloggtAls.text}]]<strong th:text=${user.displayName}></strong>
+				</span> 
 				<form th:if="${user}" th:action="@{/logout}" method="post">
-					<button class="btn btn-secondary" type="submit">Abmelden</button>
+					<button class="btn btn-secondary" type="submit">[[#{abmelden.text}]]</button>
 				</form>
 			</div>
 		</nav>
@@ -107,11 +106,11 @@
 
 	<div th:fragment="showTaskType">
 		<h6 th:if="${task.taskType.toString()=='MANDATORY'}"
-			class="card-subtitle mb-2 text-primary">Pflichtaufgabe</h6>
+			class="card-subtitle mb-2 text-primary" th:text="#{pflichtaufgabe.text}"></h6>
 		<h6 th:if="${task.taskType.toString()=='OPTIONAL'}"
-			class="card-subtitle mb-2 text-secondary">Optionale Aufgabe</h6>
+			class="card-subtitle mb-2 text-secondary" th:text="#{optionaleAufgabe.text}"></h6>
 		<h6 th:if="${task.taskType.toString()=='INFO'}"
-			class="card-subtitle mb-2 text-info">Nur zur Info</h6>
+			class="card-subtitle mb-2 text-info" th:text="#{nurZurInfo.text}"></h6>
 	</div>
 
 	<th:block th:fragment="scripts">
