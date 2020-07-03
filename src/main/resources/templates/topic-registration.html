@@ -7,7 +7,7 @@
 
 	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
 		<div class="row justify-content-center">
-			<div class="col-auto">
+			<div class="col-7">
 				<h4 class="display-4"
 					th:text="#{topic.text} + ' '+ ${topic.title}+' '+ #{abbonieren.text}"></h4>
 				<div class="card bg-dark border-primary">
@@ -15,7 +15,7 @@
 						<h5 class="card-title" th:text="${topic.title}">Card title</h5>
 						<h6 class="card-subtitle mb-2 text-muted"
 							th:text="'Von '+${topic.creator.displayName}">Card subtitle</h6>
-						<p class="card-text">[[#{keineBeschreibung.text}]]</p>
+						<p class="card-text" th:text="${topic.shortDescription}">[[#{keineBeschreibung.text}]]</p>
 						<form id="formName"
 							th:action="@{/topics/{uuid}/register(uuid=${topic.uuid})}"
 							method="post">
