@@ -31,7 +31,7 @@
 		<hr class="my-4">
 		
 		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 mb-5">
-			<div class="col" th:each="t : ${managedTopics}">
+			<div class="col mb-4" th:each="t : ${managedTopics}">
 				<div class="card bg-dark border-primary" style="height: 100%;">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${t.title} +' ('+${t.key}+')'">Card
@@ -77,8 +77,8 @@
 		
 		<hr class="my-4">
 		
-		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 mb-4">
-			<div class="col" th:each="t : ${topics}">
+		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+			<div class="col mb-4" th:each="t : ${topics}">
 				<div class="card bg-dark border-secondary" style="height: 100%;">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${t.title}">Card title</h5>
