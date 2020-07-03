@@ -67,18 +67,17 @@ body {
     </div>
 </div>
 <div class="container" th:if="${user}">
-    <div
-            class="row justify-content-center mt-5 align-items-center rgba-gradient"
-            style="height: 60vh;">
+    <div class="row justify-content-center mt-5 align-items-center rgba-gradient">
         <div class="col-6">
-            <h1 class="display-4 ml-5" th:text="#{hallo.text}+' '+${user.name}+'!'"></h1>
-            <h3 class="ml-5" th:text="#{agenda.text} + ':'"></h3>
+            <h1 class="ml-5" th:text="#{hallo.text}+' '+${user.name}+'!'"></h1>
         </div>
         <div class="col-6 mt-5">
             <div class="container">
                 <form th:object="${registration}" th:action="@{/register}"
                       method="post">
                     <h5 class="form-signin-heading" th:text="#{direkteinstieg.text}"></h5>
+                    <small class="form-text text-white mb-2"
+                           th:text="#{kurzschluesselErklaerung.text}"></small>
                     <div class="form-row">
                         <div class="form-group col-9">
                             <input th:field="*{key}" class="form-control form-control-sm"
@@ -90,32 +89,30 @@ body {
                         </div>
                     </div>
                 </form>
-                <small th:if="${user}" class="form-text text-muted"
-                       th:text="#{kurzschluesselErklaerung.text}"></small>
             </div>
         </div>
         <hr class="my-4">
-        <div style="height: 40vh;" class="overflow-auto">
-            <div class="col mb-4 border border-secondary"
-                 th:each="t : ${topics}">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${t.title}">Card title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted"
-                        th:text="'Von '+${t.creator.displayName}">Card subtitle</h6>
-                    <p>
-                        <small class="card-text" th:text="${t.shortDescription}">[[#{keineBeschreibung.text}]]</small>
-                    </p>
-                    <a th:href="'/topics/'+${t.uuid}"
-                       class="btn btn-sm btn-primary mr-2">[[#{oeffnen.text}]]</a> <a
-                        th:href="'/topics/'+${t.uuid}+'/unregister'"
-                        class="btn btn-sm btn-outline-warning mr-2">[[#{abboEnde.text}]]</a> <small>[[#{offeneTasks.text}]]
-                    <i th:text="${t.amountUnfinishedTasks}"></i>
-                </small>
+        <div>
+            <h3 class="ml-4" th:text="#{agenda.text} + ':'"></h3>
 
+            <div class="col mb-4" th:each="t : ${topics}">
+                <div class="border border-secondary rounded">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${t.title}">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted"
+                            th:text="'Von '+${t.creator.displayName}">Card subtitle</h6>
+                        <p><small class="card-text" th:text="${t.shortDescription}">
+                            [[#{keineBeschreibung.text}]]
+                        </small></p>
+                        <a th:href="'/topics/'+${t.uuid}"
+                           class="btn btn-sm btn-primary mr-2">[[#{oeffnen.text}]]</a> <a
+                            th:href="'/topics/'+${t.uuid}+'/unregister'"
+                            class="btn btn-sm btn-outline-warning mr-2">[[#{abboEnde.text}]]</a>
+                        <small>[[#{offeneTasks.text}]]<span th:text="' ' + ${t.amountUnfinishedTasks}"></span></small>
+                    </div>
                 </div>
             </div>
         </div>
-
 
     </div>
 </div>
