@@ -11,32 +11,41 @@
 				<h4 class="display-4" th:text="#{eigeneAufgaben.text}"></h4>
 				<span th:if="${#lists.size(tasks)==0}">[[#{keineAufgaben.text}]]</span>
 			</div>
-			<div class="row justify-content-between">
-				<form class="form-inline" th:object="${search}"
-					th:action="@{/tasks}" method="get">
-					<div class="form-check">
-						<input type="checkbox" class="form-check-input"
-							th:checked="*{onlyNewTasks} ? 'checked'" value="yes"
-							name="onlyNewTasks" id="onlyNewTasksID"> <label
-							class="form-check-label" for="onlyNewTasksID">[[#{nurOffeneTasks.text}]]&nbsp;</label>
+			<div class="col-auto">
+
+				<form th:object="${search}" th:action="@{/tasks}"
+					method="get">
+					
+					<div class="row form-inline">
+						<div class="form-group">
+							<input th:field="*{search}" class="form-control"
+								th:placeholder="#{suchen.text}" />
+						</div>
+						<button type="submit" class="btn btn-primary">[[#{suchen}]]</button>
 					</div>
-					<div class="form-group bg-dark">
-						<input th:field="*{search}" class="form-control"
-							th:placeholder="#{suchen.text}" />
+					<div class="row">
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input"
+								th:checked="*{onlyNewTasks} ? 'checked'" value="yes"
+								name="onlyNewTasks" id="onlyNewTasksID"> <label
+								class="form-check-label" for="onlyNewTasksID">[[#{nurOffeneTasks.text}]]&nbsp;</label>
+						</div>
 					</div>
-					<button type="submit" class="btn btn-primary">[[#{suchen}]]</button>
 				</form>
 			</div>
 		</div>
-		<div class="row row-cols-1 bg-dark">
+		<hr class="my-4">
+		<div
+			class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 bg-dark">
 			<div class="col mb-4" th:each="task : ${tasks}">
-				<div class="card bg-dark"
+				<div class="card bg-dark" style="height: 100%;"
 					th:classappend="${task.status.status.toString()=='FERTIG'} ? border-secondary : border-primary">
+					<img th:src="'data:image/png;base64,'+${task.base64Image}"
+						class="card-img-top" />
 					<div class="card-body">
 						<h5 class="card-title" th:text="${task.title}">Card title</h5>
 						<div th:replace="fragments :: showTaskType"></div>
 						<p class="card-text" th:text="${task.taskShortDescription}"></p>
-
 						<form th:unless="${task.status.status.toString()=='FERTIG'}"
 							id="formName" th:action="@{/tasks/{id}/check(id=${task.id})}"
 							th:object="${task}" method="post">

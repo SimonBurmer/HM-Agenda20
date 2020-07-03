@@ -8,7 +8,8 @@
 	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
 		<div class="row">
 			<div class="col-auto">
-				<h4 class="display-4" th:text="#{aufgabenUEbersichtTopic.text}+' '+${topic.title}">
+				<h4 class="display-4"
+					th:text="#{aufgabenUEbersichtTopic.text}+' '+${topic.title}">
 				</h4>
 			</div>
 		</div>
@@ -20,26 +21,38 @@
 
 		<div class="row row-cols-1 bg-dark">
 			<div class="col mb-4" th:each="task : ${tasks}">
-				<div class="card bg-dark" th:classappend="${task.status.status.toString()=='FERTIG'} ? border-secondary : border-primary">
+				<div class="card bg-dark"
+					th:classappend="${task.status.status.toString()=='FERTIG'} ? border-secondary : border-primary">
 					<div class="card-body">
-						<h5 class="card-title" th:text="${task.title}">Card title</h5>
-						<div th:replace="fragments :: showTaskType"></div>
-						<p class="card-text" th:text="${task.taskShortDescription}"></p>
+						<div class="row">
+							<div class="col-md-3  text-center">
+								<img th:src="'data:image/png;base64,'+${task.base64Image}"
+									style="width: 100%;" class="mb-1" />
+							</div>
+							<div class="col-md-9">
 
-						<form th:unless="${task.status.status.toString()=='FERTIG'}"
-							  id="formName" th:action="@{/tasks/{id}/check(id=${task.id})}"
-							  th:object="${task}" method="post">
-							<a th:href="'/tasks/'+${task.id}" class="btn btn-sm btn-primary mr-2">[[#{oeffnen.text}]]</a>
-							<button type="submit" class="btn btn-sm btn-success mr-2">[[#{erledigt.text}]]</button>
-						</form>
+								<h5 class="card-title" th:text="${task.title}">Card title</h5>
+								<div th:replace="fragments :: showTaskType"></div>
+								<p class="card-text" th:text="${task.taskShortDescription}"></p>
 
-						<form th:if="${task.status.status.toString()=='FERTIG'}"
-							  id="formName" th:action="@{/tasks/{id}/reset(id=${task.id})}"
-							  th:object="${task}" method="post">
-							<a th:href="'/tasks/'+${task.id}" class="btn btn-sm btn-primary mr-2">[[#{oeffnen.text}]]</a>
-							<button type="submit" class="btn btn-sm btn-outline-secondary mr-2">[[#{zuruecksetzten.text}]]</button>
-						</form>
+								<form th:unless="${task.status.status.toString()=='FERTIG'}"
+									id="formName" th:action="@{/tasks/{id}/check(id=${task.id})}"
+									th:object="${task}" method="post">
+									<a th:href="'/tasks/'+${task.id}"
+										class="btn btn-sm btn-primary mr-2">[[#{oeffnen.text}]]</a>
+									<button type="submit" class="btn btn-sm btn-success mr-2">[[#{erledigt.text}]]</button>
+								</form>
 
+								<form th:if="${task.status.status.toString()=='FERTIG'}"
+									id="formName" th:action="@{/tasks/{id}/reset(id=${task.id})}"
+									th:object="${task}" method="post">
+									<a th:href="'/tasks/'+${task.id}"
+										class="btn btn-sm btn-primary mr-2">[[#{oeffnen.text}]]</a>
+									<button type="submit"
+										class="btn btn-sm btn-outline-secondary mr-2">[[#{zuruecksetzten.text}]]</button>
+								</form>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -8,65 +8,72 @@
 		<div class="row justify-content-between">
 			<div class="col-auto">
 				<h4 class="display-4">
-					[[#{eigeneTopics.text}]] <a href="/topics/create" class="btn btn-primary">[[#{erstelleTopic.text}]]</a>
+					[[#{eigeneTopics.text}]] <a href="/topics/create"
+						class="btn btn-primary">[[#{erstelleTopic.text}]]</a>
 				</h4>
 
-				<span th:if="${#lists.size(managedTopics)==0}" th:text="#{keinTopicErstellt.text}"></span>
+				<span th:if="${#lists.size(managedTopics)==0}"
+					th:text="#{keinTopicErstellt.text}"></span>
 			</div>
 			<form class="form-inline" th:object="${search}"
 				th:action="@{/topics}" method="get">
-				<div class="form-group bg-dark">
+				<div class="form-group">
 					<input th:field="*{search}" class="form-control"
 						th:placeholder="#{suchen.text}" />
 				</div>
 				<button type="submit" class="btn btn-primary">[[#{suchen}]]</button>
 			</form>
 		</div>
-		<div class="row row-cols-1 row-cols-md-3 bg-dark">
+		<hr class="my-4">
+		<div
+			class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
 			<div class="col mb-4" th:each="t : ${managedTopics}">
-				<div class="card bg-dark border-primary">
+				<div class="card bg-dark border-primary" style="height: 100%;">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${t.title} +' ('+${t.key}+')'">Card
 							title</h5>
-						<p>
-							<small class="card-text" th:text="${t.shortDescription}">[[#{keineBeschreibung.text}]]</small>
+						<p class="card-text" th:text="${t.shortDescription}">[[#{keineBeschreibung.text}]]
 						</p>
+						<div class="mb-1 text-success">
+							[[#{anzahlSubscriber.text}]]<i th:text="${t.AmountSubscriber}"></i>
+						</div>
 						<a th:href="'/topics/'+${t.uuid}+'/manage'"
 							class="btn btn-sm btn-primary">[[#{verwaltung.text}]]</a> <a
 							th:href="'/topics/'+${t.uuid}+'/subscriberlist'"
-							class="btn btn-sm btn-outline-primary">[[#{teilnehmer.text}]]</a> <small>[[#{anzahlSubscriber.text}]] <i th:text="${t.AmountSubscriber}"></i>
-						</small>
+							class="btn btn-sm btn-outline-primary">[[#{teilnehmer.text}]]</a>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row row-cols-1 row-cols-md-3 bg-dark">
+		<div class="row row-cols-1 mt-3">
 			<div class="col-auto">
 				<h6 class="display-4" th:text="#{abbonierteTopics.text}"></h6>
 				<span th:if="${#lists.size(topics)==0}">[[#{keineTopicsAbboniert.text}]]</span>
 			</div>
 		</div>
-		<div class="row row-cols-1 row-cols-md-3 bg-dark">
+		<hr class="my-4">
+		<div
+			class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
 			<div class="col mb-4" th:each="t : ${topics}">
-				<div class="card bg-dark border-secondary">
+				<div class="card bg-dark border-secondary" style="height: 100%;">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${t.title}">Card title</h5>
 						<h6 class="card-subtitle mb-2 text-muted"
 							th:text="'Von '+${t.creator.displayName}">Card subtitle</h6>
-						<p>
-							<small class="card-text" th:text="${t.shortDescription}">[[#{keineBeschreibung.text}]]</small>
+						<p class="card-text" th:text="${t.shortDescription}">[[#{keineBeschreibung.text}]]
 						</p>
+						<div class="mb-1 text-danger">
+							[[#{offeneTasks.text}]]<i th:text="${t.amountUnfinishedTasks}"></i>
+						</div>
 						<a th:href="'/topics/'+${t.uuid}"
 							class="btn btn-sm btn-primary mr-2">[[#{oeffnen.text}]]</a> <a
 							th:href="'/topics/'+${t.uuid}+'/unregister'"
-							class="btn btn-sm btn-outline-warning mr-2">[[#{abboEnde.text}]]</a> <small>[[#{offeneTasks.text}]] <i th:text="${t.amountUnfinishedTasks}"></i>
-						</small>
-
+							class="btn btn-sm btn-outline-warning mr-2">[[#{abboEnde.text}]]</a>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row row-cols-1 row-cols-md-3 bg-dark">
+		<div class="row row-cols-1 row-cols-md-3">
 			<div class="col mb-4">
 				<div class="card bg-dark border-info">
 					<div class="card-body">
@@ -83,7 +90,8 @@
 								</div>
 							</div>
 						</form>
-						<small th:if="${user}" class="form-text text-muted" th:text="#{kurzschluesselErklaerung.text}"></small>
+						<small th:if="${user}" class="form-text text-muted"
+							th:text="#{kurzschluesselErklaerung.text}"></small>
 					</div>
 				</div>
 			</div>
