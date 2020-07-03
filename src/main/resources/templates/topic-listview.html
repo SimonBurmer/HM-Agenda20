@@ -15,19 +15,22 @@
 				<span th:if="${#lists.size(managedTopics)==0}"
 					th:text="#{keinTopicErstellt.text}"></span>
 			</div>
-			<form class="form-inline" th:object="${search}"
-				th:action="@{/topics}" method="get">
-				<div class="form-group">
-					<input th:field="*{search}" class="form-control"
-						th:placeholder="#{suchen.text}" />
+			<form class="col-auto" th:object="${search}" th:action="@{/topics}"
+				method="get">
+				<div class="form-row">
+					<div class="form-group col-9">
+						<input th:field="*{search}" class="form-control"
+							th:placeholder="#{suchen.text}" />
+					</div>
+					<div class="col-3">
+						<button type="submit" class="btn btn-primary">[[#{suchen}]]</button>
+					</div>
 				</div>
-				<button type="submit" class="btn btn-primary">[[#{suchen}]]</button>
 			</form>
 		</div>
 		<hr class="my-4">
-		<div
-			class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
-			<div class="col mb-4" th:each="t : ${managedTopics}">
+		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 mb-5">
+			<div class="col" th:each="t : ${managedTopics}">
 				<div class="card bg-dark border-primary" style="height: 100%;">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${t.title} +' ('+${t.key}+')'">Card
@@ -45,16 +48,35 @@
 				</div>
 			</div>
 		</div>
-		<div class="row row-cols-1 mt-3">
-			<div class="col-auto">
-				<h6 class="display-4" th:text="#{abbonierteTopics.text}"></h6>
+		<div class="row justify-content-between">
+			<div class="col-auto align-self-center">
+				<div class="display-4" th:text="#{abbonierteTopics.text}"></div>
 				<span th:if="${#lists.size(topics)==0}">[[#{keineTopicsAbboniert.text}]]</span>
+			</div>
+
+			<div class="col-auto">
+				<div th:text="#{direkteinstieg.text}"></div>
+				<form th:object="${registration}" th:action="@{/register}"
+					method="post">
+					<div class="form-row">
+						<div class="form-group col-9">
+							<input th:field="*{key}" class="form-control"
+								th:placeholder="#{kurzschluessel.text}" />
+						</div>
+						<div class="col-3">
+							<button type="submit" class="btn btn-primary">[[#{suchen}]]</button>
+						</div>
+					</div>
+				</form>
+				<div>
+					<small th:if="${user}" class="form-text text-muted mt-n2"
+						th:text="#{kurzschluesselErklaerung.text}"></small>
+				</div>
 			</div>
 		</div>
 		<hr class="my-4">
-		<div
-			class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
-			<div class="col mb-4" th:each="t : ${topics}">
+		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 mb-4">
+			<div class="col" th:each="t : ${topics}">
 				<div class="card bg-dark border-secondary" style="height: 100%;">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${t.title}">Card title</h5>
@@ -62,7 +84,7 @@
 							th:text="'Von '+${t.creator.displayName}">Card subtitle</h6>
 						<p class="card-text" th:text="${t.shortDescription}">[[#{keineBeschreibung.text}]]
 						</p>
-						<div class="mb-1 text-danger">
+						<div class="mb-1 text-warning">
 							[[#{offeneTasks.text}]]<i th:text="${t.amountUnfinishedTasks}"></i>
 						</div>
 						<a th:href="'/topics/'+${t.uuid}"
@@ -73,29 +95,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row row-cols-1 row-cols-md-3">
-			<div class="col mb-4">
-				<div class="card bg-dark border-info">
-					<div class="card-body">
-						<h5 class="card-title" th:text="#{direkteinstieg.text}"></h5>
-						<form th:object="${registration}" th:action="@{/register}"
-							method="post">
-							<div class="form-row">
-								<div class="form-group col-9">
-									<input th:field="*{key}" class="form-control"
-										th:placeholder="#{kurzschluessel.text}" />
-								</div>
-								<div class="col-3">
-									<button type="submit" class="btn btn-primary">[[#{suchen}]]</button>
-								</div>
-							</div>
-						</form>
-						<small th:if="${user}" class="form-text text-muted"
-							th:text="#{kurzschluesselErklaerung.text}"></small>
-					</div>
-				</div>
-			</div>
-		</div>
+
 	</div>
 	<th:block th:replace="fragments :: scripts">
 </body>
