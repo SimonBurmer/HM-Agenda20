@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html ang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head">
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>[[#{ameldung.text}]]</title>
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+	crossorigin="anonymous">
+<link
+	href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css"
+	rel="stylesheet" crossorigin="anonymous" />
+</head>
+
+<style>
+/* Set a background image by replacing the URL below */
+body {
+	background-image:
+		url('http://mdbootstrap.com/img/Photos/Others/images/91.jpg');
+	background-repeat: no-repeat;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	background-size: cover;
+	-o-background-size: cover;
+}
+
+.rgba-gradient {
+	background: -webkit-linear-gradient(45deg, rgba(0, 0, 0, 0.7),
+		rgba(72, 15, 144, 0.4) 100%);
+	background: -webkit-gradient(linear, 45deg, from(rgba(0, 0, 0, 0.7),
+		rgba(72, 15, 144, 0.4) 100%));
+	background: linear-gradient(to 45deg, rgba(0, 0, 0, 0.7),
+		rgba(72, 15, 144, 0.4) 100%);
+}
+</style>
+
+
+<body class="text-white bg-dark">
+	<nav th:replace="fragments :: navigation"></nav>
+	<div class="container">
+		<div class="row justify-content-center mt-5 align-items-center">
+			<div class="col-4">
+				<form class="form-signin" method="post" action="/login">
+					<h2 class="form-signin-heading text-center"
+						th:text="#{ameldung.text}"></h2>
+					<p>
+						<label for="username" class="sr-only">Username</label> <input
+							type="text" id="username" name="username" class="form-control"
+							placeholder="Username" required autofocus>
+					</p>
+					<p>
+						<label for="password" class="sr-only"></label> <input
+							type="password" id="password" name="password"
+							class="form-control" th:placeholder="#{passwort.text}" required>
+					</p>
+					<button class="btn btn-lg btn-primary btn-block" type="submit">[[#{anmelden.text}]]</button>
+				</form>
+			</div>
+
+		</div>
+	</div>
+
+	<th:block th:replace="fragments :: scripts">
+</body>
+</html>
