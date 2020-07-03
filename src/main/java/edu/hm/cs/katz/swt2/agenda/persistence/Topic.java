@@ -126,6 +126,10 @@ public class Topic {
     return Collections.unmodifiableCollection(subscriber);
   }
 
+  public Collection<User> getSubscriberModifiable() {
+    return subscriber;
+  }
+
   /*
    * Standard-Methoden. Es ist sinnvoll, hier auf die Auswertung der Assoziationen zu verzichten,
    * nur die Primärschlüssel zu vergleichen und insbesonderen Getter zu verwenden, um auch mit den

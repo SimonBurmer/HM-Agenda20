@@ -17,21 +17,29 @@
 		</div>
 		
 		<div class="row justify-content-center">
-			<div class="col-9">
-				<table class="table table-dark">
+			<div class="col-12">
+				<table class="table table-dark table-striped">
 					<thead>
 						<tr>
 							<th scope="col">[[#{login.text}]]</th>
 							<th scope="col">[[#{name.text}]]</th>
 							<th scope="col">[[#{topics.text}]]</th>
 							<th scope="col">[[#{abos.text}]]</th>
+							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tr th:each="user : ${users}">
-						<td th:text="${user.login} " />
-						<td th:text="${user.name} " />
-						<td th:text="${user.topicCount} " />
-						<td th:text="${user.subscriptionCount} " />
+						<td th:text="${user.login}" />
+						<td th:text="${user.name}" />
+						<td th:text="${user.topicCount}" />
+						<td th:text="${user.subscriptionCount}" />
+						<td>
+							<div th:unless="${user.login=='admin'}">
+								<form id="deleteUserForm" th:action="'/users/'+${user.login}+'/delete'" method="post">
+									<button type="submit" class="btn btn-sm btn-danger">[[#{anwenderLoeschen.text}]]</button>
+								</form>
+							</div>
+						</td>
 					</tr>
 				</table>
 			</div>

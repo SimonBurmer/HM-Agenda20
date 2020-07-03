@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -60,6 +61,24 @@ public class UserController extends AbstractController {
     }
     redirectAttributes.addFlashAttribute("success",
         "Anwender " + anwender.getLogin() + " erstellt.");
+    return "redirect:/users";
+  }
+
+  /**
+   * Löscht einen Anwender samt seiner abonnierten Topics und Task-Statuses.
+   * Sind eigene verwaltete Topics vorhanden werden Abonnenten deabonniert und auch deren
+   * Task-Status gelöscht.
+   */
+  @PostMapping("/users/{login}/delete")
+  public String handleUserDeletion(Model model, Authentication auth,
+      @PathVariable("login") String login, RedirectAttributes redirectAttributes) {
+    try {
+      userService.deleteUser(login);
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("error", e.getMessage());
+      return "redirect:/users";
+    }
+    redirectAttributes.addFlashAttribute("success", "Anwender " + login + " wurde gelöscht!");
     return "redirect:/users";
   }
 }
