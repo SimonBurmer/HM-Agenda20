@@ -26,7 +26,16 @@ public class IndexController extends AbstractController {
 
   @Autowired
   TopicService topicService;
-
+  
+  
+  /**
+   * Erstellt die Login-Page.
+   */
+  @GetMapping("/login")
+  public String login() {
+    return "login";
+  }
+  
   /**
    * Erstellt die Landing-Page.
    */

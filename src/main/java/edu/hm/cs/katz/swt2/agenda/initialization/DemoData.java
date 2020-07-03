@@ -83,7 +83,7 @@ public class DemoData {
 
   private static final String TOPIC_CSS_KURZ =
       "Jetzt CSS Profi werden mit Fine. Sie möchten Webdesigner werden"
-          + " oder Ihr Wissen vertiefen bzw. auffrischen ?";
+          + " oder Ihr Wissen vertiefen und auffrischen?";
 
 
   private static final String TASK_LINK_ERSTELLEN_LANG =
@@ -99,6 +99,7 @@ public class DemoData {
           + "Schweiz aus zugänglich zu machen, entstand 1989 am CERN ein Projekt,"
           + " welches sich mit der Lösung dieser Aufgabe beschäftigte. Am 3. November"
           + " 1992 erschien die erste Version der HTML-Spezifikation.";
+  
   private static final String TASK_HTML_TEMPLATE_ERSTELLEN_LANG =
       "Das template-Element ermöglicht es, Template-Vorlagen als "
           + "Inhaltsfragmente im HTML-Dokument anzugeben, die zwar auf ihre "
@@ -137,6 +138,7 @@ public class DemoData {
           + "während es auf anderen Kontinenten nur eine untergeordnete Rolle"
           + " spielt; in Asien sind fast ausschließlich Reiskuchen bekannt. "
           + "In China haben außerdem die Mondkuchen eine besondere Bedeutung.";
+  
   private static final String TASK_AFFENMUFFINS_BACKEN_LANG =
       "Den Backofen auf 175 °C vorheizen. Das Muffinblech mit Papierförmchen"
           + " auslegen. In einer Schüssel das Mehl mit dem Backpulver, Natron,"
@@ -152,21 +154,26 @@ public class DemoData {
           + ". 12 Oblaten halbieren. In die Muffins links und rechts je einen "
           + "kleinen Schnitt machen und die halben Oblaten einstecken. Erst "
           + "die Augen, dann den Mund in die noch warme Kuvertüre auf die " + "Muffins kleben.";
+  
   private static final String TASK_LINK_ERSTELLEN_KURZ =
       "Die Hypertext Markup Language ist eine textbasierte "
           + "Auszeichnungssprache zur Strukturierung elektronischer Dokumente"
           + " wie Texte mit Hyperlinks, Bildern und anderen Inhalten.";
+  
   private static final String TASK_HTML_TEMPLATE_ERSTELLEN_KURZ =
       "Das template-Element ermöglicht es, Template-Vorlagen als Inhaltsfragmente"
           + " im HTML-Dokument anzugeben, die zwar auf ihre Richtigkeit geparst,"
           + " aber nicht gerendert werden.";
+  
   private static final String TASK_WAS_IST_CSS_KURZ =
       "Sicherlich hat jeder, der nur im Entferntesten mit der digitalen Welt in Berührung kommt,"
           + " schon einmal von der Abkürzung CSS gehört. Doch was bedeutet sie eigentlich?";
+  
   private static final String TASK_GOOGLEHUPF_BACKEN_KURZ =
       "Der Kuchen gehört zu den feinen Backwaren. Es handelt sich um ein "
           + "zumeist süßes Backwerk. Man unterscheidet vor allem nach der Art"
           + " der Herstellung Blechkuchen.";
+  
   private static final String TASK_AFFENMUFFINS_BACKEN_KURZ =
       "Diese Muffins passen perfekt zu einem tollen Kindergeburtstag. Wie"
           + " man sie zubereitet und anschließend noch in lustige Affen "

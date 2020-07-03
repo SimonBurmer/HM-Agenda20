@@ -30,7 +30,7 @@ public class AgendaConfiguration extends WebSecurityConfigurerAdapter {
         // Authentifizierung Voraussetzung für alles andere
         .anyRequest().fullyAuthenticated()
         // Login-Handling
-        .and().formLogin().and().logout().logoutSuccessUrl("/").permitAll();
+        .and().formLogin().loginPage("/login").and().logout().logoutSuccessUrl("/").permitAll();
 
     // Deaktivierung von Sicherheitsmerkmalen nur im Praktikum sinnvoll!
     http.csrf().disable();
