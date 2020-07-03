@@ -67,7 +67,7 @@ body {
     </div>
 </div>
 <div class="container" th:if="${user}">
-    <div class="row justify-content-center mt-5 align-items-center rgba-gradient">
+    <div class="row justify-content-center mt-5 mb-5 align-items-center rgba-gradient">
         <div class="col-6">
             <h1 class="ml-5" th:text="#{hallo.text}+' '+${user.name}+'!'"></h1>
         </div>
@@ -91,10 +91,9 @@ body {
                 </form>
             </div>
         </div>
-        <hr class="my-4">
         <div>
-            <h3 class="ml-4" th:text="#{agenda.text} + ':'"></h3>
-
+            <h3 class="col align-items-left ml-4" th:unless="${topics.isEmpty()}" th:text="#{agenda.text} + ':'"></h3>
+            <h3 class="mt-5 mb-4" th:if="${topics.isEmpty()}" th:text="#{agendaEmpty.text}"></h3>
             <div class="col mb-4" th:each="t : ${topics}">
                 <div class="border border-secondary rounded">
                     <div class="card-body">
