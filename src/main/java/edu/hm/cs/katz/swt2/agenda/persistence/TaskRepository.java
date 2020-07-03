@@ -8,10 +8,18 @@ import org.springframework.stereotype.Repository;
  * Repository zum Zugriff auf gespeicherte Tasks. Repostory-Interfaces erben eine unglaubliche Menge
  * hilfreicher Methoden. Weitere Methoden kann man einfach durch Benennung definierern. Spring Data
  * ergänzt die Implementierungen zur Laufzeit.
- * 
+ *
  * @author Bastian Katz (mailto: bastian.katz@hm.edu)
  */
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
-  // Keine eigenen Methoden benötigt.
+
+  /**
+   * Löscht alle Tasks zu einem Topic.
+   *
+   * @param topic Topic
+   * @return int Anzahl der gelöschten Tasks
+   */
+  int deleteByTopic(Topic topic);
+  
 }

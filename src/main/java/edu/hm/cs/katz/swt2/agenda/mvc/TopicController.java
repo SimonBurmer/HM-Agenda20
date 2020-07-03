@@ -170,6 +170,7 @@ public class TopicController extends AbstractController {
   public String deleteTopic(Authentication auth, @PathVariable("uuid") String uuid,
       RedirectAttributes redirectAttributes) {
     try {
+      taskService.deleteTasksFromTopic(uuid, auth.getName());
       topicService.deleteTopic(uuid, auth.getName());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("error", e.getMessage());

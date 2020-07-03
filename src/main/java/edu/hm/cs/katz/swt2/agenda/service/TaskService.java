@@ -89,4 +89,9 @@ public interface TaskService {
    * Löscht für einen Abonnenten alle Status für Tasks eines Topics.
    */
   void deleteTaskStatusesforTopic(String topicUuid, String login);
+
+  /**
+   * Löscht alle Tasks eines Topics.
+   */
+  void deleteTasksFromTopic(String topicUuid, String login);
 }

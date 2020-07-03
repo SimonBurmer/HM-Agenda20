@@ -386,4 +386,18 @@ public class TaskServiceImpl implements TaskService {
     }
     LOG.debug("{} Status gelöscht", numberOfDeletedStatuses);
   }
+
+  @Override
+  @PreAuthorize("#login == authentication.name or hasRole('ROLE_ADMIN')")
+  public void deleteTasksFromTopic(String topicUuid, String login) {
+    Topic topic = topicRepository.getOne(topicUuid);
+    if (!login.equals(topic.getCreator().getLogin())) {
+      LOG.warn("Login \"{}\" ist nicht berechtigt Tasks zu löschen.",
+          login);
+      throw new AccessDeniedException("Zugriff verweigert.");
+    }
+    taskRepository.deleteByTopic(topic);
+  }
+
+
 }
