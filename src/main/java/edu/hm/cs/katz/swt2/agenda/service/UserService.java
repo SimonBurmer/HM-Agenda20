@@ -14,4 +14,6 @@ public interface UserService {
 
   void legeAn(String login, String name, String password, boolean isAdministrator);
 
+  void deleteUser(String login);
+
 }

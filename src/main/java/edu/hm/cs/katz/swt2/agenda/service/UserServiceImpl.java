@@ -3,10 +3,17 @@ package edu.hm.cs.katz.swt2.agenda.service;
 import static edu.hm.cs.katz.swt2.agenda.common.SecurityHelper.ADMIN_ROLES;
 import static edu.hm.cs.katz.swt2.agenda.common.SecurityHelper.STANDARD_ROLES;
 
+import edu.hm.cs.katz.swt2.agenda.persistence.StatusRepository;
+import edu.hm.cs.katz.swt2.agenda.persistence.Task;
+import edu.hm.cs.katz.swt2.agenda.persistence.TaskRepository;
+import edu.hm.cs.katz.swt2.agenda.persistence.Topic;
+import edu.hm.cs.katz.swt2.agenda.persistence.TopicRepository;
 import edu.hm.cs.katz.swt2.agenda.persistence.User;
 import edu.hm.cs.katz.swt2.agenda.persistence.UserRepository;
 import edu.hm.cs.katz.swt2.agenda.service.dto.UserDisplayDto;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.ValidationException;
@@ -42,6 +49,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
   @Autowired
   private UserRepository anwenderRepository;
+
+  @Autowired
+  StatusRepository statusRepository;
+
+  @Autowired
+  TopicRepository topicRepository;
+
+  @Autowired
+  TaskRepository taskRepository;
 
   @Autowired
   private DtoMapper mapper;
@@ -116,5 +132,74 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     // Passwörter im Klartext in der Datenbank (böse)
     User anwender = new User(login, name, "{noop}" + password, isAdministrator);
     anwenderRepository.save(anwender);
+  }
+
+  @Override
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  public void deleteUser(String login) {
+    LOG.info("Lösche einen Anwender.");
+    LOG.debug("\tlogin=\"{}\"", login);
+
+    if (!anwenderRepository.existsById(login)) {
+      LOG.debug("Zu löschender Anwender existiert nicht!");
+      throw new ValidationException(
+          "Zu löschender Anwender existiert nicht!");
+    }
+    if (login.equals("admin")) {
+      LOG.debug("Admin Account kann nicht gelöscht werden!");
+      throw new ValidationException(
+          "Admin Account kann nicht gelöscht werden!");
+    }
+
+    User userToDelete = anwenderRepository.getOne(login);
+
+    // Abonnierte Topics und Task-Statuses löschen
+    Collection<Topic> subscribedTopics = userToDelete.getSubscriptions();
+    LOG.debug("\tsubscribedTopics={}", subscribedTopics);
+    for (Iterator<Topic> iterator = subscribedTopics.iterator(); iterator.hasNext();) {
+      Topic subscribedTopic = iterator.next();
+      LOG.debug("\t\tsubscribedTopic={}", subscribedTopic);
+      subscribedTopic.getSubscriberModifiable().remove(userToDelete);
+      Collection<Task> subscribedTasks = subscribedTopic.getTasks();
+      LOG.debug("\t\tsubscribedTasks={}", subscribedTasks);
+      int numberOfDeletedStatuses = 0;
+      for (Task task : subscribedTasks) {
+        numberOfDeletedStatuses += statusRepository.deleteByUserAndTask(userToDelete, task);
+      }
+      LOG.debug("\t\t{} eigene Task Status gelöscht", numberOfDeletedStatuses);
+      iterator.remove();
+    }
+
+    // Eigene Topics, Abonnements, Abonnenten-Status und Tasks löschen
+    List<Topic> managedTopics = topicRepository.findByCreatorOrderByTitleAsc(userToDelete);
+    LOG.debug("\tmanagedTopics={}", managedTopics);
+    for (Iterator<Topic> managedTopicIterator = managedTopics.iterator();
+         managedTopicIterator.hasNext();) {
+      Topic managedTopic = managedTopicIterator.next();
+      LOG.debug("\t\tmanagedTopic={}", managedTopic);
+      Collection<User> subscribers = managedTopic.getSubscriberModifiable();
+      for (Iterator<User> subscriberIterator = subscribers.iterator();
+           subscriberIterator.hasNext();) {
+        User subscribedUser = subscriberIterator.next();
+        LOG.debug("\t\tsubscribedUser={}", subscribedUser);
+        subscribedUser.getSubscriptions().remove(managedTopic);
+        Collection<Task> subscriberTasks = managedTopic.getTasks();
+        LOG.debug("\t\tsubscriberTasks={}", subscriberTasks);
+        int numberOfDeletedStatuses = 0;
+        for (Task task : subscriberTasks) {
+          numberOfDeletedStatuses += statusRepository.deleteByUserAndTask(subscribedUser, task);
+        }
+        LOG.debug("\t\t{} Subscriber Task Status gelöscht", numberOfDeletedStatuses);
+        subscriberIterator.remove();
+      }
+      taskRepository.deleteByTopic(managedTopic);
+      LOG.debug("\tAlle managed Tasks gelöscht");
+      topicRepository.delete(managedTopic);
+      LOG.debug("\tAlle managed Topics gelöscht");
+      managedTopicIterator.remove();
+    }
+    // User löschen
+    anwenderRepository.delete(userToDelete);
+    LOG.debug("\tAnwender gelöscht");
   }
 }
