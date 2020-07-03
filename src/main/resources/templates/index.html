@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: head"/>
+<head th:replace="fragments :: head" />
 
 <style>
 /* Set a background image by replacing the URL below */
@@ -22,135 +22,138 @@ body {
 	background: linear-gradient(to 45deg, rgba(0, 0, 0, 0.7),
 		rgba(72, 15, 144, 0.4) 100%);
 }
-
 </style>
 
 <body class="text-white bg-dark">
-<nav th:replace="fragments :: navigation"></nav>
+	<nav th:replace="fragments :: navigation"></nav>
 
-<div class="container" th:unless="${user}">
-    <div class="row justify-content-center mt-5 align-items-center rgba-gradient"
-         style="height: 60vh;">
-        <div class="col-6">
-            <h1 class="display-4" th:text="#{agenda.text}"></h1>
-            <p class="lead" th:text="#{deadline.text}"></p>
-            <hr class="my-4">
-            <div>
-                <p>
-                    [[#{erklaerung1.text}]]
-                    <i>Topic</i>
-                    [[#{erklaerung2.text}]](<i>Tasks</i>)
-                    [[#{erklaerung3.text}]]
-                </p>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="container">
-                <form class="form-signin" method="post" action="/login">
-                    <h2 class="form-signin-heading" th:text="#{ameldung.text}"></h2>
-                    <p>
-                        <label for="username" class="sr-only">Username</label> <input
-                            type="text" id="username" name="username" class="form-control"
-                            placeholder="Username" required autofocus>
-                    </p>
-                    <p>
-                        <label for="password" class="sr-only"></label> <input
-                            type="password" id="password" name="password"
-                            class="form-control" th:placeholder="#{passwort.text}" required>
-                    </p>
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">
-                        [[#{anmelden.text}]]
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container" th:if="${user}">
-    <div class="row justify-content-center mt-5 mb-5 align-items-center rgba-gradient">
-        <div class="col-6">
-            <h1 class="ml-5" th:text="#{hallo.text}+' '+${user.name}+'!'"></h1>
-        </div>
-        <div class="col-6 mt-5">
-            <div class="container">
-                <form th:object="${registration}" th:action="@{/register}"
-                      method="post">
-                    <h5 class="form-signin-heading" th:text="#{direkteinstieg.text}"></h5>
-                    <small class="form-text text-white mb-2"
-                           th:text="#{kurzschluesselErklaerung.text}"></small>
-                    <div class="form-row">
-                        <div class="form-group col-9">
-                            <input th:field="*{key}" class="form-control form-control-sm"
-                                   th:placeholder="#{kurzschluessel.text}"/>
-                        </div>
-                        <div class="col-3">
-                            <button type="submit" class="btn btn-sm btn-primary">[[#{suchen}]]
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div>
-            <h3 class="col align-items-left ml-4" th:unless="${topics.isEmpty()}" th:text="#{agenda.text} + ':'"></h3>
-            <h3 class="mt-5 mb-4" th:if="${topics.isEmpty()}" th:text="#{agendaEmpty.text}"></h3>
-            <div class="col mb-4" th:each="t : ${topics}">
-                <div class="border border-secondary rounded">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${t.title}">Card title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted"
-                            th:text="'Von '+${t.creator.displayName}">Card subtitle</h6>
-                        <p><small class="card-text" th:text="${t.shortDescription}">
-                            [[#{keineBeschreibung.text}]]
-                        </small></p>
-                        <a th:href="'/topics/'+${t.uuid}"
-                           class="btn btn-sm btn-primary mr-2">[[#{oeffnen.text}]]</a> <a
-                            th:href="'/topics/'+${t.uuid}+'/unregister'"
-                            class="btn btn-sm btn-outline-warning mr-2">[[#{abboEnde.text}]]</a>
-                        <small>[[#{offeneTasks.text}]]<span th:text="' ' + ${t.amountUnfinishedTasks}"></span></small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-<div class="container">
-    <div class="row justify-content-center mt-3 mb-3 align-items-center">
-        <!-- Button trigger modal -->
-        <button type="button" class="btn center-block btn-sm btn-info mb-2"
-                data-toggle="modal" data-target="#exampleModalCenter">[[#{impressum.text}]]
-        </button>
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1"
-             role="dialog" aria-labelledby="exampleModalCenterTitle"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title text-dark" id="exampleModalLongTitle"
-                            th:text="#{impressum.text}"></h5>
-                        <button type="button" class="close" data-dismiss="modal"
-                                aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body text-dark">
-                        <p>
-                            Simons Ludwig Solutions<br> Kirchenstraße 4a<br> 82327
-                            Tutzing<br>
-                        <p>[[#{servicetelefon.text}]] 08158-914 8982
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-sm btn-info"
-                                data-dismiss="modal">[[#{zurueck.text}]]
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<th:block th:replace="fragments :: scripts">
+	<div class="container" th:unless="${user}">
+		<div
+			class="row justify-content-center mt-5 align-items-center rgba-gradient"
+			style="height: 60vh;">
+			<div class="col-6">
+				<h1 class="display-4" th:text="#{agenda.text}"></h1>
+				<p class="lead" th:text="#{deadline.text}"></p>
+				<hr class="my-4">
+				<div>
+					<p>
+						[[#{erklaerung1.text}]] <i>Topic</i> [[#{erklaerung2.text}]](<i>Tasks</i>)
+						[[#{erklaerung3.text}]]
+					</p>
+				</div>
+			</div>
+			<div class="col-4">
+				<div class="container">
+					<form class="form-signin" method="post" action="/login">
+						<h2 class="form-signin-heading" th:text="#{ameldung.text}"></h2>
+						<p>
+							<label for="username" class="sr-only">Username</label> <input
+								type="text" id="username" name="username" class="form-control"
+								placeholder="Username" required autofocus>
+						</p>
+						<p>
+							<label for="password" class="sr-only"></label> <input
+								type="password" id="password" name="password"
+								class="form-control" th:placeholder="#{passwort.text}" required>
+						</p>
+						<button class="btn btn-lg btn-primary btn-block" type="submit">
+							[[#{anmelden.text}]]</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container" th:if="${user}">
+		<div
+			class="row justify-content-center mt-5 mb-5 align-items-center rgba-gradient">
+			<div class="col-6">
+				<h1 class="ml-5" th:text="#{hallo.text}+' '+${user.name}+'!'"></h1>
+			</div>
+			<div class="col-6 mt-5">
+				<div class="container">
+					<form th:object="${registration}" th:action="@{/register}"
+						method="post">
+						<h5 class="form-signin-heading" th:text="#{direkteinstieg.text}"></h5>
+						<small class="form-text text-white mb-2"
+							th:text="#{kurzschluesselErklaerung.text}"></small>
+						<div class="form-row">
+							<div class="form-group col-9">
+								<input th:field="*{key}" class="form-control form-control-sm"
+									th:placeholder="#{kurzschluessel.text}" />
+							</div>
+							<div class="col-3">
+								<button type="submit" class="btn btn-sm btn-primary">[[#{suchen}]]
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div>
+				<h3 class="col align-items-left ml-4"
+					th:unless="${topics.isEmpty()}" th:text="#{agenda.text} + ':'"></h3>
+				<h3 class="mt-5 mb-4" th:if="${topics.isEmpty()}"
+					th:text="#{agendaEmpty.text}"></h3>
+				<div class="col mb-4" th:each="t : ${topics}">
+					<div class="border border-secondary rounded">
+						<div class="card-body">
+							<h5 class="card-title" th:text="${t.title}">Card title</h5>
+							<h6 class="card-subtitle mb-2 text-muted"
+								th:text="'Von '+${t.creator.displayName}">Card subtitle</h6>
+							<p>
+								<small class="card-text" th:text="${t.shortDescription}">
+									[[#{keineBeschreibung.text}]] </small>
+							</p>
+							<div>
+								<small class="mb-1 text-warning">
+									[[#{offeneTasks.text}]]<i th:text="${t.amountUnfinishedTasks}"></i>
+								</small>
+							</div>
+							<a th:href="'/topics/'+${t.uuid}"
+								class="btn btn-sm btn-primary mr-2">[[#{oeffnen.text}]]</a> <a
+								th:href="'/topics/'+${t.uuid}+'/unregister'"
+								class="btn btn-sm btn-outline-warning mr-2">[[#{abboEnde.text}]]</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row justify-content-center mt-3 mb-3 align-items-center">
+			<!-- Button trigger modal -->
+			<button type="button" class="btn center-block btn-sm btn-info mb-2"
+				data-toggle="modal" data-target="#exampleModalCenter">[[#{impressum.text}]]
+			</button>
+			<!-- Modal -->
+			<div class="modal fade" id="exampleModalCenter" tabindex="-1"
+				role="dialog" aria-labelledby="exampleModalCenterTitle"
+				aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title text-dark" id="exampleModalLongTitle"
+								th:text="#{impressum.text}"></h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body text-dark">
+							<p>
+								Simons Ludwig Solutions<br> Kirchenstraße 4a<br> 82327
+								Tutzing<br>
+							<p>[[#{servicetelefon.text}]] 08158-914 8982
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-sm btn-info"
+								data-dismiss="modal">[[#{zurueck.text}]]</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<th:block th:replace="fragments :: scripts">
 </body>
 </html>
