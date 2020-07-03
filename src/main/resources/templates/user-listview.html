@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments :: head" />
-<body class= "bg-dark text-white">
+<body class="bg-dark text-white">
 	<nav th:replace="fragments :: navigation"></nav>
-	
-	<div class="container-fluid p-3 mb-2">
 
+	<div class="container-fluid p-3 mb-2">
 		<div class="row justify-content-center">
 			<div class="col-12">
 				<h4 class="display-4">
-					[[#{anwender.text}]] <a href="/users/create" class="btn btn-primary">[[#{anwenderAnlegen.text}]]
-					</a>
+					[[#{anwender.text}]] <a href="/users/create"
+						class="btn btn-primary">[[#{anwenderAnlegen.text}]] </a>
 				</h4>
-
 			</div>
 		</div>
-		
 		<div class="row justify-content-center">
 			<div class="col-12">
 				<table class="table table-dark table-striped">
@@ -35,7 +32,8 @@
 						<td th:text="${user.subscriptionCount}" />
 						<td>
 							<div th:unless="${user.login=='admin'}">
-								<form id="deleteUserForm" th:action="'/users/'+${user.login}+'/delete'" method="post">
+								<form id="deleteUserForm"
+									th:action="'/users/'+${user.login}+'/delete'" method="post">
 									<button type="submit" class="btn btn-sm btn-danger">[[#{anwenderLoeschen.text}]]</button>
 								</form>
 							</div>
@@ -44,7 +42,6 @@
 				</table>
 			</div>
 		</div>
-		
 	</div>
 
 	<th:block th:replace="fragments :: scripts">

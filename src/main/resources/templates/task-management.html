@@ -8,7 +8,10 @@
 	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
 		<div class="row">
 			<div class="col-auto">
-				<h4 class="display-4">Task <span th:text="#{verwalten.text} + ': '"></span><i th:text="${task.title}"></i></h4>
+				<h4 class="display-4">
+					Task <span th:text="#{verwalten.text} + ': '"></span><i
+						th:text="${task.title}"></i>
+				</h4>
 			</div>
 		</div>
 
@@ -29,7 +32,6 @@
 						<small class="form-text text-muted">
 							[[#{aussagekreaftigeKURZbeschreibung.text}]] </small>
 					</div>
-
 					<div class="form-group">
 						<textarea th:field="*{taskLongDescription}" class="form-control"
 							th:placeholder="#{langbeschreibung.text}" minlength="200"
@@ -37,7 +39,6 @@
 						<small class="form-text text-muted">
 							[[#{aussagekreaftigeLANGbeschreibung.text}]] </small>
 					</div>
-
 					<div class="form-group">
 						<label for="selectTaskType">[[#{typAuswaehlen.text}]]</label> <select
 							th:field="*{taskType}" class="form-control" id="selectTaskType">
@@ -47,13 +48,11 @@
 							<option value="INFO">[[#{nurZurInfo.text}]]</option>
 						</select>
 					</div>
-
 					<label for="selectImage">[[#{bildAuswaehlen.text}]]</label>
 					<div class="form-group" id="selectImage">
 						<input type="file" name="imageFile"> <small
 							class="form-text text-muted"> [[#{bildGroeße.text}]]</small>
 					</div>
-
 					<button type="submit" class="btn btn-primary">[[#{speichern.text}]]</button>
 					<a th:href="'/topics/'+${task.topic.uuid}+'/manage'"
 						class="btn btn-secondary">[[#{zurueckZumTopic.text}]]</a>
@@ -62,17 +61,14 @@
 		</div>
 
 		<hr class="my-4">
-		<h4 class="display-4 mt-4" th:text="#{kommentare.text}"></h4>
 
+		<h4 class="display-4 mt-4" th:text="#{kommentare.text}"></h4>
 		<div class="row row-cols-1">
 			<div class="col mb-4">
-
 				<b>[[#{bedeutungFarbe.text}]]</b> <span class="text-warning">[[#{nochZuBearbeiten.text}]]</span>
 				<span class="text-success">[[#{schonErledigt.text}]]</span>
-
 			</div>
 		</div>
-
 		<div class="row row-cols-1">
 			<div class="col mb-4" th:each="status : ${statuses}">
 				<div class="card bg-dark"
@@ -89,7 +85,6 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
 
 	<th:block th:replace="fragments :: scripts">

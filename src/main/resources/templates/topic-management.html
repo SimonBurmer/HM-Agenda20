@@ -20,12 +20,13 @@
 				</form>
 			</div>
 		</div>
+		
 		<hr class="my-4">
+		
 		<div class="row justify-content-center">
 			<div class="col-12">
 				<form th:action="'/topics/'+${topic.uuid}+'/manage'"
 					th:object="${topic}" method="post">
-
 					<div class="form-group">
 						<textarea th:field="*{shortDescription}" class="form-control"
 							th:placeholder="#{kurzbeschreibung.text}" minlength="100"
@@ -46,7 +47,9 @@
 				</form>
 			</div>
 		</div>
+		
 		<hr class="my-4">
+		
 		<div class="row row-cols-1">
 			<div class="col mb-4" th:each="task : ${tasks}">
 				<div class="card bg-dark border-primary">
@@ -60,7 +63,7 @@
 								<h5 class="card-title" th:text="${task.title}">Card title</h5>
 								<div th:replace="fragments :: showTaskType"></div>
 								<div class="text-success">
-									[[#{anzahlSubscriberAbgeschlossen.text}]] <i
+									[[#{anzahlSubscriberAbgeschlossen.text}]]<i
 										th:text="${task.amountFinished}"></i>
 								</div>
 								<p class="card-text" th:text="${task.taskShortDescription}"></p>

@@ -9,29 +9,28 @@
 		<div class="row justify-content-center bg-dark text-white">
 			<div class="col-12">
 				<h4 class="display-4">Neues Topic erstellen</h4>
-
 				<form id="formName" th:action="@{/topics}" th:object="${newTopic}"
 					method="post">
-
-
 					<div class="form-group">
 						<input th:field="*{title}" class="form-control"
-							th:placeholder="#{titel.text}" minlength="10" maxlength="60" /> <small
-							class="form-text text-muted"> [[#{aussagekreaftigerTitel.text}]] </small>
+							th:placeholder="#{titel.text}" minlength="10" maxlength="60" />
+						<small class="form-text text-muted">
+							[[#{aussagekreaftigerTitel.text}]] </small>
 					</div>
-
 					<div class="form-group">
 						<textarea th:field="*{shortDescription}" class="form-control"
-							th:placeholder="#{kurzbeschreibung.text}" minlength="100" maxlength="200"></textarea>
-						<small class="form-text text-muted"> [[#{aussagekreaftigeKURZbeschreibung.text}]] </small>
+							th:placeholder="#{kurzbeschreibung.text}" minlength="100"
+							maxlength="200"></textarea>
+						<small class="form-text text-muted">
+							[[#{aussagekreaftigeKURZbeschreibung.text}]] </small>
 					</div>
-
 					<div class="form-group">
 						<textarea th:field="*{longDescription}" class="form-control"
-							th:placeholder="#{langbeschreibung.text}" minlength="200" maxlength="2000"></textarea>
-						<small class="form-text text-muted"> [[#{aussagekreaftigeLANGbeschreibung.text}]] </small>
+							th:placeholder="#{langbeschreibung.text}" minlength="200"
+							maxlength="2000"></textarea>
+						<small class="form-text text-muted">
+							[[#{aussagekreaftigeLANGbeschreibung.text}]] </small>
 					</div>
-
 					<button type="submit" class="btn btn-primary">[[#{erstellen.text}]]</button>
 					<a href="/topics" class="btn btn-danger">[[#{abbrechen.text}]]</a>
 				</form>

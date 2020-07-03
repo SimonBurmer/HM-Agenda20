@@ -13,7 +13,7 @@
 					<div class="row">
 						<div class="col-lg-4  text-center">
 							<img th:src="'data:image/png;base64,'+${task.base64Image}"
-								style="width: 100%;"  class="mb-3"/>
+								style="width: 100%;" class="mb-3" />
 						</div>
 						<div class="col-lg-8">
 							<h5 class="card-title" th:text="${task.title}">Card title</h5>
@@ -25,13 +25,12 @@
 					<form id="commentForm"
 						th:action="@{/tasks/{id}/comment(id=${task.id})}"
 						th:object="${status}" method="post">
-
 						<div class="form-group mt-3">
 							<textarea th:field="*{comment}" class="form-control" rows="4"
 								th:placeholder="#{kommentar.text}" maxlength="500">th:text="${status.comment}</textarea>
-							<small class="form-text text-muted" th:text = "#{kommentarBis500.text}"></small>
+							<small class="form-text text-muted"
+								th:text="#{kommentarBis500.text}"></small>
 						</div>
-
 						<button type="submit" class="btn btn-sm btn-success">[[#{kommentarSpeichern.text}]]</button>
 						<a th:href="'/tasks/'" class="btn btn-sm btn-outline-secondary">[[#{zurueckZurTaskliste.text}]]</a>
 					</form>
@@ -39,6 +38,7 @@
 			</div>
 		</div>
 	</div>
+
 	<th:block th:replace="fragments :: scripts">
 </body>
 </html>

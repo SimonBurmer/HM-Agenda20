@@ -11,7 +11,6 @@
 					[[#{eigeneTopics.text}]] <a href="/topics/create"
 						class="btn btn-primary">[[#{erstelleTopic.text}]]</a>
 				</h4>
-
 				<span th:if="${#lists.size(managedTopics)==0}"
 					th:text="#{keinTopicErstellt.text}"></span>
 			</div>
@@ -28,7 +27,9 @@
 				</div>
 			</form>
 		</div>
+		
 		<hr class="my-4">
+		
 		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 mb-5">
 			<div class="col" th:each="t : ${managedTopics}">
 				<div class="card bg-dark border-primary" style="height: 100%;">
@@ -53,7 +54,6 @@
 				<div class="display-4" th:text="#{abbonierteTopics.text}"></div>
 				<span th:if="${#lists.size(topics)==0}">[[#{keineTopicsAbboniert.text}]]</span>
 			</div>
-
 			<div class="col-auto">
 				<div th:text="#{direkteinstieg.text}"></div>
 				<form th:object="${registration}" th:action="@{/register}"
@@ -74,7 +74,9 @@
 				</div>
 			</div>
 		</div>
+		
 		<hr class="my-4">
+		
 		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 mb-4">
 			<div class="col" th:each="t : ${topics}">
 				<div class="card bg-dark border-secondary" style="height: 100%;">
@@ -95,7 +97,6 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
 	<th:block th:replace="fragments :: scripts">
 </body>

@@ -11,7 +11,8 @@
 				<h4 class="display-4" th:text="#{eigeneAufgaben.text}"></h4>
 				<span th:if="${#lists.size(tasks)==0}">[[#{keineAufgaben.text}]]</span>
 			</div>
-			<form class="col-auto" th:object="${search}" th:action="@{/tasks}" method="get">
+			<form class="col-auto" th:object="${search}" th:action="@{/tasks}"
+				method="get">
 				<div class="form-row">
 					<div class="form-group col-9">
 						<input th:field="*{search}" class="form-control"
@@ -30,9 +31,10 @@
 					</div>
 				</div>
 			</form>
-
 		</div>
+
 		<hr class="my-4">
+
 		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 bg-dark">
 			<div class="col mb-4" th:each="task : ${tasks}">
 				<div class="card bg-dark" style="height: 100%;"

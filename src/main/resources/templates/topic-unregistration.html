@@ -8,9 +8,9 @@
 	<div class="container-fluid pt-4 pl-5 pr-5 text-white">
 		<div class="row">
 			<div class="col-auto">
-				<h4 class="display-4" th:text="#{aboVon.text}+' '+${topic.title}+' '+#{beendenFRAGE.text}">
+				<h4 class="display-4"
+					th:text="#{aboVon.text}+' '+${topic.title}+' '+#{beendenFRAGE.text}">
 				</h4>
-
 				<div class="card bg-dark">
 					<div class="card-body">
 						<h5 class="card-title" th:text="${topic.title}">Card title</h5>
@@ -20,10 +20,8 @@
 						<form id="formName"
 							th:action="@{/topics/{uuid}/unregister(uuid=${topic.uuid})}"
 							method="post">
-
 							<button type="submit" class="btn btn-sm btn-warning">[[#{aboBeenden.text}]]</button>
 							<a href="/topics" class="btn btn-sm btn-secondary">[[#{abbrechen.text}]]</a>
-
 						</form>
 					</div>
 				</div>
@@ -31,6 +29,7 @@
 			</div>
 		</div>
 	</div>
+
 	<th:block th:replace="fragments :: scripts">
 </body>
 </html>
