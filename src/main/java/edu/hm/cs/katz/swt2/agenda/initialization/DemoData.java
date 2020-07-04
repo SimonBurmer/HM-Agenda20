@@ -22,6 +22,16 @@ import org.springframework.stereotype.Component;
 @Profile("demo")
 public class DemoData {
 
+  private static final String TOPIC_STUDIENARBEIT_BEWERTEN_LANG =
+      "Beurteilung: Wortbestandteil ist das Urteil im psychologischen Sinne. "
+          + "Beteiligte sind der Beurteilende und das Beurteilungsobjekt. "
+          + "Der Beurteilende ist eine natürliche Person, die einem Beurteilungsobjekt"
+          + " (Sachverhalt, Situation, Person usw.) einen Wert auf einer Urteilsdimension"
+          + " zuordnet. Die Urteilsdimension ist eine abgestufte Skala (gut – schlecht,"
+          + " zielbehindernd – zielfördernd; schwerwiegend – unbedenklich). Angewandte"
+          + " Skalen sind insbesondere Benotungen jeder Art, Schulnoten, Sportnoten,"
+          + " Ratings oder Kreditscorings. Beurteilen ist also das Bewerten"
+          + " eines Beurteilungsobjekts.";
 
   private static final String TOPIC_BACKKURS_LANG =
       "Wir schütten ein Füllhorn mit Glückshormonen & süßen Geschmackserlebnissen"
@@ -73,6 +83,11 @@ public class DemoData {
           + " Text \"geschrieben\". Wir erstellen also nur eine Textdatei,"
           + " in der das Design definiert wird.";
 
+  private static final String TOPIC_STUDIENARBEIT_BEWERTEN_KURZ =
+      "Die Bewertung von Studienarbeiten ist eine aufwände Angelegenheit. "
+          + "Alle Aufgaben der Teilnehmer müssen überprüft werden und daraus"
+          + " dann Noten gebildet werden.";
+
   private static final String TOPIC_BACKKURS_KURZ =
       "Bei einem Ernies-Backkurs lernen Sie, wie Sie die hauchzarten"
           + " und bildschönen französischen Leckerbissen perfekt formen und füllen.";
@@ -99,7 +114,19 @@ public class DemoData {
           + "Schweiz aus zugänglich zu machen, entstand 1989 am CERN ein Projekt,"
           + " welches sich mit der Lösung dieser Aufgabe beschäftigte. Am 3. November"
           + " 1992 erschien die erste Version der HTML-Spezifikation.";
-  
+
+  private static final String TASK_BESTNOTEN_VERGEBEN_LANG =
+      "Studierende: Als Student (von lat. studens „strebend (nach), sich interessierend"
+          + " (für), sich bemühend um“, im Plural studentes) bzw. als Studentin wird eine"
+          + " Person bezeichnet, die in einer Einrichtung des tertiären Bildungsbereichs"
+          + " immatrikuliert ist und dort eine akademische Ausbildung erhält oder sich einer"
+          + " hochschulmäßigen Weiterbildung unterzieht. Die meisten der Immatrikulierten"
+          + " studieren, um sich für Berufe zu qualifizieren, für die der Erwerb eines"
+          + " akademischen Grades oder das Ablegen eines Staatsexamens vorausgesetzt oder"
+          + " zumindest wünschenswert ist. Sie besuchen im Rahmen des Studiums meistens"
+          + " Lehrveranstaltungen in den Gebäuden der jeweiligen Bildungseinrichtung."
+          + " Eine Ausnahme bildet das Fernstudium.";
+
   private static final String TASK_HTML_TEMPLATE_ERSTELLEN_LANG =
       "Das template-Element ermöglicht es, Template-Vorlagen als "
           + "Inhaltsfragmente im HTML-Dokument anzugeben, die zwar auf ihre "
@@ -138,7 +165,7 @@ public class DemoData {
           + "während es auf anderen Kontinenten nur eine untergeordnete Rolle"
           + " spielt; in Asien sind fast ausschließlich Reiskuchen bekannt. "
           + "In China haben außerdem die Mondkuchen eine besondere Bedeutung.";
-  
+
   private static final String TASK_AFFENMUFFINS_BACKEN_LANG =
       "Den Backofen auf 175 °C vorheizen. Das Muffinblech mit Papierförmchen"
           + " auslegen. In einer Schüssel das Mehl mit dem Backpulver, Natron,"
@@ -154,26 +181,31 @@ public class DemoData {
           + ". 12 Oblaten halbieren. In die Muffins links und rechts je einen "
           + "kleinen Schnitt machen und die halben Oblaten einstecken. Erst "
           + "die Augen, dann den Mund in die noch warme Kuvertüre auf die " + "Muffins kleben.";
-  
+
+  private static final String TASK_BESTNOTEN_VERGEBEN_KURZ =
+      "Studierende freuen sich, wenn sie nach vielen Wochen Arbeit an"
+          + " ihrer Studienarbeit das Projekt abschließen können und das"
+          + " Modul mit einer guten Note bewertet bekommen.";
+
   private static final String TASK_LINK_ERSTELLEN_KURZ =
       "Die Hypertext Markup Language ist eine textbasierte "
           + "Auszeichnungssprache zur Strukturierung elektronischer Dokumente"
           + " wie Texte mit Hyperlinks, Bildern und anderen Inhalten.";
-  
+
   private static final String TASK_HTML_TEMPLATE_ERSTELLEN_KURZ =
       "Das template-Element ermöglicht es, Template-Vorlagen als Inhaltsfragmente"
           + " im HTML-Dokument anzugeben, die zwar auf ihre Richtigkeit geparst,"
           + " aber nicht gerendert werden.";
-  
+
   private static final String TASK_WAS_IST_CSS_KURZ =
       "Sicherlich hat jeder, der nur im Entferntesten mit der digitalen Welt in Berührung kommt,"
           + " schon einmal von der Abkürzung CSS gehört. Doch was bedeutet sie eigentlich?";
-  
+
   private static final String TASK_GOOGLEHUPF_BACKEN_KURZ =
       "Der Kuchen gehört zu den feinen Backwaren. Es handelt sich um ein "
           + "zumeist süßes Backwerk. Man unterscheidet vor allem nach der Art"
           + " der Herstellung Blechkuchen.";
-  
+
   private static final String TASK_AFFENMUFFINS_BACKEN_KURZ =
       "Diese Muffins passen perfekt zu einem tollen Kindergeburtstag. Wie"
           + " man sie zubereitet und anschließend noch in lustige Affen "
@@ -185,6 +217,8 @@ public class DemoData {
   private static final String LOGIN_ERNIE = "ernie";
 
   private static final String LOGIN_BERT = "bert";
+
+  private static final String LOGIN_BASTIAN = "bastian";
 
   private static final Logger LOG = LoggerFactory.getLogger(DemoData.class);
 
@@ -209,6 +243,19 @@ public class DemoData {
     anwenderService.legeAn(LOGIN_FINE, "Fine", "Fine123*", false);
     anwenderService.legeAn(LOGIN_ERNIE, "Ernie", "Ernie123*", false);
     anwenderService.legeAn(LOGIN_BERT, "Bert", "Bert123*", false);
+    anwenderService.legeAn(LOGIN_BASTIAN, "Professor Katz", "Bastian123*", false);
+
+    // Topic: Studienarbeit bewerten
+    String studienarbeitBewertenUuid = topicService.createTopic("Studienarbeit bewerten",
+        LOGIN_BASTIAN, TOPIC_STUDIENARBEIT_BEWERTEN_KURZ, TOPIC_STUDIENARBEIT_BEWERTEN_LANG);
+    topicService.subscribe(studienarbeitBewertenUuid, LOGIN_ERNIE);
+    topicService.subscribe(studienarbeitBewertenUuid, LOGIN_FINE);
+    topicService.subscribe(studienarbeitBewertenUuid, LOGIN_BERT);
+    topicService.subscribe(studienarbeitBewertenUuid, LOGIN_BASTIAN);
+    Long bestnotenVergebenTask = taskService.createTask(studienarbeitBewertenUuid,
+        "Bestnoten an Studenten vergeben", LOGIN_BASTIAN, TASK_BESTNOTEN_VERGEBEN_KURZ,
+        TASK_BESTNOTEN_VERGEBEN_LANG, TaskTypeEnum.MANDATORY, "gruppe36.jpg");
+    taskService.checkTask(bestnotenVergebenTask, LOGIN_BERT);
 
     // Topic: HTML für Anfänger
     String htmlKursUuid =
@@ -226,10 +273,10 @@ public class DemoData {
     // Topic: CSS für Fortgeschrittene
     String cssKursUuid = topicService.createTopic("CSS für Fortgeschrittene", LOGIN_FINE,
         TOPIC_CSS_KURZ, TOPIC_CSS_LANG);
-    taskService.createTask(cssKursUuid, "CSS: Was ist das eigentlich?", LOGIN_FINE,
-        TASK_WAS_IST_CSS_KURZ, TASK_WAS_IST_CSS_LANG, TaskTypeEnum.DEFAULT, "was-ist-CSS.jpg");
     topicService.subscribe(cssKursUuid, LOGIN_ERNIE);
     topicService.subscribe(cssKursUuid, LOGIN_BERT);
+    taskService.createTask(cssKursUuid, "CSS: Was ist das eigentlich?", LOGIN_FINE,
+        TASK_WAS_IST_CSS_KURZ, TASK_WAS_IST_CSS_LANG, TaskTypeEnum.DEFAULT, "was-ist-CSS.jpg");
 
     // Topic: Ernies Backkurs
     String erniesKursUuid = topicService.createTopic("Ernies Backkurs", LOGIN_ERNIE,
@@ -237,11 +284,12 @@ public class DemoData {
     taskService.createTask(erniesKursUuid, "Googlehupf backen", LOGIN_ERNIE,
         TASK_GOOGLEHUPF_BACKEN_KURZ, TASK_GOOGLEHUPF_BACKEN_LANG, TaskTypeEnum.MANDATORY,
         "gugelhupf.jpg");
+    topicService.subscribe(erniesKursUuid, LOGIN_BERT);
+    topicService.subscribe(erniesKursUuid, LOGIN_FINE);
     Long affenMuffinTask = taskService.createTask(erniesKursUuid, "Affenmuffins backen",
         LOGIN_ERNIE, TASK_AFFENMUFFINS_BACKEN_KURZ, TASK_AFFENMUFFINS_BACKEN_LANG,
         TaskTypeEnum.OPTIONAL, "affenmuffins.jpg");
-    topicService.subscribe(erniesKursUuid, LOGIN_BERT);
     taskService.checkTask(affenMuffinTask, LOGIN_BERT);
-    topicService.subscribe(erniesKursUuid, LOGIN_FINE);
+
   }
 }
