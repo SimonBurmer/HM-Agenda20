@@ -213,4 +213,19 @@ public class TopicServiceImpl implements TopicService {
     }
     return topic.getUuid();
   }
+
+
+
+  @Override
+  public boolean isAlreadyRegisteredSubscriber(String login, String topicUuid) {
+
+    User anwender = anwenderRepository.getOne(login);
+    Topic topic = topicRepository.getOne(topicUuid);
+
+    if (topic.getSubscriber().contains(anwender)) {
+      throw new ValidationException("Du hast dieses Topic bereits abboniert!");
+    }
+
+    return false;
+  }
 }

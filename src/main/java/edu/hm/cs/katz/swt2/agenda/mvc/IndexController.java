@@ -55,11 +55,14 @@ public class IndexController extends AbstractController {
   @PostMapping("/register")
   public String handleRegistrationKey(@ModelAttribute("registration") Registration registration,
       @RequestHeader(value = "referer", required = true) String referer,
-      RedirectAttributes redirectAttributes) {
+      RedirectAttributes redirectAttributes, Authentication auth) {
     String uuid = "";
     String key = registration.getKey();
+    String login = auth.getName();
+    
     try {
       uuid = topicService.getTopicUuid(key);
+      topicService.isAlreadyRegisteredSubscriber(login, uuid);
       redirectAttributes.addFlashAttribute("sucsess", "Topic gefunden!");
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("error", e.getMessage());

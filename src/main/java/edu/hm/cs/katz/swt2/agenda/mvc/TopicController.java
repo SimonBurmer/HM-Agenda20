@@ -107,8 +107,19 @@ public class TopicController extends AbstractController {
    */
   @PostMapping("/topics/{uuid}/register")
   public String handleTaskRegistration(Model model, Authentication auth,
-      @PathVariable("uuid") String uuid) {
+      @PathVariable("uuid") String uuid, RedirectAttributes redirectAttributes) {
+    
+    String login = auth.getName();
+
+    try {
+      topicService.isAlreadyRegisteredSubscriber(login, uuid);
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("error", e.getMessage());
+      return "redirect:/topics/";
+    }
+    
     topicService.subscribe(uuid, auth.getName());
+    
     return "redirect:/topics/" + uuid;
   }
 

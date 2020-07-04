@@ -68,4 +68,9 @@ public interface TopicService {
    * Liefert eine Liste von Abbonenten eines Topics mit dazugehörenden abgeschlossenen Tasks.
    */
   List<SubscriberTopicDto> getSubscribedUsersWithFinishedTasks(String topicUuid, String login);
+
+  /**
+   * Prüft ob einn Subscriber ein Topic bereits abboniert hat.
+   */
+  boolean isAlreadyRegisteredSubscriber(String login, String topicUuid);
 }
